@@ -2,6 +2,8 @@ import { Expry, Operator } from './types';
 
 import { operators } from './operators';
 
+export { Expry };
+
 /**
  * It evaluates the expression with the given variables.
  *
