@@ -1,11 +1,11 @@
 import { expry } from '..';
 
-import { Value, Operator } from '../types';
+import { Expr, Eval, Vars, Operator } from '../types';
 
 export type Boolean = {
-  $and: Operator<Value[], boolean>;
-  $not: Operator<Value, boolean>;
-  $or: Operator<Value[], boolean>;
+  $and: Operator<unknown[], boolean>;
+  $not: Operator<unknown, boolean>;
+  $or: Operator<unknown[], boolean>;
 };
 
 export const boolean: Boolean = {
@@ -20,7 +20,7 @@ export const boolean: Boolean = {
    * @example $and([true, true, true]) // true
    * @example $and([true, false, true]) // false
    */
-  $and(args: Value[], vars: Record<string, Value>): boolean {
+  $and(args: unknown[], vars: Vars): boolean {
     return args.every(expr => {
       const boolean = expry(expr, vars) as boolean;
       return boolean;
@@ -38,7 +38,7 @@ export const boolean: Boolean = {
    * @example $not(true) // false
    * @example $not(false) // true
    */
-  $not(args: Value, vars: Record<string, Value>): boolean {
+  $not(args: unknown, vars: Vars): boolean {
     const boolean = expry(args, vars) as boolean;
     return !boolean;
   },
@@ -54,7 +54,7 @@ export const boolean: Boolean = {
    * @example $or([true, false, true]) // true
    * @example $or([false, false, false]) // false
    */
-  $or(args: Value[], vars: Record<string, Value>): boolean {
+  $or(args: unknown[], vars: Vars): boolean {
     return args.some(expr => {
       const boolean = expry(expr, vars) as boolean;
       return boolean;

@@ -1,13 +1,16 @@
 import { expry } from '..';
 
-import { Value, Operator } from '../types';
+import { Expr, Eval, Vars, Operator } from '../types';
 
 export type Conditional = {
-  $cond: Operator<{ if: Value; then: Value; else: Value }, Value>;
-  $ifNull: Operator<Value[], Value>;
+  $cond: Operator<{ if: unknown; then: unknown; else: unknown }, unknown>;
+  $ifNull: Operator<unknown[], unknown>;
   $switch: Operator<
-    { branches: { case: Value; then: Value }[]; default: Value },
-    Value
+    {
+      branches: { case: unknown; then: unknown }[];
+      default: unknown;
+    },
+    unknown
   >;
 };
 
@@ -24,9 +27,9 @@ export const conditional: Conditional = {
    * @example $cond({ if: false, then: 'yes', else: 'no' }) // 'no'
    */
   $cond(
-    args: { if: Value; then: Value; else: Value },
-    vars: Record<string, Value>
-  ): Value {
+    args: { if: unknown; then: unknown; else: unknown },
+    vars: Vars
+  ): unknown {
     return expry(args.if, vars)
       ? expry(args.then, vars)
       : expry(args.else, vars);
@@ -44,7 +47,7 @@ export const conditional: Conditional = {
    * @example $ifNull([null, null, 'bye']) // 'bye'
    * @example $ifNull([null, null, null]) // null
    */
-  $ifNull(args: Value[], vars: Record<string, Value>): Value {
+  $ifNull(args: unknown[], vars: Vars): unknown {
     for (const arg of args) {
       const value = expry(arg, vars);
       if (value !== null) return value;
@@ -65,11 +68,11 @@ export const conditional: Conditional = {
    */
   $switch(
     args: {
-      branches: { case: Value; then: Value }[];
-      default: Value;
+      branches: { case: unknown; then: unknown }[];
+      default: unknown;
     },
-    vars: Record<string, Value>
-  ): Value {
+    vars: Vars
+  ): unknown {
     for (const branch of args.branches) {
       if (expry(branch.case, vars)) {
         return expry(branch.then, vars);

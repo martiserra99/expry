@@ -123,7 +123,7 @@ describe('$reduce', () => {
       expry({
         $reduce: {
           input: ['a', 'b', 'c'],
-          initialValue: '',
+          initialunknown: '',
           in: { $concat: ['$$value', '$$this'] },
         },
       })
@@ -132,7 +132,7 @@ describe('$reduce', () => {
       expry({
         $reduce: {
           input: [1, 2, 3],
-          initialValue: 0,
+          initialunknown: 0,
           in: { $add: ['$$value', '$$this'] },
         },
       })

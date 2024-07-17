@@ -1,4 +1,6 @@
-export type Value = unknown;
+export type Expr = unknown;
+export type Eval = unknown;
+export type Vars = Record<string, unknown>;
 
 /**
  * An operator that takes arguments and variables, and returns a result.
@@ -11,7 +13,4 @@ export type Value = unknown;
  *
  * @returns The result of the operator.
  */
-export type Operator<T extends Value, U extends Value> = (
-  args: T,
-  vars: Record<string, Value>
-) => U;
+export type Operator<T, U> = (args: T, vars: Record<string, unknown>) => U;
