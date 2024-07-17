@@ -182,7 +182,9 @@ export const array: Array = {
   $maxN(args: { input: Expr; n: Expr }, vars: Vars): number[] | string[] {
     const array = expry(args.input, vars) as number[] | string[];
     const n = expry(args.n, vars) as number;
-    return array.sort((a, b) => (b > a ? 1 : -1)).slice(0, n);
+    return array
+      .sort((a: string | number, b: string | number) => (b > a ? 1 : -1))
+      .slice(0, n);
   },
 
   /**
@@ -200,7 +202,9 @@ export const array: Array = {
   $minN(args: { input: Expr; n: Expr }, vars: Vars): number[] | string[] {
     const array = expry(args.input, vars) as number[] | string[];
     const n = expry(args.n, vars) as number;
-    return array.sort((a, b) => (a > b ? 1 : -1)).slice(0, n);
+    return array
+      .sort((a: string | number, b: string | number) => (a > b ? 1 : -1))
+      .slice(0, n);
   },
 
   /**
