@@ -1,18 +1,18 @@
 import { expry } from '../index';
 
-import { Expry, Operator } from '../types';
+import { Value, Operator } from '../types';
 
 export type String = {
-  $concat: Operator<Expry[], string>;
-  $ltrim: Operator<Expry, string>;
-  $regexMatch: Operator<[Expry, Expry], boolean>;
-  $rtrim: Operator<Expry, string>;
-  $split: Operator<[Expry, Expry], string[]>;
-  $strLen: Operator<Expry, number>;
-  $substr: Operator<[Expry, Expry, Expry], string>;
-  $toLower: Operator<Expry, string>;
-  $trim: Operator<Expry, string>;
-  $toUpper: Operator<Expry, string>;
+  $concat: Operator<Value[], string>;
+  $ltrim: Operator<Value, string>;
+  $regexMatch: Operator<[Value, Value], boolean>;
+  $rtrim: Operator<Value, string>;
+  $split: Operator<[Value, Value], string[]>;
+  $strLen: Operator<Value, number>;
+  $substr: Operator<[Value, Value, Value], string>;
+  $toLower: Operator<Value, string>;
+  $trim: Operator<Value, string>;
+  $toUpper: Operator<Value, string>;
 };
 
 export const string: String = {
@@ -26,7 +26,7 @@ export const string: String = {
    *
    * @example $concat(['hello', ' ', 'world']) // 'hello world'
    */
-  $concat(args: Expry[], vars: Record<string, Expry>): string {
+  $concat(args: Value[], vars: Record<string, Value>): string {
     return args
       .map(arg => {
         const string = expry(arg, vars) as string;
@@ -45,7 +45,7 @@ export const string: String = {
    *
    * @example $ltrim('  hello') // 'hello'
    */
-  $ltrim(args: Expry, vars: Record<string, Expry>): string {
+  $ltrim(args: Value, vars: Record<string, Value>): string {
     const string = expry(args, vars) as string;
     return string.replace(/^\s+/, '');
   },
@@ -61,7 +61,7 @@ export const string: String = {
    * @example $regexMatch(['hello', '/ell/']) // true
    * @example $regexMatch(['hello', '/bye/']) // false
    */
-  $regexMatch(args: [Expry, Expry], vars: Record<string, Expry>): boolean {
+  $regexMatch(args: [Value, Value], vars: Record<string, Value>): boolean {
     const string = expry(args[0], vars) as string;
     const regex = expry(args[1], vars) as string;
     return string.match(regex) !== null;
@@ -77,7 +77,7 @@ export const string: String = {
    *
    * @example $rtrim('hello  ') // 'hello'
    */
-  $rtrim(args: Expry, vars: Record<string, Expry>): string {
+  $rtrim(args: Value, vars: Record<string, Value>): string {
     const string = expry(args, vars) as string;
     return string.replace(/\s+$/, '');
   },
@@ -93,7 +93,7 @@ export const string: String = {
    * @example $split(['June-15-2013', '-']) // ['June', '15', '2013']
    * @example $split(['hello world', ' ']) // ['hello', 'world']
    */
-  $split(args: [Expry, Expry], vars: Record<string, Expry>): string[] {
+  $split(args: [Value, Value], vars: Record<string, Value>): string[] {
     const string = expry(args[0], vars) as string;
     const delimiter = expry(args[1], vars) as string;
     return string.split(delimiter);
@@ -109,7 +109,7 @@ export const string: String = {
    *
    * @example $strLen('hello') // 5
    */
-  $strLen(args: Expry, vars: Record<string, Expry>): number {
+  $strLen(args: Value, vars: Record<string, Value>): number {
     const string = expry(args, vars) as string;
     return string.length;
   },
@@ -124,7 +124,7 @@ export const string: String = {
    *
    * @example $substr(['hello', 0, 2]) // 'he'
    */
-  $substr(args: [Expry, Expry, Expry], vars: Record<string, Expry>): string {
+  $substr(args: [Value, Value, Value], vars: Record<string, Value>): string {
     const string = expry(args[0], vars) as string;
     const start = expry(args[1], vars) as number;
     const length = expry(args[2], vars) as number;
@@ -141,7 +141,7 @@ export const string: String = {
    *
    * @example $toLower('Marti Serra') // 'marti serra'
    */
-  $toLower(args: Expry, vars: Record<string, Expry>): string {
+  $toLower(args: Value, vars: Record<string, Value>): string {
     const string = expry(args, vars) as string;
     return string.toLowerCase();
   },
@@ -156,7 +156,7 @@ export const string: String = {
    *
    * @example $trim('  hello  ') // 'hello'
    */
-  $trim(args: Expry, vars: Record<string, Expry>): string {
+  $trim(args: Value, vars: Record<string, Value>): string {
     const string = expry(args, vars) as string;
     return string.trim();
   },
@@ -171,7 +171,7 @@ export const string: String = {
    *
    * @example $toUpper('Marti Serra') // 'MARTI SERRA'
    */
-  $toUpper(args: Expry, vars: Record<string, Expry>): string {
+  $toUpper(args: Value, vars: Record<string, Value>): string {
     const string = expry(args, vars) as string;
     return string.toUpperCase();
   },

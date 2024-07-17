@@ -1,10 +1,4 @@
-export type Expry =
-  | { [key: string]: Expry }
-  | Expry[]
-  | boolean
-  | string
-  | number
-  | null;
+export type Value = unknown;
 
 /**
  * An operator that takes arguments and variables, and returns a result.
@@ -17,7 +11,7 @@ export type Expry =
  *
  * @returns The result of the operator.
  */
-export type Operator<T extends Expry, U extends Expry> = (
+export type Operator<T extends Value, U extends Value> = (
   args: T,
-  vars: Record<string, Expry>
+  vars: Record<string, Value>
 ) => U;

@@ -1,15 +1,15 @@
 import { expry } from '..';
 
-import { Expry, Operator } from '../types';
+import { Value, Operator } from '../types';
 
 export type Type = {
-  $convert: Operator<{ input: Expry; to: Expry }, boolean | number | string>;
-  $isBoolean: Operator<Expry, boolean>;
-  $isNumber: Operator<Expry, boolean>;
-  $isString: Operator<Expry, boolean>;
-  $toBoolean: Operator<Expry, boolean>;
-  $toNumber: Operator<Expry, number | null>;
-  $toString: Operator<Expry, string>;
+  $convert: Operator<{ input: Value; to: Value }, boolean | number | string>;
+  $isBoolean: Operator<Value, boolean>;
+  $isNumber: Operator<Value, boolean>;
+  $isString: Operator<Value, boolean>;
+  $toBoolean: Operator<Value, boolean>;
+  $toNumber: Operator<Value, number | null>;
+  $toString: Operator<Value, string>;
 };
 
 export const type: Type = {
@@ -26,8 +26,8 @@ export const type: Type = {
    * @example $convert({ input: 5, to: 'bool' }) // true
    */
   $convert(
-    args: { input: Expry; to: Expry },
-    vars: Record<string, Expry>
+    args: { input: Value; to: Value },
+    vars: Record<string, Value>
   ): boolean | number | string {
     const input = expry(args.input, vars);
     const to = expry(args.to, vars) as 'bool' | 'number' | 'string';
@@ -49,7 +49,7 @@ export const type: Type = {
    * @example $isBoolean(5) // false
    * @example $isBoolean('hello') // false
    */
-  $isBoolean(args: Expry, vars: Record<string, Expry>): boolean {
+  $isBoolean(args: Value, vars: Record<string, Value>): boolean {
     const value = expry(args, vars);
     return typeof value === 'boolean';
   },
@@ -66,7 +66,7 @@ export const type: Type = {
    * @example $isNumber(true) // false
    * @example $isNumber('hello') // false
    */
-  $isNumber(args: Expry, vars: Record<string, Expry>): boolean {
+  $isNumber(args: Value, vars: Record<string, Value>): boolean {
     const value = expry(args, vars);
     return typeof value === 'number';
   },
@@ -83,7 +83,7 @@ export const type: Type = {
    * @example $isString(5) // false
    * @example $isString(true) // false
    */
-  $isString(args: Expry, vars: Record<string, Expry>): boolean {
+  $isString(args: Value, vars: Record<string, Value>): boolean {
     const value = expry(args, vars);
     return typeof value === 'string';
   },
@@ -101,7 +101,7 @@ export const type: Type = {
    * @example $toBoolean(5) // true
    * @example $toBoolean(0) // false
    */
-  $toBoolean(args: Expry, vars: Record<string, Expry>): boolean {
+  $toBoolean(args: Value, vars: Record<string, Value>): boolean {
     const value = expry(args, vars);
     return Boolean(value);
   },
@@ -117,7 +117,7 @@ export const type: Type = {
    * @example $toNumber('5') // 5
    * @example $toNumber('hello') // null
    */
-  $toNumber(args: Expry, vars: Record<string, Expry>): number | null {
+  $toNumber(args: Value, vars: Record<string, Value>): number | null {
     const value = expry(args, vars);
     const number = Number(value);
     if (isNaN(number)) return null;
@@ -135,7 +135,7 @@ export const type: Type = {
    * @example $toString(5) // '5'
    * @example $toString(true) // 'true'
    */
-  $toString(args: Expry, vars: Record<string, Expry>): string {
+  $toString(args: Value, vars: Record<string, Value>): string {
     const value = expry(args, vars);
     return String(value);
   },

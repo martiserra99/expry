@@ -1,13 +1,13 @@
 import { expry } from '../index';
 
-import { Expry, Operator } from '../types';
+import { Value, Operator } from '../types';
 
 export type Object = {
-  $getField: Operator<{ field: Expry; input: Expry }, Expry>;
-  $mergeObjects: Operator<Expry[], Record<string, Expry>>;
+  $getField: Operator<{ field: Value; input: Value }, Value>;
+  $mergeObjects: Operator<Value[], Record<string, Value>>;
   $setField: Operator<
-    { field: Expry; input: Expry; value: Expry },
-    Record<string, Expry>
+    { field: Value; input: Value; value: Value },
+    Record<string, Value>
   >;
 };
 
@@ -23,11 +23,11 @@ export const object: Object = {
    * @example $getField({ field: 'qty', input: { item: 'apple', qty: 25, price: 4.5 } }) // 25
    */
   $getField(
-    args: { field: Expry; input: Expry },
-    vars: Record<string, Expry>
-  ): Expry {
+    args: { field: Value; input: Value },
+    vars: Record<string, Value>
+  ): Value {
     const field = expry(args.field, vars) as string;
-    const input = expry(args.input, vars) as Record<string, Expry>;
+    const input = expry(args.input, vars) as Record<string, Value>;
     if (field in input) return expry(input[field], vars);
     return null;
   },
@@ -43,11 +43,11 @@ export const object: Object = {
    * @example $mergeObjects([{ item: 'apple', qty: 5, price: 2.5 }, { qty: 10, price: 1.2, sale: true }]) // { item: 'apple', qty: 10, price: 1.2, sale: true }
    */
   $mergeObjects(
-    args: Expry[],
-    vars: Record<string, Expry>
-  ): Record<string, Expry> {
-    return args.reduce((acc: Record<string, Expry>, arg) => {
-      const object = expry(arg, vars) as Record<string, Expry>;
+    args: Value[],
+    vars: Record<string, Value>
+  ): Record<string, Value> {
+    return args.reduce((acc: Record<string, Value>, arg) => {
+      const object = expry(arg, vars) as Record<string, Value>;
       return { ...acc, ...object };
     }, {});
   },
@@ -63,11 +63,11 @@ export const object: Object = {
    * @example $setField({ field: 'item', input: { qty: 25, price: 4.5 }, value: 'apple' }) // { item: 'apple', qty: 25, price: 4.5 }
    */
   $setField(
-    args: { field: Expry; input: Expry; value: Expry },
-    vars: Record<string, Expry>
-  ): Record<string, Expry> {
+    args: { field: Value; input: Value; value: Value },
+    vars: Record<string, Value>
+  ): Record<string, Value> {
     const field = expry(args.field, vars) as string;
-    const input = expry(args.input, vars) as Record<string, Expry>;
+    const input = expry(args.input, vars) as Record<string, Value>;
     const value = expry(args.value, vars);
     return { ...input, [field]: value };
   },

@@ -1,23 +1,23 @@
 import { expry } from '..';
 
-import { Expry, Operator } from '../types';
+import { Value, Operator } from '../types';
 
 export type Array = {
-  $arrayElemAt: Operator<[Expry, Expry], Expry>;
-  $concatArrays: Operator<Expry[], Expry[]>;
-  $filter: Operator<{ input: Expry; cond: Expry; as: Expry }, Expry[]>;
-  $firstN: Operator<{ input: Expry; n: Expry }, Expry[]>;
-  $in: Operator<[Expry, Expry], boolean>;
-  $indexOfArray: Operator<[Expry, Expry], number>;
-  $lastN: Operator<{ input: Expry; n: Expry }, Expry[]>;
-  $map: Operator<{ input: Expry; as: Expry; in: Expry }, Expry[]>;
-  $maxN: Operator<{ input: Expry; n: Expry }, Expry[]>;
-  $minN: Operator<{ input: Expry; n: Expry }, Expry[]>;
-  $reduce: Operator<{ input: Expry; initialValue: Expry; in: Expry }, Expry>;
-  $reverseArray: Operator<Expry, Expry[]>;
-  $size: Operator<Expry, number>;
-  $slice: Operator<[Expry, Expry, Expry], Expry[]>;
-  $sortArray: Operator<{ input: Expry; sortBy: Expry }, Expry[]>;
+  $arrayElemAt: Operator<[Value, Value], Value>;
+  $concatArrays: Operator<Value[], Value[]>;
+  $filter: Operator<{ input: Value; cond: Value; as: Value }, Value[]>;
+  $firstN: Operator<{ input: Value; n: Value }, Value[]>;
+  $in: Operator<[Value, Value], boolean>;
+  $indexOfArray: Operator<[Value, Value], number>;
+  $lastN: Operator<{ input: Value; n: Value }, Value[]>;
+  $map: Operator<{ input: Value; as: Value; in: Value }, Value[]>;
+  $maxN: Operator<{ input: Value; n: Value }, Value[]>;
+  $minN: Operator<{ input: Value; n: Value }, Value[]>;
+  $reduce: Operator<{ input: Value; initialValue: Value; in: Value }, Value>;
+  $reverseArray: Operator<Value, Value[]>;
+  $size: Operator<Value, number>;
+  $slice: Operator<[Value, Value, Value], Value[]>;
+  $sortArray: Operator<{ input: Value; sortBy: Value }, Value[]>;
 };
 
 export const array: Array = {
@@ -33,8 +33,8 @@ export const array: Array = {
    * @example $arrayElemAt([1, 2, 3], 1) // 2
    * @example $arrayElemAt([1, 2, 3], 3) // null
    */
-  $arrayElemAt(args: [Expry, Expry], vars: Record<string, Expry>): Expry {
-    const array = expry(args[0], vars) as Expry[];
+  $arrayElemAt(args: [Value, Value], vars: Record<string, Value>): Value {
+    const array = expry(args[0], vars) as Value[];
     const index = expry(args[1], vars) as number;
     if (index < 0 || index >= array.length) return null;
     return array[index];
@@ -52,9 +52,9 @@ export const array: Array = {
    * @example $concatArrays([['hello', ' '], ['world']]) // ['hello', ' ', 'world']
    * @example $concatArrays([['hello', ' '], [['world']]]) // ['hello', ' ', ['world']]
    */
-  $concatArrays(args: Expry[], vars: Record<string, Expry>): Expry[] {
-    return args.reduce((acc: Expry[], expr: Expry) => {
-      const array = expry(expr, vars) as Expry[];
+  $concatArrays(args: Value[], vars: Record<string, Value>): Value[] {
+    return args.reduce((acc: Value[], expr: Value) => {
+      const array = expry(expr, vars) as Value[];
       return acc.concat(array);
     }, []);
   },
@@ -70,10 +70,10 @@ export const array: Array = {
    * @example $filter({ input: [1, 2, 3, 4], as: 'num', cond: { $gt: ['$$num', 2] } }) // [3, 4]
    */
   $filter(
-    args: { input: Expry; cond: Expry; as: Expry },
-    vars: Record<string, Expry>
-  ): Expry[] {
-    const array = expry(args.input, vars) as Expry[];
+    args: { input: Value; cond: Value; as: Value },
+    vars: Record<string, Value>
+  ): Value[] {
+    const array = expry(args.input, vars) as Value[];
     const as = expry(args.as, vars) as string;
     return array.filter(value => {
       return expry(args.cond, { ...vars, [`$${as}`]: value });
@@ -93,10 +93,10 @@ export const array: Array = {
    * @example $firstN({ n: 2, input: [1] } }) // [1]
    */
   $firstN(
-    args: { input: Expry; n: Expry },
-    vars: Record<string, Expry>
-  ): Expry[] {
-    const array = expry(args.input, vars) as Expry[];
+    args: { input: Value; n: Value },
+    vars: Record<string, Value>
+  ): Value[] {
+    const array = expry(args.input, vars) as Value[];
     const n = expry(args.n, vars) as number;
     return array.slice(0, n);
   },
@@ -113,9 +113,9 @@ export const array: Array = {
    * @example $in({ $in: [4, [1, 2, 3]] }) // false
    * @example $in({ $in: ['world', ['hello', 'world']] }) // true
    */
-  $in(args: [Expry, Expry], vars: Record<string, Expry>): boolean {
+  $in(args: [Value, Value], vars: Record<string, Value>): boolean {
     const value = expry(args[0], vars);
-    const array = expry(args[1], vars) as Expry[];
+    const array = expry(args[1], vars) as Value[];
     return array.includes(value);
   },
 
@@ -130,8 +130,8 @@ export const array: Array = {
    * @example $indexOfArray([['a', 'abc'], 'a']) // 0
    * @example $indexOfArray([[1, 2], 5]) // -1
    */
-  $indexOfArray(args: [Expry, Expry], vars: Record<string, Expry>): number {
-    const array = expry(args[0], vars) as Expry[];
+  $indexOfArray(args: [Value, Value], vars: Record<string, Value>): number {
+    const array = expry(args[0], vars) as Value[];
     const value = expry(args[1], vars);
     return array.indexOf(value);
   },
@@ -149,10 +149,10 @@ export const array: Array = {
    * @example $lastN({ n: 2, input: [1] } }) // [1]
    */
   $lastN(
-    args: { input: Expry; n: Expry },
-    vars: Record<string, Expry>
-  ): Expry[] {
-    const array = expry(args.input, vars) as Expry[];
+    args: { input: Value; n: Value },
+    vars: Record<string, Value>
+  ): Value[] {
+    const array = expry(args.input, vars) as Value[];
     const n = expry(args.n, vars) as number;
     return array.slice(-n);
   },
@@ -169,10 +169,10 @@ export const array: Array = {
    * @example $map({ input: ['a', 'b'], as: 'str', in: { $toUpper: '$$str' } }) // ['A', 'B']
    */
   $map(
-    args: { input: Expry; as: Expry; in: Expry },
-    vars: Record<string, Expry>
-  ): Expry[] {
-    const array = expry(args.input, vars) as Expry[];
+    args: { input: Value; as: Value; in: Value },
+    vars: Record<string, Value>
+  ): Value[] {
+    const array = expry(args.input, vars) as Value[];
     const as = expry(args.as, vars) as string;
     return array.map(value => {
       return expry(args.in, { ...vars, [`$${as}`]: value });
@@ -192,9 +192,9 @@ export const array: Array = {
    * @example $maxN({ n: 5, input: [3, 7, 2, 4] } }) // [7, 4, 3, 2]
    */
   $maxN(
-    args: { input: Expry; n: Expry },
-    vars: Record<string, Expry>
-  ): Expry[] {
+    args: { input: Value; n: Value },
+    vars: Record<string, Value>
+  ): Value[] {
     const array = expry(args.input, vars) as (number | string)[];
     const n = Number(expry(args.n, vars));
     return array.sort((a, b) => (b > a ? 1 : -1)).slice(0, n);
@@ -213,9 +213,9 @@ export const array: Array = {
    * @example $minN({ n: 5, input: [3, 7, 2, 4] } }) // [2, 3, 4, 7]
    */
   $minN(
-    args: { input: Expry; n: Expry },
-    vars: Record<string, Expry>
-  ): Expry[] {
+    args: { input: Value; n: Value },
+    vars: Record<string, Value>
+  ): Value[] {
     const array = expry(args.input, vars) as (number | string)[];
     const n = Number(expry(args.n, vars));
     return array.sort((a, b) => (a > b ? 1 : -1)).slice(0, n);
@@ -233,10 +233,10 @@ export const array: Array = {
    * @example $reduce({ input: [1, 2, 3], initialValue: 0, in: { $add: ['$$value', '$$this'] } } }) // 6
    */
   $reduce(
-    args: { input: Expry; initialValue: Expry; in: Expry },
-    vars: Record<string, Expry>
-  ): Expry {
-    const array = expry(args.input, vars) as Expry[];
+    args: { input: Value; initialValue: Value; in: Value },
+    vars: Record<string, Value>
+  ): Value {
+    const array = expry(args.input, vars) as Value[];
     const initialValue = expry(args.initialValue, vars);
     return array.reduce((acc, value) => {
       return expry(args.in, { ...vars, $value: acc, $this: value });
@@ -254,8 +254,8 @@ export const array: Array = {
    * @example $reverseArray([4, 2, 3]) // [3, 2, 4]
    * @example $reverseArray(['a', 'c', 'b']) // ['b', 'c', 'a']
    */
-  $reverseArray(args: Expry, vars: Record<string, Expry>): Expry[] {
-    const array = expry(args, vars) as Expry[];
+  $reverseArray(args: Value, vars: Record<string, Value>): Value[] {
+    const array = expry(args, vars) as Value[];
     return array.reverse();
   },
 
@@ -271,8 +271,8 @@ export const array: Array = {
    * @example $size(['a', 'b', 'c', 'd']) // 4
    * @example $size([]) // 0
    */
-  $size(args: Expry, vars: Record<string, Expry>): number {
-    const array = expry(args, vars) as Expry[];
+  $size(args: Value, vars: Record<string, Value>): number {
+    const array = expry(args, vars) as Value[];
     return array.length;
   },
 
@@ -289,8 +289,8 @@ export const array: Array = {
    * @example $slice([[1, 2, 3], 1, 3]) // [2, 3]
    * @example $slice([[1, 2, 3], 3, 2]) // []
    */
-  $slice(args: [Expry, Expry, Expry], vars: Record<string, Expry>): Expry[] {
-    const array = expry(args[0], vars) as Expry[];
+  $slice(args: [Value, Value, Value], vars: Record<string, Value>): Value[] {
+    const array = expry(args[0], vars) as Value[];
     const position = expry(args[1], vars) as number;
     const n = expry(args[2], vars) as number;
     return array.slice(position, position + n);
@@ -308,10 +308,10 @@ export const array: Array = {
    * @example $sortArray({ input: [3, 4, 2], sortBy: { $cmp: ['$$second', '$$first'] } }) // [4, 3, 2]
    */
   $sortArray(
-    args: { input: Expry; sortBy: Expry },
-    vars: Record<string, Expry>
-  ): Expry[] {
-    const array = expry(args.input, vars) as Expry[];
+    args: { input: Value; sortBy: Value },
+    vars: Record<string, Value>
+  ): Value[] {
+    const array = expry(args.input, vars) as Value[];
     return array.sort((a, b) => {
       const variables = { ...vars, $first: a, $second: b };
       const number = expry(args.sortBy, variables) as number;

@@ -1,24 +1,24 @@
 import { expry } from '..';
 
-import { Expry, Operator } from '../types';
+import { Value, Operator } from '../types';
 
 export type Arithmetic = {
-  $abs: Operator<Expry, number>;
-  $add: Operator<Expry[], number>;
-  $ceil: Operator<Expry, number>;
-  $divide: Operator<[Expry, Expry], number>;
-  $exp: Operator<Expry, number>;
-  $floor: Operator<Expry, number>;
-  $ln: Operator<Expry, number>;
-  $log: Operator<[Expry, Expry], number>;
-  $log10: Operator<Expry, number>;
-  $mod: Operator<[Expry, Expry], number>;
-  $multiply: Operator<Expry[], number>;
-  $pow: Operator<[Expry, Expry], number>;
-  $round: Operator<[Expry, Expry], number>;
-  $sqrt: Operator<Expry, number>;
-  $subtract: Operator<[Expry, Expry], number>;
-  $trunc: Operator<[Expry, Expry], number>;
+  $abs: Operator<Value, number>;
+  $add: Operator<Value[], number>;
+  $ceil: Operator<Value, number>;
+  $divide: Operator<[Value, Value], number>;
+  $exp: Operator<Value, number>;
+  $floor: Operator<Value, number>;
+  $ln: Operator<Value, number>;
+  $log: Operator<[Value, Value], number>;
+  $log10: Operator<Value, number>;
+  $mod: Operator<[Value, Value], number>;
+  $multiply: Operator<Value[], number>;
+  $pow: Operator<[Value, Value], number>;
+  $round: Operator<[Value, Value], number>;
+  $sqrt: Operator<Value, number>;
+  $subtract: Operator<[Value, Value], number>;
+  $trunc: Operator<[Value, Value], number>;
 };
 
 export const arithmetic: Arithmetic = {
@@ -33,7 +33,7 @@ export const arithmetic: Arithmetic = {
    * @example $abs(-5) // 5
    * @example $abs(5) // 5
    */
-  $abs(args: Expry, vars: Record<string, Expry>): number {
+  $abs(args: Value, vars: Record<string, Value>): number {
     const number = expry(args, vars) as number;
     return Math.abs(number);
   },
@@ -49,8 +49,8 @@ export const arithmetic: Arithmetic = {
    * @example $add([1, 2, 3]) // 6
    * @example $add([1, 2, 3, 4]) // 10
    */
-  $add(args: Expry[], vars: Record<string, Expry>): number {
-    return args.reduce((acc: number, expr: Expry) => {
+  $add(args: Value[], vars: Record<string, Value>): number {
+    return args.reduce((acc: number, expr: Value) => {
       const number = expry(expr, vars) as number;
       return acc + number;
     }, 0);
@@ -67,7 +67,7 @@ export const arithmetic: Arithmetic = {
    * @example $ceil(5.5) // 6
    * @example $ceil(5.1) // 6
    */
-  $ceil(args: Expry, vars: Record<string, Expry>): number {
+  $ceil(args: Value, vars: Record<string, Value>): number {
     const number = expry(args, vars) as number;
     return Math.ceil(number);
   },
@@ -83,7 +83,7 @@ export const arithmetic: Arithmetic = {
    * @example $divide([10, 2]) // 5
    * @example $divide([10, 3]) // 3.3333333333333335
    */
-  $divide(args: [Expry, Expry], vars: Record<string, Expry>): number {
+  $divide(args: [Value, Value], vars: Record<string, Value>): number {
     const number1 = expry(args[0], vars) as number;
     const number2 = expry(args[1], vars) as number;
     return number1 / number2;
@@ -100,7 +100,7 @@ export const arithmetic: Arithmetic = {
    * @example $exp(1) // 2.718281828459045
    * @example $exp(2) // 7.3890560989306495
    */
-  $exp(args: Expry, vars: Record<string, Expry>): number {
+  $exp(args: Value, vars: Record<string, Value>): number {
     const number = expry(args, vars) as number;
     return Math.exp(number);
   },
@@ -116,7 +116,7 @@ export const arithmetic: Arithmetic = {
    * @example $floor(5.5) // 5
    * @example $floor(5.1) // 5
    */
-  $floor(args: Expry, vars: Record<string, Expry>): number {
+  $floor(args: Value, vars: Record<string, Value>): number {
     const number = expry(args, vars) as number;
     return Math.floor(number);
   },
@@ -132,7 +132,7 @@ export const arithmetic: Arithmetic = {
    * @example $ln(1) // 0
    * @example $ln(2.718281828459045) // 1
    */
-  $ln(args: Expry, vars: Record<string, Expry>): number {
+  $ln(args: Value, vars: Record<string, Value>): number {
     const number = expry(args, vars) as number;
     return Math.log(number);
   },
@@ -148,7 +148,7 @@ export const arithmetic: Arithmetic = {
    * @example $log([10, 10]) // 1
    * @example $log([100, 10]) // 2
    */
-  $log(args: [Expry, Expry], vars: Record<string, Expry>): number {
+  $log(args: [Value, Value], vars: Record<string, Value>): number {
     const number1 = expry(args[0], vars) as number;
     const number2 = expry(args[1], vars) as number;
     return Math.log(number1) / Math.log(number2);
@@ -165,7 +165,7 @@ export const arithmetic: Arithmetic = {
    * @example $log10(1) // 0
    * @example $log10(10) // 1
    */
-  $log10(args: Expry, vars: Record<string, Expry>): number {
+  $log10(args: Value, vars: Record<string, Value>): number {
     const number = expry(args, vars) as number;
     return Math.log10(number);
   },
@@ -181,7 +181,7 @@ export const arithmetic: Arithmetic = {
    * @example $mod([10, 3]) // 1
    * @example $mod([10, 2]) // 0
    */
-  $mod(args: [Expry, Expry], vars: Record<string, Expry>): number {
+  $mod(args: [Value, Value], vars: Record<string, Value>): number {
     const number1 = expry(args[0], vars) as number;
     const number2 = expry(args[1], vars) as number;
     return number1 % number2;
@@ -197,8 +197,8 @@ export const arithmetic: Arithmetic = {
    *
    * @example $multiply([1, 2, 3]) // 6
    */
-  $multiply(args: Expry[], vars: Record<string, Expry>): number {
-    return args.reduce((acc: number, expr: Expry) => {
+  $multiply(args: Value[], vars: Record<string, Value>): number {
+    return args.reduce((acc: number, expr: Value) => {
       const number = expry(expr, vars) as number;
       return acc * number;
     }, 1);
@@ -215,7 +215,7 @@ export const arithmetic: Arithmetic = {
    * @example $pow([2, 3]) // 8
    * @example $pow([3, 2]) // 9
    */
-  $pow(args: [Expry, Expry], vars: Record<string, Expry>): number {
+  $pow(args: [Value, Value], vars: Record<string, Value>): number {
     const number1 = expry(args[0], vars) as number;
     const number2 = expry(args[1], vars) as number;
     return Math.pow(number1, number2);
@@ -232,7 +232,7 @@ export const arithmetic: Arithmetic = {
    * @example $round([5.5, 0]) // 6
    * @example $round([5.5, 1]) // 5.5
    */
-  $round(args: [Expry, Expry], vars: Record<string, Expry>): number {
+  $round(args: [Value, Value], vars: Record<string, Value>): number {
     const number = expry(args[0], vars) as number;
     const places = expry(args[1], vars) as number;
     const factor = Math.pow(10, places);
@@ -250,7 +250,7 @@ export const arithmetic: Arithmetic = {
    * @example $sqrt(4) // 2
    * @example $sqrt(9) // 3
    */
-  $sqrt(args: Expry, vars: Record<string, Expry>): number {
+  $sqrt(args: Value, vars: Record<string, Value>): number {
     const number = expry(args, vars) as number;
     return Math.sqrt(number);
   },
@@ -266,7 +266,7 @@ export const arithmetic: Arithmetic = {
    * @example $subtract([5, 3]) // 2
    * @example $subtract([3, 5]) // -2
    */
-  $subtract(args: [Expry, Expry], vars: Record<string, Expry>): number {
+  $subtract(args: [Value, Value], vars: Record<string, Value>): number {
     const number1 = expry(args[0], vars) as number;
     const number2 = expry(args[1], vars) as number;
     return number1 - number2;
@@ -283,7 +283,7 @@ export const arithmetic: Arithmetic = {
    * @example $trunc(5.5) // 5
    * @example $trunc(5.5, 1) // 5.5
    */
-  $trunc(args: [Expry, Expry], vars: Record<string, Expry>): number {
+  $trunc(args: [Value, Value], vars: Record<string, Value>): number {
     const number = expry(args[0], vars) as number;
     const places = expry(args[1], vars) as number;
     const factor = Math.pow(10, places);

@@ -1,15 +1,15 @@
 import { expry } from '..';
 
-import { Expry, Operator } from '../types';
+import { Value, Operator } from '../types';
 
 export type Comparison = {
-  $cmp: Operator<[Expry, Expry], number>;
-  $eq: Operator<[Expry, Expry], boolean>;
-  $gt: Operator<[Expry, Expry], boolean>;
-  $gte: Operator<[Expry, Expry], boolean>;
-  $lt: Operator<[Expry, Expry], boolean>;
-  $lte: Operator<[Expry, Expry], boolean>;
-  $ne: Operator<[Expry, Expry], boolean>;
+  $cmp: Operator<[Value, Value], number>;
+  $eq: Operator<[Value, Value], boolean>;
+  $gt: Operator<[Value, Value], boolean>;
+  $gte: Operator<[Value, Value], boolean>;
+  $lt: Operator<[Value, Value], boolean>;
+  $lte: Operator<[Value, Value], boolean>;
+  $ne: Operator<[Value, Value], boolean>;
 };
 
 export const comparison: Comparison = {
@@ -25,7 +25,7 @@ export const comparison: Comparison = {
    * @example $cmp([5, 3]) // 1
    * @example $cmp([3, 3]) // 0
    */
-  $cmp(args: [Expry, Expry], vars: Record<string, Expry>): number {
+  $cmp(args: [Value, Value], vars: Record<string, Value>): number {
     const a = expry(args[0], vars) as number | string;
     const b = expry(args[1], vars) as number | string;
     return a < b ? -1 : a > b ? 1 : 0;
@@ -42,7 +42,7 @@ export const comparison: Comparison = {
    * @example $eq([3, 3]) // true
    * @example $eq(['hello', 'bye']) // false
    */
-  $eq(args: [Expry, Expry], vars: Record<string, Expry>): boolean {
+  $eq(args: [Value, Value], vars: Record<string, Value>): boolean {
     const a = expry(args[0], vars);
     const b = expry(args[1], vars);
     return a === b;
@@ -60,7 +60,7 @@ export const comparison: Comparison = {
    * @example $gt([3, 5]) // false
    * @example $gt([3, 3]) // false
    */
-  $gt(args: [Expry, Expry], vars: Record<string, Expry>): boolean {
+  $gt(args: [Value, Value], vars: Record<string, Value>): boolean {
     const a = expry(args[0], vars) as number | string;
     const b = expry(args[1], vars) as number | string;
     return a > b;
@@ -78,7 +78,7 @@ export const comparison: Comparison = {
    * @example $gte([3, 5]) // false
    * @example $gte([3, 3]) // true
    */
-  $gte(args: [Expry, Expry], vars: Record<string, Expry>): boolean {
+  $gte(args: [Value, Value], vars: Record<string, Value>): boolean {
     const a = expry(args[0], vars) as number | string;
     const b = expry(args[1], vars) as number | string;
     return a >= b;
@@ -96,7 +96,7 @@ export const comparison: Comparison = {
    * @example $lt([5, 3]) // false
    * @example $lt([3, 3]) // false
    */
-  $lt(args: [Expry, Expry], vars: Record<string, Expry>): boolean {
+  $lt(args: [Value, Value], vars: Record<string, Value>): boolean {
     const a = expry(args[0], vars) as number | string;
     const b = expry(args[1], vars) as number | string;
     return a < b;
@@ -114,7 +114,7 @@ export const comparison: Comparison = {
    * @example $lte([5, 3]) // false
    * @example $lte([3, 3]) // true
    */
-  $lte(args: [Expry, Expry], vars: Record<string, Expry>): boolean {
+  $lte(args: [Value, Value], vars: Record<string, Value>): boolean {
     const a = expry(args[0], vars) as number | string;
     const b = expry(args[1], vars) as number | string;
     return a <= b;
@@ -131,7 +131,7 @@ export const comparison: Comparison = {
    * @example $ne([3, 3]) // false
    * @example $ne(['hello', 'bye']) // true
    */
-  $ne(args: [Expry, Expry], vars: Record<string, Expry>): boolean {
+  $ne(args: [Value, Value], vars: Record<string, Value>): boolean {
     const a = expry(args[0], vars);
     const b = expry(args[1], vars);
     return a !== b;
