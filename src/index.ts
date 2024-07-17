@@ -2,6 +2,8 @@ import { Expr, Eval, Vars, Data, Operator } from './types';
 
 import { operators } from './operators';
 
+export { Expr, Eval, Vars, Data };
+
 /**
  * It evaluates the expression with the given variables.
  *
