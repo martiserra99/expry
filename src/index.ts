@@ -1,4 +1,4 @@
-import { Expr, Eval, Vars, Operator } from './types';
+import { Expr, Eval, Vars, Data, Operator } from './types';
 
 import { operators } from './operators';
 
@@ -42,7 +42,7 @@ function isOperator(expr: Record<string, Expr>): boolean {
 
 function evalOperator(expr: Record<string, Expr>, vars: Vars): Eval {
   const key = Object.keys(expr)[0] as keyof typeof operators;
-  const operator = operators[key] as Operator<unknown, Eval>;
+  const operator = operators[key] as Operator<Expr, Eval>;
   return operator(expr[key], vars);
 }
 
@@ -69,7 +69,7 @@ function isVariable(expr: string): boolean {
 
 function evalVariable(expr: string, vars: Vars): Eval {
   const parts = expr.slice(1).split('.');
-  return parts.reduce((acc: unknown, key: string): unknown => {
+  return parts.reduce((acc: Data, key: string): Data => {
     if (isObj(acc) && key in acc) return acc[key];
     if (isArr(acc) && key in acc) return acc[Number(key)];
     return null;

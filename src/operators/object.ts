@@ -25,7 +25,7 @@ export const object: Object = {
   $getField(args: { field: Expr; input: Expr }, vars: Vars): Eval {
     const field = expry(args.field, vars) as string;
     const input = expry(args.input, vars) as Record<string, Eval>;
-    if (field in input) return field;
+    if (field in input) return input[field];
     return null;
   },
 
@@ -40,7 +40,7 @@ export const object: Object = {
    * @example $mergeObjects([{ item: 'apple', qty: 5, price: 2.5 }, { qty: 10, price: 1.2, sale: true }]) // { item: 'apple', qty: 10, price: 1.2, sale: true }
    */
   $mergeObjects(args: Expr[], vars: Vars): Record<string, Eval> {
-    return args.reduce((acc: Record<string, Expr>, arg) => {
+    return args.reduce((acc: Record<string, Eval>, arg) => {
       const object = expry(arg, vars) as Record<string, Eval>;
       return { ...acc, ...object };
     }, {});
