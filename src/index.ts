@@ -2,7 +2,7 @@ import { Expression, ExpressionResult, ExpressionVariables, ExpressionValue, Ope
 
 import { operations } from "./operations";
 
-export { Expression, ExpressionResult as Evaluation, ExpressionVariables as Variables, ExpressionValue as Value };
+export { Expression, ExpressionResult, ExpressionVariables, ExpressionValue };
 
 /**
  * It evaluates the expression with the given variables.
