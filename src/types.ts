@@ -1,11 +1,11 @@
-export type Expr = unknown;
-export type Eval = unknown;
+export type Expression = unknown;
+export type Evaluation = unknown;
 
-export type Vars = Record<string, Data>;
-export type Data = unknown;
+export type Variables = Record<string, Value>;
+export type Value = unknown;
 
 /**
- * An operator that takes arguments and variables, and returns a result.
+ * An operation that takes arguments and variables, and returns a result.
  *
  * @template T The type of the arguments.
  * @template U The type of the result.
@@ -13,9 +13,6 @@ export type Data = unknown;
  * @param args The arguments.
  * @param vars The variables.
  *
- * @returns The result of the operator.
+ * @returns The result of the operation.
  */
-export type Operator<T extends Expr, U extends Eval> = (
-  args: T,
-  vars: Vars
-) => U;
+export type Operation<T extends Expression, U extends Evaluation> = (args: T, vars: Variables) => U;

@@ -1,42 +1,17 @@
-import { expry } from '..';
+import { expry } from "..";
 
-import { Expr, Vars, Operator } from '../types';
+import { Expression, Variables, Operation } from "../types";
 
 export type Type = {
-  $convert: Operator<{ input: Expr; to: Expr }, boolean | number | string>;
-  $isBoolean: Operator<Expr, boolean>;
-  $isNumber: Operator<Expr, boolean>;
-  $isString: Operator<Expr, boolean>;
-  $toBoolean: Operator<Expr, boolean>;
-  $toNumber: Operator<Expr, number | null>;
-  $toString: Operator<Expr, string>;
+  $isBoolean: Operation<Expression, boolean>;
+  $isNumber: Operation<Expression, boolean>;
+  $isString: Operation<Expression, boolean>;
+  $toBoolean: Operation<Expression, boolean>;
+  $toNumber: Operation<Expression, number | null>;
+  $toString: Operation<Expression, string>;
 };
 
 export const type: Type = {
-  /**
-   * Converts a value to a specified type.
-   *
-   * @param args The value and the type (expressions evaluating to any type and a string that has to be 'bool', 'number', or 'string').
-   * @param vars The variables.
-   *
-   * @returns The converted value.
-   *
-   * @example $convert({ input: '5', to: 'number' }) // 5
-   * @example $convert({ input: 5, to: 'string' }) // '5'
-   * @example $convert({ input: 5, to: 'bool' }) // true
-   */
-  $convert(
-    args: { input: Expr; to: Expr },
-    vars: Vars
-  ): boolean | number | string {
-    const input = expry(args.input, vars);
-    const to = expry(args.to, vars) as 'bool' | 'number' | 'string';
-    if (to === 'bool') return Boolean(input);
-    if (to === 'number') return Number(input);
-    if (to === 'string') return String(input);
-    throw new Error(`Invalid type: ${to}`);
-  },
-
   /**
    * Returns true if the value is a boolean. Otherwise, it returns false.
    *
@@ -49,9 +24,9 @@ export const type: Type = {
    * @example $isBoolean(5) // false
    * @example $isBoolean('hello') // false
    */
-  $isBoolean(args: Expr, vars: Vars): boolean {
+  $isBoolean(args: Expression, vars: Variables): boolean {
     const value = expry(args, vars);
-    return typeof value === 'boolean';
+    return typeof value === "boolean";
   },
 
   /**
@@ -66,9 +41,9 @@ export const type: Type = {
    * @example $isNumber(true) // false
    * @example $isNumber('hello') // false
    */
-  $isNumber(args: Expr, vars: Vars): boolean {
+  $isNumber(args: Expression, vars: Variables): boolean {
     const value = expry(args, vars);
-    return typeof value === 'number';
+    return typeof value === "number";
   },
 
   /**
@@ -83,9 +58,9 @@ export const type: Type = {
    * @example $isString(5) // false
    * @example $isString(true) // false
    */
-  $isString(args: Expr, vars: Vars): boolean {
+  $isString(args: Expression, vars: Variables): boolean {
     const value = expry(args, vars);
-    return typeof value === 'string';
+    return typeof value === "string";
   },
 
   /**
@@ -101,7 +76,7 @@ export const type: Type = {
    * @example $toBoolean(5) // true
    * @example $toBoolean(0) // false
    */
-  $toBoolean(args: Expr, vars: Vars): boolean {
+  $toBoolean(args: Expression, vars: Variables): boolean {
     const value = expry(args, vars);
     return Boolean(value);
   },
@@ -117,7 +92,7 @@ export const type: Type = {
    * @example $toNumber('5') // 5
    * @example $toNumber('hello') // null
    */
-  $toNumber(args: Expr, vars: Vars): number | null {
+  $toNumber(args: Expression, vars: Variables): number | null {
     const value = expry(args, vars);
     const number = Number(value);
     if (isNaN(number)) return null;
@@ -135,7 +110,7 @@ export const type: Type = {
    * @example $toString(5) // '5'
    * @example $toString(true) // 'true'
    */
-  $toString(args: Expr, vars: Vars): string {
+  $toString(args: Expression, vars: Variables): string {
     const value = expry(args, vars);
     return String(value);
   },

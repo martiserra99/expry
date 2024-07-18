@@ -1,17 +1,11 @@
-import { expry } from '..';
+import { expry } from "..";
 
-import { Expr, Eval, Vars, Operator } from '../types';
+import { Expression, Evaluation, Variables, Operation } from "../types";
 
 export type Conditional = {
-  $cond: Operator<{ if: Expr; then: Expr; else: Expr }, Eval>;
-  $ifNull: Operator<Expr[], Eval>;
-  $switch: Operator<
-    {
-      branches: { case: Expr; then: Expr }[];
-      default: Expr;
-    },
-    Eval
-  >;
+  $cond: Operation<{ if: Expression; then: Expression; else: Expression }, Evaluation>;
+  $ifNull: Operation<Expression[], Evaluation>;
+  $switch: Operation<{ branches: { case: Expression; then: Expression }[]; default: Expression }, Evaluation>;
 };
 
 export const conditional: Conditional = {
@@ -26,10 +20,8 @@ export const conditional: Conditional = {
    * @example $cond({ if: true, then: 'yes', else: 'no' }) // 'yes'
    * @example $cond({ if: false, then: 'yes', else: 'no' }) // 'no'
    */
-  $cond(args: { if: Expr; then: Expr; else: Expr }, vars: Vars): Eval {
-    return expry(args.if, vars)
-      ? expry(args.then, vars)
-      : expry(args.else, vars);
+  $cond(args: { if: Expression; then: Expression; else: Expression }, vars: Variables): Evaluation {
+    return expry(args.if, vars) ? expry(args.then, vars) : expry(args.else, vars);
   },
 
   /**
@@ -44,7 +36,7 @@ export const conditional: Conditional = {
    * @example $ifNull([null, null, 'bye']) // 'bye'
    * @example $ifNull([null, null, null]) // null
    */
-  $ifNull(args: Expr[], vars: Vars): Eval {
+  $ifNull(args: Expression[], vars: Variables): Evaluation {
     for (const arg of args) {
       const value = expry(arg, vars);
       if (value !== null) return value;
@@ -64,12 +56,9 @@ export const conditional: Conditional = {
    * @example $switch({ branches: [{ case: false, then: 1 }, { case: false, then: 2 }], default: 3 } }) // 3
    */
   $switch(
-    args: {
-      branches: { case: Expr; then: Expr }[];
-      default: Expr;
-    },
-    vars: Vars
-  ): Eval {
+    args: { branches: { case: Expression; then: Expression }[]; default: Expression },
+    vars: Variables
+  ): Evaluation {
     for (const branch of args.branches) {
       if (expry(branch.case, vars)) {
         return expry(branch.then, vars);

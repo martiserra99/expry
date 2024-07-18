@@ -1,8 +1,8 @@
-import { Expr, Eval, Vars, Data, Operator } from './types';
+import { Expression, Evaluation, Variables, Value, Operation } from "./types";
 
-import { operators } from './operators';
+import { operations } from "./operations";
 
-export { Expr, Eval, Vars, Data };
+export { Expression, Evaluation, Variables, Value };
 
 /**
  * It evaluates the expression with the given variables.
@@ -12,43 +12,43 @@ export { Expr, Eval, Vars, Data };
  *
  * @returns The result of the expression.
  */
-export function expry(expr: Expr, vars: Vars = {}): Eval {
+export function expry(expr: Expression, vars: Variables = {}): Evaluation {
   if (isArr(expr)) return evalArr(expr, vars);
   if (isObj(expr)) return evalObj(expr, vars);
   if (isStr(expr)) return evalStr(expr, vars);
   return expr;
 }
 
-function isArr(expr: Expr): expr is Expr[] {
+function isArr(expr: Expression): expr is Expression[] {
   return Array.isArray(expr);
 }
 
-function evalArr(expr: Expr[], vars: Vars): Eval {
+function evalArr(expr: Expression[], vars: Variables): Evaluation {
   return expr.map(expression => expry(expression, vars));
 }
 
-function isObj(expr: Expr): expr is Record<string, Expr> {
-  return typeof expr === 'object' && !Array.isArray(expr) && expr !== null;
+function isObj(expr: Expression): expr is Record<string, Expression> {
+  return typeof expr === "object" && !Array.isArray(expr) && expr !== null;
 }
 
-function evalObj(expr: Record<string, Expr>, vars: Vars): Eval {
+function evalObj(expr: Record<string, Expression>, vars: Variables): Evaluation {
   if (isOperator(expr)) return evalOperator(expr, vars);
   return evalObjValue(expr, vars);
 }
 
-function isOperator(expr: Record<string, Expr>): boolean {
+function isOperator(expr: Record<string, Expression>): boolean {
   const keys = Object.keys(expr);
-  if (keys.length === 1) return keys[0] in operators;
+  if (keys.length === 1) return keys[0] in operations;
   return false;
 }
 
-function evalOperator(expr: Record<string, Expr>, vars: Vars): Eval {
-  const key = Object.keys(expr)[0] as keyof typeof operators;
-  const operator = operators[key] as Operator<Expr, Eval>;
+function evalOperator(expr: Record<string, Expression>, vars: Variables): Evaluation {
+  const key = Object.keys(expr)[0] as keyof typeof operations;
+  const operator = operations[key] as Operation<Expression, Evaluation>;
   return operator(expr[key], vars);
 }
 
-function evalObjValue(expr: Record<string, Expr>, vars: Vars): Eval {
+function evalObjValue(expr: Record<string, Expression>, vars: Variables): Evaluation {
   return Object.fromEntries(
     Object.entries(expr).map(([key, expr]) => {
       return [evalStrValue(key), expry(expr, vars)];
@@ -56,29 +56,29 @@ function evalObjValue(expr: Record<string, Expr>, vars: Vars): Eval {
   );
 }
 
-function isStr(expr: Expr): expr is string {
-  return typeof expr === 'string';
+function isStr(expr: Expression): expr is string {
+  return typeof expr === "string";
 }
 
-function evalStr(expr: string, vars: Vars): Eval {
+function evalStr(expr: string, vars: Variables): Evaluation {
   if (isVariable(expr)) return evalVariable(expr, vars);
   return evalStrValue(expr);
 }
 
 function isVariable(expr: string): boolean {
-  return expr.startsWith('$');
+  return expr.startsWith("$");
 }
 
-function evalVariable(expr: string, vars: Vars): Eval {
-  const parts = expr.slice(1).split('.');
-  return parts.reduce((acc: Data, key: string): Data => {
+function evalVariable(expr: string, vars: Variables): Evaluation {
+  const parts = expr.slice(1).split(".");
+  return parts.reduce((acc: Value, key: string): Value => {
     if (isObj(acc) && key in acc) return acc[key];
     if (isArr(acc) && key in acc) return acc[Number(key)];
     return null;
   }, vars);
 }
 
-function evalStrValue(expr: string): Eval {
-  if (expr.startsWith('#')) return expr.slice(1);
+function evalStrValue(expr: string): Evaluation {
+  if (expr.startsWith("#")) return expr.slice(1);
   return expr;
 }

@@ -1,9 +1,9 @@
-import { expry } from '..';
+import { expry } from "..";
 
-import { Expr, Eval, Vars, Operator } from '../types';
+import { Expression, Evaluation, Variables, Operation } from "../types";
 
 export type Variable = {
-  $let: Operator<{ vars: Record<string, Expr>; in: Expr }, Eval>;
+  $let: Operation<{ vars: Record<string, Expression>; in: Expression }, Evaluation>;
 };
 
 export const variable: Variable = {
@@ -17,7 +17,7 @@ export const variable: Variable = {
    *
    * @example $let({ vars: { age: 24 }, in: { isAdult: { $gte: ['$$age', 18] } } }) // { isAdult: true }
    */
-  $let(args: { vars: Record<string, Expr>; in: Expr }, vars: Vars): Eval {
+  $let(args: { vars: Record<string, Expression>; in: Expression }, vars: Variables): Evaluation {
     const variables = Object.fromEntries(
       Object.entries(args.vars).map(([key, value]) => {
         return [`$${key}`, expry(value, vars)];

@@ -1,11 +1,11 @@
-import { expry } from '..';
+import { expry } from "..";
 
-import { Expr, Vars, Operator } from '../types';
+import { Expression, Variables, Operation } from "../types";
 
 export type Boolean = {
-  $and: Operator<Expr[], boolean>;
-  $not: Operator<Expr, boolean>;
-  $or: Operator<Expr[], boolean>;
+  $and: Operation<Expression[], boolean>;
+  $not: Operation<Expression, boolean>;
+  $or: Operation<Expression[], boolean>;
 };
 
 export const boolean: Boolean = {
@@ -20,7 +20,7 @@ export const boolean: Boolean = {
    * @example $and([true, true, true]) // true
    * @example $and([true, false, true]) // false
    */
-  $and(args: Expr[], vars: Vars): boolean {
+  $and(args: Expression[], vars: Variables): boolean {
     return args.every(expr => {
       const boolean = expry(expr, vars) as boolean;
       return boolean;
@@ -38,7 +38,7 @@ export const boolean: Boolean = {
    * @example $not(true) // false
    * @example $not(false) // true
    */
-  $not(args: Expr, vars: Vars): boolean {
+  $not(args: Expression, vars: Variables): boolean {
     const boolean = expry(args, vars) as boolean;
     return !boolean;
   },
@@ -54,7 +54,7 @@ export const boolean: Boolean = {
    * @example $or([true, false, true]) // true
    * @example $or([false, false, false]) // false
    */
-  $or(args: Expr[], vars: Vars): boolean {
+  $or(args: Expression[], vars: Variables): boolean {
     return args.some(expr => {
       const boolean = expry(expr, vars) as boolean;
       return boolean;
