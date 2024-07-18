@@ -1,6 +1,6 @@
 import { expry } from "..";
 
-import { Expression, Variables, Operation } from "../types";
+import { Expression, ExpressionVariables, Operation } from "../types";
 
 export type Type = {
   $isBoolean: Operation<Expression, boolean>;
@@ -24,7 +24,7 @@ export const type: Type = {
    * @example $isBoolean(5) // false
    * @example $isBoolean('hello') // false
    */
-  $isBoolean(args: Expression, vars: Variables): boolean {
+  $isBoolean(args: Expression, vars: ExpressionVariables): boolean {
     const value = expry(args, vars);
     return typeof value === "boolean";
   },
@@ -41,7 +41,7 @@ export const type: Type = {
    * @example $isNumber(true) // false
    * @example $isNumber('hello') // false
    */
-  $isNumber(args: Expression, vars: Variables): boolean {
+  $isNumber(args: Expression, vars: ExpressionVariables): boolean {
     const value = expry(args, vars);
     return typeof value === "number";
   },
@@ -58,7 +58,7 @@ export const type: Type = {
    * @example $isString(5) // false
    * @example $isString(true) // false
    */
-  $isString(args: Expression, vars: Variables): boolean {
+  $isString(args: Expression, vars: ExpressionVariables): boolean {
     const value = expry(args, vars);
     return typeof value === "string";
   },
@@ -76,7 +76,7 @@ export const type: Type = {
    * @example $toBoolean(5) // true
    * @example $toBoolean(0) // false
    */
-  $toBoolean(args: Expression, vars: Variables): boolean {
+  $toBoolean(args: Expression, vars: ExpressionVariables): boolean {
     const value = expry(args, vars);
     return Boolean(value);
   },
@@ -92,7 +92,7 @@ export const type: Type = {
    * @example $toNumber('5') // 5
    * @example $toNumber('hello') // null
    */
-  $toNumber(args: Expression, vars: Variables): number | null {
+  $toNumber(args: Expression, vars: ExpressionVariables): number | null {
     const value = expry(args, vars);
     const number = Number(value);
     if (isNaN(number)) return null;
@@ -110,7 +110,7 @@ export const type: Type = {
    * @example $toString(5) // '5'
    * @example $toString(true) // 'true'
    */
-  $toString(args: Expression, vars: Variables): string {
+  $toString(args: Expression, vars: ExpressionVariables): string {
     const value = expry(args, vars);
     return String(value);
   },

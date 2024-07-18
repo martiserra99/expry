@@ -1,8 +1,8 @@
 export type Expression = unknown;
-export type Evaluation = unknown;
+export type ExpressionResult = unknown;
 
-export type Variables = Record<string, Value>;
-export type Value = unknown;
+export type ExpressionVariables = Record<string, ExpressionValue>;
+export type ExpressionValue = unknown;
 
 /**
  * An operation that takes arguments and variables, and returns a result.
@@ -15,4 +15,4 @@ export type Value = unknown;
  *
  * @returns The result of the operation.
  */
-export type Operation<T extends Expression, U extends Evaluation> = (args: T, vars: Variables) => U;
+export type Operation<T extends Expression, U extends ExpressionResult> = (args: T, vars: ExpressionVariables) => U;

@@ -1,23 +1,23 @@
 import { expry } from "..";
 
-import { Expression, Evaluation, Variables, Operation } from "../types";
+import { Expression, ExpressionResult, ExpressionVariables, Operation } from "../types";
 
 export type Array = {
-  $arrayElemAt: Operation<[Expression, Expression], Evaluation>;
-  $concatArrays: Operation<Expression[], Evaluation[]>;
-  $filter: Operation<{ input: Expression; cond: Expression; as: Expression }, Evaluation[]>;
-  $firstN: Operation<{ input: Expression; n: Expression }, Evaluation[]>;
+  $arrayElemAt: Operation<[Expression, Expression], ExpressionResult>;
+  $concatArrays: Operation<Expression[], ExpressionResult[]>;
+  $filter: Operation<{ input: Expression; cond: Expression; as: Expression }, ExpressionResult[]>;
+  $firstN: Operation<{ input: Expression; n: Expression }, ExpressionResult[]>;
   $in: Operation<[Expression, Expression], boolean>;
   $indexOfArray: Operation<[Expression, Expression], number>;
-  $lastN: Operation<{ input: Expression; n: Expression }, Evaluation[]>;
-  $map: Operation<{ input: Expression; as: Expression; in: Expression }, Evaluation[]>;
+  $lastN: Operation<{ input: Expression; n: Expression }, ExpressionResult[]>;
+  $map: Operation<{ input: Expression; as: Expression; in: Expression }, ExpressionResult[]>;
   $maxN: Operation<{ input: Expression; n: Expression }, number[] | string[]>;
   $minN: Operation<{ input: Expression; n: Expression }, number[] | string[]>;
-  $reduce: Operation<{ input: Expression; initialValue: Expression; in: Expression }, Evaluation>;
-  $reverseArray: Operation<Expression, Evaluation[]>;
+  $reduce: Operation<{ input: Expression; initialValue: Expression; in: Expression }, ExpressionResult>;
+  $reverseArray: Operation<Expression, ExpressionResult[]>;
   $size: Operation<Expression, number>;
-  $slice: Operation<[Expression, Expression, Expression], Evaluation[]>;
-  $sortArray: Operation<{ input: Expression; sortBy: Expression }, Evaluation[]>;
+  $slice: Operation<[Expression, Expression, Expression], ExpressionResult[]>;
+  $sortArray: Operation<{ input: Expression; sortBy: Expression }, ExpressionResult[]>;
 };
 
 export const array: Array = {
@@ -33,8 +33,8 @@ export const array: Array = {
    * @example $arrayElemAt([1, 2, 3], 1) // 2
    * @example $arrayElemAt([1, 2, 3], 3) // null
    */
-  $arrayElemAt(args: [Expression, Expression], vars: Variables): Evaluation {
-    const array = expry(args[0], vars) as Evaluation[];
+  $arrayElemAt(args: [Expression, Expression], vars: ExpressionVariables): ExpressionResult {
+    const array = expry(args[0], vars) as ExpressionResult[];
     const index = expry(args[1], vars) as number;
     if (index < 0 || index >= array.length) return null;
     return array[index];
@@ -52,9 +52,9 @@ export const array: Array = {
    * @example $concatArrays([['hello', ' '], ['world']]) // ['hello', ' ', 'world']
    * @example $concatArrays([['hello', ' '], [['world']]]) // ['hello', ' ', ['world']]
    */
-  $concatArrays(args: Expression[], vars: Variables): Evaluation[] {
-    return args.reduce((acc: Evaluation[], expr: Expression) => {
-      const array = expry(expr, vars) as Evaluation[];
+  $concatArrays(args: Expression[], vars: ExpressionVariables): ExpressionResult[] {
+    return args.reduce((acc: ExpressionResult[], expr: Expression) => {
+      const array = expry(expr, vars) as ExpressionResult[];
       return acc.concat(array);
     }, []);
   },
@@ -69,8 +69,11 @@ export const array: Array = {
    *
    * @example $filter({ input: [1, 2, 3, 4], as: 'num', cond: { $gt: ['$$num', 2] } }) // [3, 4]
    */
-  $filter(args: { input: Expression; cond: Expression; as: Expression }, vars: Variables): Evaluation[] {
-    const array = expry(args.input, vars) as Evaluation[];
+  $filter(
+    args: { input: Expression; cond: Expression; as: Expression },
+    vars: ExpressionVariables
+  ): ExpressionResult[] {
+    const array = expry(args.input, vars) as ExpressionResult[];
     const as = expry(args.as, vars) as string;
     return array.filter(value => {
       return expry(args.cond, { ...vars, [`$${as}`]: value });
@@ -89,8 +92,8 @@ export const array: Array = {
    * @example $firstN({ n: 3, input: [1, 2] } }) // [1, 2]
    * @example $firstN({ n: 2, input: [1] } }) // [1]
    */
-  $firstN(args: { input: Expression; n: Expression }, vars: Variables): Evaluation[] {
-    const array = expry(args.input, vars) as Evaluation[];
+  $firstN(args: { input: Expression; n: Expression }, vars: ExpressionVariables): ExpressionResult[] {
+    const array = expry(args.input, vars) as ExpressionResult[];
     const n = expry(args.n, vars) as number;
     return array.slice(0, n);
   },
@@ -107,9 +110,9 @@ export const array: Array = {
    * @example $in({ $in: [4, [1, 2, 3]] }) // false
    * @example $in({ $in: ['world', ['hello', 'world']] }) // true
    */
-  $in(args: [Expression, Expression], vars: Variables): boolean {
+  $in(args: [Expression, Expression], vars: ExpressionVariables): boolean {
     const value = expry(args[0], vars);
-    const array = expry(args[1], vars) as Evaluation[];
+    const array = expry(args[1], vars) as ExpressionResult[];
     return array.includes(value);
   },
 
@@ -124,8 +127,8 @@ export const array: Array = {
    * @example $indexOfArray([['a', 'abc'], 'a']) // 0
    * @example $indexOfArray([[1, 2], 5]) // -1
    */
-  $indexOfArray(args: [Expression, Expression], vars: Variables): number {
-    const array = expry(args[0], vars) as Evaluation[];
+  $indexOfArray(args: [Expression, Expression], vars: ExpressionVariables): number {
+    const array = expry(args[0], vars) as ExpressionResult[];
     const value = expry(args[1], vars);
     return array.indexOf(value);
   },
@@ -142,8 +145,8 @@ export const array: Array = {
    * @example $lastN({ n: 3, input: [1, 2] } }) // [1, 2]
    * @example $lastN({ n: 2, input: [1] } }) // [1]
    */
-  $lastN(args: { input: Expression; n: Expression }, vars: Variables): Evaluation[] {
-    const array = expry(args.input, vars) as Evaluation[];
+  $lastN(args: { input: Expression; n: Expression }, vars: ExpressionVariables): ExpressionResult[] {
+    const array = expry(args.input, vars) as ExpressionResult[];
     const n = expry(args.n, vars) as number;
     return array.slice(-n);
   },
@@ -159,8 +162,8 @@ export const array: Array = {
    * @example $map({ input: [1, 2, 3], as: 'num', in: { $add: ['$$num', 1] } }) // [2, 3, 4]
    * @example $map({ input: ['a', 'b'], as: 'str', in: { $toUpper: '$$str' } }) // ['A', 'B']
    */
-  $map(args: { input: Expression; as: Expression; in: Expression }, vars: Variables): Evaluation[] {
-    const array = expry(args.input, vars) as Evaluation[];
+  $map(args: { input: Expression; as: Expression; in: Expression }, vars: ExpressionVariables): ExpressionResult[] {
+    const array = expry(args.input, vars) as ExpressionResult[];
     const as = expry(args.as, vars) as string;
     return array.map(value => {
       return expry(args.in, { ...vars, [`$${as}`]: value });
@@ -179,7 +182,7 @@ export const array: Array = {
    * @example $maxN({ n: 3, input: [3, 7, 2, 4] } }) // [7, 4, 3]
    * @example $maxN({ n: 5, input: [3, 7, 2, 4] } }) // [7, 4, 3, 2]
    */
-  $maxN(args: { input: Expression; n: Expression }, vars: Variables): number[] | string[] {
+  $maxN(args: { input: Expression; n: Expression }, vars: ExpressionVariables): number[] | string[] {
     const array = expry(args.input, vars) as number[] | string[];
     const n = expry(args.n, vars) as number;
     return array.sort((a: string | number, b: string | number) => (b > a ? 1 : -1)).slice(0, n);
@@ -197,7 +200,7 @@ export const array: Array = {
    * @example $minN({ n: 3, input: [3, 7, 2, 4] } }) // [2, 3, 4]
    * @example $minN({ n: 5, input: [3, 7, 2, 4] } }) // [2, 3, 4, 7]
    */
-  $minN(args: { input: Expression; n: Expression }, vars: Variables): number[] | string[] {
+  $minN(args: { input: Expression; n: Expression }, vars: ExpressionVariables): number[] | string[] {
     const array = expry(args.input, vars) as number[] | string[];
     const n = expry(args.n, vars) as number;
     return array.sort((a: string | number, b: string | number) => (a > b ? 1 : -1)).slice(0, n);
@@ -214,8 +217,11 @@ export const array: Array = {
    * @example $reduce({ input: ['a', 'b', 'c'], initialValue: '', in: { $concat: ['$$value', '$$this'] } }) // 'abc'
    * @example $reduce({ input: [1, 2, 3], initialValue: 0, in: { $add: ['$$value', '$$this'] } } }) // 6
    */
-  $reduce(args: { input: Expression; initialValue: Expression; in: Expression }, vars: Variables): Evaluation {
-    const array = expry(args.input, vars) as Evaluation[];
+  $reduce(
+    args: { input: Expression; initialValue: Expression; in: Expression },
+    vars: ExpressionVariables
+  ): ExpressionResult {
+    const array = expry(args.input, vars) as ExpressionResult[];
     const initialValue = expry(args.initialValue, vars);
     return array.reduce((acc, value) => {
       return expry(args.in, { ...vars, $value: acc, $this: value });
@@ -233,8 +239,8 @@ export const array: Array = {
    * @example $reverseArray([4, 2, 3]) // [3, 2, 4]
    * @example $reverseArray(['a', 'c', 'b']) // ['b', 'c', 'a']
    */
-  $reverseArray(args: Expression, vars: Variables): Evaluation[] {
-    const array = expry(args, vars) as Evaluation[];
+  $reverseArray(args: Expression, vars: ExpressionVariables): ExpressionResult[] {
+    const array = expry(args, vars) as ExpressionResult[];
     return array.reverse();
   },
 
@@ -250,8 +256,8 @@ export const array: Array = {
    * @example $size(['a', 'b', 'c', 'd']) // 4
    * @example $size([]) // 0
    */
-  $size(args: Expression, vars: Variables): number {
-    const array = expry(args, vars) as Evaluation[];
+  $size(args: Expression, vars: ExpressionVariables): number {
+    const array = expry(args, vars) as ExpressionResult[];
     return array.length;
   },
 
@@ -268,8 +274,8 @@ export const array: Array = {
    * @example $slice([[1, 2, 3], 1, 3]) // [2, 3]
    * @example $slice([[1, 2, 3], 3, 2]) // []
    */
-  $slice(args: [Expression, Expression, Expression], vars: Variables): Evaluation[] {
-    const array = expry(args[0], vars) as Evaluation[];
+  $slice(args: [Expression, Expression, Expression], vars: ExpressionVariables): ExpressionResult[] {
+    const array = expry(args[0], vars) as ExpressionResult[];
     const position = expry(args[1], vars) as number;
     const n = expry(args[2], vars) as number;
     return array.slice(position, position + n);
@@ -286,8 +292,8 @@ export const array: Array = {
    * @example $sortArray({ input: [3, 4, 2], sortBy: { $cmp: ['$$first', '$$second'] } }) // [2, 3, 4]
    * @example $sortArray({ input: [3, 4, 2], sortBy: { $cmp: ['$$second', '$$first'] } }) // [4, 3, 2]
    */
-  $sortArray(args: { input: Expression; sortBy: Expression }, vars: Variables): Evaluation[] {
-    const array = expry(args.input, vars) as Evaluation[];
+  $sortArray(args: { input: Expression; sortBy: Expression }, vars: ExpressionVariables): ExpressionResult[] {
+    const array = expry(args.input, vars) as ExpressionResult[];
     return array.sort((a, b) => {
       const variables = { ...vars, $first: a, $second: b };
       const number = expry(args.sortBy, variables) as number;

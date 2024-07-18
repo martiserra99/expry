@@ -1,11 +1,11 @@
 import { expry } from "../index";
 
-import { Expression, Evaluation, Variables, Operation } from "../types";
+import { Expression, ExpressionResult, ExpressionVariables, Operation } from "../types";
 
 export type Object = {
-  $getField: Operation<{ field: Expression; input: Expression }, Evaluation>;
-  $mergeObjects: Operation<Expression[], Record<string, Evaluation>>;
-  $setField: Operation<{ field: Expression; input: Expression; value: Expression }, Record<string, Evaluation>>;
+  $getField: Operation<{ field: Expression; input: Expression }, ExpressionResult>;
+  $mergeObjects: Operation<Expression[], Record<string, ExpressionResult>>;
+  $setField: Operation<{ field: Expression; input: Expression; value: Expression }, Record<string, ExpressionResult>>;
 };
 
 export const object: Object = {
@@ -19,9 +19,9 @@ export const object: Object = {
    *
    * @example $getField({ field: 'qty', input: { item: 'apple', qty: 25, price: 4.5 } }) // 25
    */
-  $getField(args: { field: Expression; input: Expression }, vars: Variables): Evaluation {
+  $getField(args: { field: Expression; input: Expression }, vars: ExpressionVariables): ExpressionResult {
     const field = expry(args.field, vars) as string;
-    const input = expry(args.input, vars) as Record<string, Evaluation>;
+    const input = expry(args.input, vars) as Record<string, ExpressionResult>;
     if (field in input) return input[field];
     return null;
   },
@@ -36,9 +36,9 @@ export const object: Object = {
    *
    * @example $mergeObjects([{ item: 'apple', qty: 5, price: 2.5 }, { qty: 10, price: 1.2, sale: true }]) // { item: 'apple', qty: 10, price: 1.2, sale: true }
    */
-  $mergeObjects(args: Expression[], vars: Variables): Record<string, Evaluation> {
-    return args.reduce((acc: Record<string, Evaluation>, arg) => {
-      const object = expry(arg, vars) as Record<string, Evaluation>;
+  $mergeObjects(args: Expression[], vars: ExpressionVariables): Record<string, ExpressionResult> {
+    return args.reduce((acc: Record<string, ExpressionResult>, arg) => {
+      const object = expry(arg, vars) as Record<string, ExpressionResult>;
       return { ...acc, ...object };
     }, {});
   },
@@ -55,10 +55,10 @@ export const object: Object = {
    */
   $setField(
     args: { field: Expression; input: Expression; value: Expression },
-    vars: Variables
-  ): Record<string, Evaluation> {
+    vars: ExpressionVariables
+  ): Record<string, ExpressionResult> {
     const field = expry(args.field, vars) as string;
-    const input = expry(args.input, vars) as Record<string, Evaluation>;
+    const input = expry(args.input, vars) as Record<string, ExpressionResult>;
     const value = expry(args.value, vars);
     return { ...input, [field]: value };
   },

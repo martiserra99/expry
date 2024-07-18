@@ -1,11 +1,11 @@
 import { expry } from "..";
 
-import { Expression, Evaluation, Variables, Operation } from "../types";
+import { Expression, ExpressionResult, ExpressionVariables, Operation } from "../types";
 
 export type Conditional = {
-  $cond: Operation<{ if: Expression; then: Expression; else: Expression }, Evaluation>;
-  $ifNull: Operation<Expression[], Evaluation>;
-  $switch: Operation<{ branches: { case: Expression; then: Expression }[]; default: Expression }, Evaluation>;
+  $cond: Operation<{ if: Expression; then: Expression; else: Expression }, ExpressionResult>;
+  $ifNull: Operation<Expression[], ExpressionResult>;
+  $switch: Operation<{ branches: { case: Expression; then: Expression }[]; default: Expression }, ExpressionResult>;
 };
 
 export const conditional: Conditional = {
@@ -20,7 +20,7 @@ export const conditional: Conditional = {
    * @example $cond({ if: true, then: 'yes', else: 'no' }) // 'yes'
    * @example $cond({ if: false, then: 'yes', else: 'no' }) // 'no'
    */
-  $cond(args: { if: Expression; then: Expression; else: Expression }, vars: Variables): Evaluation {
+  $cond(args: { if: Expression; then: Expression; else: Expression }, vars: ExpressionVariables): ExpressionResult {
     return expry(args.if, vars) ? expry(args.then, vars) : expry(args.else, vars);
   },
 
@@ -36,7 +36,7 @@ export const conditional: Conditional = {
    * @example $ifNull([null, null, 'bye']) // 'bye'
    * @example $ifNull([null, null, null]) // null
    */
-  $ifNull(args: Expression[], vars: Variables): Evaluation {
+  $ifNull(args: Expression[], vars: ExpressionVariables): ExpressionResult {
     for (const arg of args) {
       const value = expry(arg, vars);
       if (value !== null) return value;
@@ -57,8 +57,8 @@ export const conditional: Conditional = {
    */
   $switch(
     args: { branches: { case: Expression; then: Expression }[]; default: Expression },
-    vars: Variables
-  ): Evaluation {
+    vars: ExpressionVariables
+  ): ExpressionResult {
     for (const branch of args.branches) {
       if (expry(branch.case, vars)) {
         return expry(branch.then, vars);
