@@ -1,24 +1,24 @@
 import { expry } from "..";
 
-import { Expression, ExpressionVariables, Operation } from "../types";
+import { Value, Variables, Operation } from "../types";
 
 export type Arithmetic = {
-  $abs: Operation<Expression, number>;
-  $add: Operation<Expression[], number>;
-  $ceil: Operation<Expression, number>;
-  $divide: Operation<[Expression, Expression], number>;
-  $exp: Operation<Expression, number>;
-  $floor: Operation<Expression, number>;
-  $ln: Operation<Expression, number>;
-  $log: Operation<[Expression, Expression], number>;
-  $log10: Operation<Expression, number>;
-  $mod: Operation<[Expression, Expression], number>;
-  $multiply: Operation<Expression[], number>;
-  $pow: Operation<[Expression, Expression], number>;
-  $round: Operation<[Expression, Expression], number>;
-  $sqrt: Operation<Expression, number>;
-  $subtract: Operation<[Expression, Expression], number>;
-  $trunc: Operation<[Expression, Expression], number>;
+  $abs: Operation<Value, number>;
+  $add: Operation<Value[], number>;
+  $ceil: Operation<Value, number>;
+  $divide: Operation<[Value, Value], number>;
+  $exp: Operation<Value, number>;
+  $floor: Operation<Value, number>;
+  $ln: Operation<Value, number>;
+  $log: Operation<[Value, Value], number>;
+  $log10: Operation<Value, number>;
+  $mod: Operation<[Value, Value], number>;
+  $multiply: Operation<Value[], number>;
+  $pow: Operation<[Value, Value], number>;
+  $round: Operation<[Value, Value], number>;
+  $sqrt: Operation<Value, number>;
+  $subtract: Operation<[Value, Value], number>;
+  $trunc: Operation<[Value, Value], number>;
 };
 
 export const arithmetic: Arithmetic = {
@@ -33,7 +33,7 @@ export const arithmetic: Arithmetic = {
    * @example $abs(-5) // 5
    * @example $abs(5) // 5
    */
-  $abs(args: Expression, vars: ExpressionVariables): number {
+  $abs(args: Value, vars: Variables): number {
     const number = expry(args, vars) as number;
     return Math.abs(number);
   },
@@ -49,8 +49,8 @@ export const arithmetic: Arithmetic = {
    * @example $add([1, 2, 3]) // 6
    * @example $add([1, 2, 3, 4]) // 10
    */
-  $add(args: Expression[], vars: ExpressionVariables): number {
-    return args.reduce((acc: number, expr: Expression) => {
+  $add(args: Value[], vars: Variables): number {
+    return args.reduce((acc: number, expr: Value) => {
       const number = expry(expr, vars) as number;
       return acc + number;
     }, 0);
@@ -67,7 +67,7 @@ export const arithmetic: Arithmetic = {
    * @example $ceil(5.5) // 6
    * @example $ceil(5.1) // 6
    */
-  $ceil(args: Expression, vars: ExpressionVariables): number {
+  $ceil(args: Value, vars: Variables): number {
     const number = expry(args, vars) as number;
     return Math.ceil(number);
   },
@@ -83,7 +83,7 @@ export const arithmetic: Arithmetic = {
    * @example $divide([10, 2]) // 5
    * @example $divide([10, 3]) // 3.3333333333333335
    */
-  $divide(args: [Expression, Expression], vars: ExpressionVariables): number {
+  $divide(args: [Value, Value], vars: Variables): number {
     const number1 = expry(args[0], vars) as number;
     const number2 = expry(args[1], vars) as number;
     return number1 / number2;
@@ -100,7 +100,7 @@ export const arithmetic: Arithmetic = {
    * @example $exp(1) // 2.718281828459045
    * @example $exp(2) // 7.3890560989306495
    */
-  $exp(args: Expression, vars: ExpressionVariables): number {
+  $exp(args: Value, vars: Variables): number {
     const number = expry(args, vars) as number;
     return Math.exp(number);
   },
@@ -116,7 +116,7 @@ export const arithmetic: Arithmetic = {
    * @example $floor(5.5) // 5
    * @example $floor(5.1) // 5
    */
-  $floor(args: Expression, vars: ExpressionVariables): number {
+  $floor(args: Value, vars: Variables): number {
     const number = expry(args, vars) as number;
     return Math.floor(number);
   },
@@ -132,7 +132,7 @@ export const arithmetic: Arithmetic = {
    * @example $ln(1) // 0
    * @example $ln(2.718281828459045) // 1
    */
-  $ln(args: Expression, vars: ExpressionVariables): number {
+  $ln(args: Value, vars: Variables): number {
     const number = expry(args, vars) as number;
     return Math.log(number);
   },
@@ -148,7 +148,7 @@ export const arithmetic: Arithmetic = {
    * @example $log([10, 10]) // 1
    * @example $log([100, 10]) // 2
    */
-  $log(args: [Expression, Expression], vars: ExpressionVariables): number {
+  $log(args: [Value, Value], vars: Variables): number {
     const number1 = expry(args[0], vars) as number;
     const number2 = expry(args[1], vars) as number;
     return Math.log(number1) / Math.log(number2);
@@ -165,7 +165,7 @@ export const arithmetic: Arithmetic = {
    * @example $log10(1) // 0
    * @example $log10(10) // 1
    */
-  $log10(args: Expression, vars: ExpressionVariables): number {
+  $log10(args: Value, vars: Variables): number {
     const number = expry(args, vars) as number;
     return Math.log10(number);
   },
@@ -181,7 +181,7 @@ export const arithmetic: Arithmetic = {
    * @example $mod([10, 3]) // 1
    * @example $mod([10, 2]) // 0
    */
-  $mod(args: [Expression, Expression], vars: ExpressionVariables): number {
+  $mod(args: [Value, Value], vars: Variables): number {
     const number1 = expry(args[0], vars) as number;
     const number2 = expry(args[1], vars) as number;
     return number1 % number2;
@@ -197,8 +197,8 @@ export const arithmetic: Arithmetic = {
    *
    * @example $multiply([1, 2, 3]) // 6
    */
-  $multiply(args: Expression[], vars: ExpressionVariables): number {
-    return args.reduce((acc: number, expr: Expression) => {
+  $multiply(args: Value[], vars: Variables): number {
+    return args.reduce((acc: number, expr: Value) => {
       const number = expry(expr, vars) as number;
       return acc * number;
     }, 1);
@@ -215,7 +215,7 @@ export const arithmetic: Arithmetic = {
    * @example $pow([2, 3]) // 8
    * @example $pow([3, 2]) // 9
    */
-  $pow(args: [Expression, Expression], vars: ExpressionVariables): number {
+  $pow(args: [Value, Value], vars: Variables): number {
     const number1 = expry(args[0], vars) as number;
     const number2 = expry(args[1], vars) as number;
     return Math.pow(number1, number2);
@@ -232,7 +232,7 @@ export const arithmetic: Arithmetic = {
    * @example $round([5.5, 0]) // 6
    * @example $round([5.5, 1]) // 5.5
    */
-  $round(args: [Expression, Expression], vars: ExpressionVariables): number {
+  $round(args: [Value, Value], vars: Variables): number {
     const number = expry(args[0], vars) as number;
     const places = expry(args[1], vars) as number;
     const factor = Math.pow(10, places);
@@ -250,7 +250,7 @@ export const arithmetic: Arithmetic = {
    * @example $sqrt(4) // 2
    * @example $sqrt(9) // 3
    */
-  $sqrt(args: Expression, vars: ExpressionVariables): number {
+  $sqrt(args: Value, vars: Variables): number {
     const number = expry(args, vars) as number;
     return Math.sqrt(number);
   },
@@ -266,7 +266,7 @@ export const arithmetic: Arithmetic = {
    * @example $subtract([5, 3]) // 2
    * @example $subtract([3, 5]) // -2
    */
-  $subtract(args: [Expression, Expression], vars: ExpressionVariables): number {
+  $subtract(args: [Value, Value], vars: Variables): number {
     const number1 = expry(args[0], vars) as number;
     const number2 = expry(args[1], vars) as number;
     return number1 - number2;
@@ -283,7 +283,7 @@ export const arithmetic: Arithmetic = {
    * @example $trunc(5.5) // 5
    * @example $trunc(5.5, 1) // 5.5
    */
-  $trunc(args: [Expression, Expression], vars: ExpressionVariables): number {
+  $trunc(args: [Value, Value], vars: Variables): number {
     const number = expry(args[0], vars) as number;
     const places = expry(args[1], vars) as number;
     const factor = Math.pow(10, places);
