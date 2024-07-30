@@ -32,7 +32,22 @@
     "trailingComma": "es5"
   },
   "name": "expry",
+  "description": "Create expressions for getting results",
   "author": "Marti Serra",
+  "keywords": [
+    "javascript",
+    "typescript",
+    "expression",
+    "transform",
+    "project",
+    "modify",
+    "update"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/martiserra99/expry"
+  },
+  "homepage": "https://github.com/martiserra99/expry",
   "module": "dist/expry.esm.js",
   "size-limit": [
     {
