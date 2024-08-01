@@ -23,6 +23,10 @@ export function isArray(value: Value): boolean {
   return Array.isArray(value);
 }
 
+export function isObject(value: Value): boolean {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
 export function isArrayOfType(check: Check[]): Check {
   return (value: Value) => Array.isArray(value) && value.every(item => check.some(check => check(item)));
 }
