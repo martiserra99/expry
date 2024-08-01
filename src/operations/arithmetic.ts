@@ -37,7 +37,7 @@ export const arithmetic: Arithmetic = {
    */
   $abs(args: Value, vars: Variables): number {
     const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $abs operator nneds to take a number as an argument.");
+    assert<number>(number, [isNumber], "The $abs operator requires a number as argument.");
     return Math.abs(number);
   },
 
@@ -55,7 +55,7 @@ export const arithmetic: Arithmetic = {
   $add(args: Value[], vars: Variables): number {
     return args.reduce((acc: number, expr: Value) => {
       const number = expry(expr, vars);
-      assert<number>(number, [isNumber], "The $add operator needs to take numbers as arguments.");
+      assert<number>(number, [isNumber], "The $add operator requires numbers as arguments.");
       return acc + number;
     }, 0);
   },
@@ -73,7 +73,7 @@ export const arithmetic: Arithmetic = {
    */
   $ceil(args: Value, vars: Variables): number {
     const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $ceil operator needs to take a number as an argument.");
+    assert<number>(number, [isNumber], "The $ceil operator requires a number as argument.");
     return Math.ceil(number);
   },
 
@@ -90,9 +90,9 @@ export const arithmetic: Arithmetic = {
    */
   $divide(args: [Value, Value], vars: Variables): number {
     const number1 = expry(args[0], vars);
-    assert<number>(number1, [isNumber], "The $divide operator needs to take numbers as arguments.");
+    assert<number>(number1, [isNumber], "The $divide operator requires numbers as arguments.");
     const number2 = expry(args[1], vars);
-    assert<number>(number2, [isNumber], "The $divide operator needs to take numbers as arguments.");
+    assert<number>(number2, [isNumber], "The $divide operator requires numbers as arguments.");
     return number1 / number2;
   },
 
@@ -109,7 +109,7 @@ export const arithmetic: Arithmetic = {
    */
   $exp(args: Value, vars: Variables): number {
     const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $exp operator needs to take a number as an argument.");
+    assert<number>(number, [isNumber], "The $exp operator requires a number as argument.");
     return Math.exp(number);
   },
 
@@ -126,7 +126,7 @@ export const arithmetic: Arithmetic = {
    */
   $floor(args: Value, vars: Variables): number {
     const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $floor operator needs to take a number as an argument.");
+    assert<number>(number, [isNumber], "The $floor operator requires a number as argument.");
     return Math.floor(number);
   },
 
@@ -143,7 +143,7 @@ export const arithmetic: Arithmetic = {
    */
   $ln(args: Value, vars: Variables): number {
     const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $ln operator needs to take a number as an argument.");
+    assert<number>(number, [isNumber], "The $ln operator requires a number as argument.");
     return Math.log(number);
   },
 
@@ -160,9 +160,9 @@ export const arithmetic: Arithmetic = {
    */
   $log(args: [Value, Value], vars: Variables): number {
     const number1 = expry(args[0], vars);
-    assert<number>(number1, [isNumber], "The $log operator needs to take numbers as arguments.");
+    assert<number>(number1, [isNumber], "The $log operator requires numbers as arguments.");
     const number2 = expry(args[1], vars);
-    assert<number>(number2, [isNumber], "The $log operator needs to take numbers as arguments.");
+    assert<number>(number2, [isNumber], "The $log operator requires numbers as arguments.");
     return Math.log(number1) / Math.log(number2);
   },
 
@@ -179,7 +179,7 @@ export const arithmetic: Arithmetic = {
    */
   $log10(args: Value, vars: Variables): number {
     const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $log10 operator needs to take a number as an argument.");
+    assert<number>(number, [isNumber], "The $log10 operator requires a number as argument.");
     return Math.log10(number);
   },
 
@@ -196,9 +196,9 @@ export const arithmetic: Arithmetic = {
    */
   $mod(args: [Value, Value], vars: Variables): number {
     const number1 = expry(args[0], vars);
-    assert<number>(number1, [isNumber], "The $mod operator needs to take numbers as arguments.");
+    assert<number>(number1, [isNumber], "The $mod operator requires numbers as arguments.");
     const number2 = expry(args[1], vars);
-    assert<number>(number2, [isNumber], "The $mod operator needs to take numbers as arguments.");
+    assert<number>(number2, [isNumber], "The $mod operator requires numbers as arguments.");
     return number1 % number2;
   },
 
@@ -215,7 +215,7 @@ export const arithmetic: Arithmetic = {
   $multiply(args: Value[], vars: Variables): number {
     return args.reduce((acc: number, expr: Value) => {
       const number = expry(expr, vars);
-      assert<number>(number, [isNumber], "The $multiply operator needs to take numbers as arguments.");
+      assert<number>(number, [isNumber], "The $multiply operator requires numbers as arguments.");
       return acc * number;
     }, 1);
   },
@@ -233,9 +233,9 @@ export const arithmetic: Arithmetic = {
    */
   $pow(args: [Value, Value], vars: Variables): number {
     const number1 = expry(args[0], vars);
-    assert<number>(number1, [isNumber], "The $pow operator needs to take numbers as arguments.");
+    assert<number>(number1, [isNumber], "The $pow operator requires numbers as arguments.");
     const number2 = expry(args[1], vars);
-    assert<number>(number2, [isNumber], "The $pow operator needs to take numbers as arguments.");
+    assert<number>(number2, [isNumber], "The $pow operator requires numbers as arguments.");
     return Math.pow(number1, number2);
   },
 
@@ -252,9 +252,9 @@ export const arithmetic: Arithmetic = {
    */
   $round(args: [Value, Value], vars: Variables): number {
     const number = expry(args[0], vars);
-    assert<number>(number, [isNumber], "The $round operator needs to take numbers as arguments.");
+    assert<number>(number, [isNumber], "The $round operator requires numbers as arguments.");
     const places = expry(args[1], vars);
-    assert<number>(places, [isNumber], "The $round operator needs to take numbers as arguments.");
+    assert<number>(places, [isNumber], "The $round operator requires numbers as arguments.");
     const factor = Math.pow(10, places);
     return Math.round(number * factor) / factor;
   },
@@ -272,7 +272,7 @@ export const arithmetic: Arithmetic = {
    */
   $sqrt(args: Value, vars: Variables): number {
     const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $sqrt operator needs to take a number as an argument.");
+    assert<number>(number, [isNumber], "The $sqrt operator requires a number as argument.");
     return Math.sqrt(number);
   },
 
@@ -289,9 +289,9 @@ export const arithmetic: Arithmetic = {
    */
   $subtract(args: [Value, Value], vars: Variables): number {
     const number1 = expry(args[0], vars);
-    assert<number>(number1, [isNumber], "The $subtract operator needs to take numbers as arguments.");
+    assert<number>(number1, [isNumber], "The $subtract operator requires numbers as arguments.");
     const number2 = expry(args[1], vars);
-    assert<number>(number2, [isNumber], "The $subtract operator needs to take numbers as arguments.");
+    assert<number>(number2, [isNumber], "The $subtract operator requires numbers as arguments.");
     return number1 - number2;
   },
 
@@ -308,9 +308,9 @@ export const arithmetic: Arithmetic = {
    */
   $trunc(args: [Value, Value], vars: Variables): number {
     const number = expry(args[0], vars);
-    assert<number>(number, [isNumber], "The $trunc operator needs to take numbers as arguments.");
+    assert<number>(number, [isNumber], "The $trunc operator requires numbers as arguments.");
     const places = expry(args[1], vars);
-    assert<number>(places, [isNumber], "The $trunc operator needs to take numbers as arguments.");
+    assert<number>(places, [isNumber], "The $trunc operator requires numbers as arguments.");
     const factor = Math.pow(10, places);
     return Math.trunc(number * factor) / factor;
   },

@@ -2,6 +2,8 @@ import { expry } from "..";
 
 import { Value, Variables, Operation } from "../types";
 
+import { assert, isNumber, isString, isArray } from "../assert";
+
 export type Array = {
   $arrayElemAt: Operation<[Value, Value], Value>;
   $concatArrays: Operation<Value[], Value[]>;
@@ -34,8 +36,10 @@ export const array: Array = {
    * @example $arrayElemAt([1, 2, 3], 3) // null
    */
   $arrayElemAt(args: [Value, Value], vars: Variables): Value {
-    const array = expry(args[0], vars) as Value[];
-    const index = expry(args[1], vars) as number;
+    const array = expry(args[0], vars);
+    assert<Value[]>(array, [isArray([])], "The $arrayElemAt operator requires an array as the first argument.");
+    const index = expry(args[1], vars);
+    assert<number>(index, [isNumber], "The $arrayElemAt operator requires a number as the second argument.");
     if (index < 0 || index >= array.length) return null;
     return array[index];
   },
@@ -54,7 +58,8 @@ export const array: Array = {
    */
   $concatArrays(args: Value[], vars: Variables): Value[] {
     return args.reduce((acc: Value[], expr: Value) => {
-      const array = expry(expr, vars) as Value[];
+      const array = expry(expr, vars);
+      assert<Value[]>(array, [isArray([])], "The $concatArrays operator requires arrays as arguments.");
       return acc.concat(array);
     }, []);
   },
@@ -71,7 +76,9 @@ export const array: Array = {
    */
   $filter(args: { input: Value; cond: Value; as: Value }, vars: Variables): Value[] {
     const array = expry(args.input, vars) as Value[];
+    assert<Value[]>(array, [isArray([])], "The $filter operator requires an array as the input argument.");
     const as = expry(args.as, vars) as string;
+    assert<string>(as, [isString], "The $filter operator requires a string as the as argument.");
     return array.filter(value => {
       return expry(args.cond, { ...vars, [`$${as}`]: value });
     });
@@ -90,8 +97,10 @@ export const array: Array = {
    * @example $firstN({ n: 2, input: [1] } }) // [1]
    */
   $firstN(args: { input: Value; n: Value }, vars: Variables): Value[] {
-    const array = expry(args.input, vars) as Value[];
-    const n = expry(args.n, vars) as number;
+    const array = expry(args.input, vars);
+    assert<Value[]>(array, [isArray([])], "The $firstN operator requires an array as the input argument.");
+    const n = expry(args.n, vars);
+    assert<number>(n, [isNumber], "The $firstN operator requires a number as the n argument.");
     return array.slice(0, n);
   },
 
@@ -109,7 +118,8 @@ export const array: Array = {
    */
   $in(args: [Value, Value], vars: Variables): boolean {
     const value = expry(args[0], vars);
-    const array = expry(args[1], vars) as Value[];
+    const array = expry(args[1], vars);
+    assert<Value[]>(array, [isArray([])], "The $in operator requires an array as the second argument.");
     return array.includes(value);
   },
 
@@ -125,7 +135,8 @@ export const array: Array = {
    * @example $indexOfArray([[1, 2], 5]) // -1
    */
   $indexOfArray(args: [Value, Value], vars: Variables): number {
-    const array = expry(args[0], vars) as Value[];
+    const array = expry(args[0], vars);
+    assert<Value[]>(array, [isArray([])], "The $indexOfArray operator requires an array as the first argument.");
     const value = expry(args[1], vars);
     return array.indexOf(value);
   },
@@ -143,8 +154,10 @@ export const array: Array = {
    * @example $lastN({ n: 2, input: [1] } }) // [1]
    */
   $lastN(args: { input: Value; n: Value }, vars: Variables): Value[] {
-    const array = expry(args.input, vars) as Value[];
-    const n = expry(args.n, vars) as number;
+    const array = expry(args.input, vars);
+    assert<Value[]>(array, [isArray([])], "The $lastN operator requires an array as the input argument.");
+    const n = expry(args.n, vars);
+    assert<number>(n, [isNumber], "The $lastN operator requires a number as the n argument.");
     return array.slice(-n);
   },
 
@@ -160,8 +173,10 @@ export const array: Array = {
    * @example $map({ input: ['a', 'b'], as: 'str', in: { $toUpper: '$$str' } }) // ['A', 'B']
    */
   $map(args: { input: Value; as: Value; in: Value }, vars: Variables): Value[] {
-    const array = expry(args.input, vars) as Value[];
-    const as = expry(args.as, vars) as string;
+    const array = expry(args.input, vars);
+    assert<Value[]>(array, [isArray([])], "The $map operator requires an array as the input argument.");
+    const as = expry(args.as, vars);
+    assert<string>(as, [isString], "The $map operator requires a string as the as argument.");
     return array.map(value => {
       return expry(args.in, { ...vars, [`$${as}`]: value });
     });
@@ -180,8 +195,14 @@ export const array: Array = {
    * @example $maxN({ n: 5, input: [3, 7, 2, 4] } }) // [7, 4, 3, 2]
    */
   $maxN(args: { input: Value; n: Value }, vars: Variables): number[] | string[] {
-    const array = expry(args.input, vars) as number[] | string[];
-    const n = expry(args.n, vars) as number;
+    const array = expry(args.input, vars);
+    assert<number[] | string[]>(
+      array,
+      [isArray([isNumber]), isArray([isString])],
+      "The $maxN operator requires an array of numbers or an array of strings as the input argument."
+    );
+    const n = expry(args.n, vars);
+    assert<number>(n, [isNumber], "The $maxN operator requires a number as the n argument.");
     return array.sort((a: string | number, b: string | number) => (b > a ? 1 : -1)).slice(0, n);
   },
 
@@ -198,8 +219,14 @@ export const array: Array = {
    * @example $minN({ n: 5, input: [3, 7, 2, 4] } }) // [2, 3, 4, 7]
    */
   $minN(args: { input: Value; n: Value }, vars: Variables): number[] | string[] {
-    const array = expry(args.input, vars) as number[] | string[];
-    const n = expry(args.n, vars) as number;
+    const array = expry(args.input, vars);
+    assert<number[] | string[]>(
+      array,
+      [isArray([isNumber]), isArray([isString])],
+      "The $minN operator requires an array of numbers or an array of strings as the input argument."
+    );
+    const n = expry(args.n, vars);
+    assert<number>(n, [isNumber], "The $minN operator requires a number as the n argument.");
     return array.sort((a: string | number, b: string | number) => (a > b ? 1 : -1)).slice(0, n);
   },
 
@@ -215,7 +242,8 @@ export const array: Array = {
    * @example $reduce({ input: [1, 2, 3], initialValue: 0, in: { $add: ['$$value', '$$this'] } } }) // 6
    */
   $reduce(args: { input: Value; initialValue: Value; in: Value }, vars: Variables): Value {
-    const array = expry(args.input, vars) as Value[];
+    const array = expry(args.input, vars);
+    assert<Value[]>(array, [isArray([])], "The $reduce operator requires an array as the input argument.");
     const initialValue = expry(args.initialValue, vars);
     return array.reduce((acc, value) => {
       return expry(args.in, { ...vars, $value: acc, $this: value });
@@ -234,7 +262,8 @@ export const array: Array = {
    * @example $reverseArray(['a', 'c', 'b']) // ['b', 'c', 'a']
    */
   $reverseArray(args: Value, vars: Variables): Value[] {
-    const array = expry(args, vars) as Value[];
+    const array = expry(args, vars);
+    assert<Value[]>(array, [isArray([])], "The $reverseArray operator requires an array as argument.");
     return array.reverse();
   },
 
@@ -251,7 +280,8 @@ export const array: Array = {
    * @example $size([]) // 0
    */
   $size(args: Value, vars: Variables): number {
-    const array = expry(args, vars) as Value[];
+    const array = expry(args, vars);
+    assert<Value[]>(array, [isArray([])], "The $size operator requires an array as argument.");
     return array.length;
   },
 
@@ -269,9 +299,12 @@ export const array: Array = {
    * @example $slice([[1, 2, 3], 3, 2]) // []
    */
   $slice(args: [Value, Value, Value], vars: Variables): Value[] {
-    const array = expry(args[0], vars) as Value[];
-    const position = expry(args[1], vars) as number;
-    const n = expry(args[2], vars) as number;
+    const array = expry(args[0], vars);
+    assert<Value[]>(array, [isArray([])], "The $slice operator requires an array as the first argument.");
+    const position = expry(args[1], vars);
+    assert<number>(position, [isNumber], "The $slice operator requires a number as the second argument.");
+    const n = expry(args[2], vars);
+    assert<number>(n, [isNumber], "The $slice operator requires a number as the third argument.");
     return array.slice(position, position + n);
   },
 
@@ -288,9 +321,11 @@ export const array: Array = {
    */
   $sortArray(args: { input: Value; sortBy: Value }, vars: Variables): Value[] {
     const array = expry(args.input, vars) as Value[];
+    assert<Value[]>(array, [isArray([])], "The $sortArray operator requires an array as the input argument.");
     return array.sort((a, b) => {
       const variables = { ...vars, $first: a, $second: b };
-      const number = expry(args.sortBy, variables) as number;
+      const number = expry(args.sortBy, variables);
+      assert<number>(number, [isNumber], "The $sortArray operator requires a number as the sortBy argument.");
       return number;
     });
   },
