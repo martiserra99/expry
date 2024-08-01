@@ -2,6 +2,8 @@ import { expry } from "../index";
 
 import { Value, Variables, Operation } from "../types";
 
+import { assert, isString, isNumber } from "../assert";
+
 export type String = {
   $concat: Operation<Value[], string>;
   $ltrim: Operation<Value, string>;
@@ -29,7 +31,8 @@ export const string: String = {
   $concat(args: Value[], vars: Variables): string {
     return args
       .map(arg => {
-        const string = expry(arg, vars) as string;
+        const string = expry(arg, vars);
+        assert<string>(string, [isString], "The $concat operator requires strings as arguments.");
         return string;
       })
       .join("");
@@ -46,7 +49,8 @@ export const string: String = {
    * @example $ltrim('  hello') // 'hello'
    */
   $ltrim(args: Value, vars: Variables): string {
-    const string = expry(args, vars) as string;
+    const string = expry(args, vars);
+    assert<string>(string, [isString], "The $ltrim operator requires a string as argument.");
     return string.replace(/^\s+/, "");
   },
 
@@ -62,8 +66,10 @@ export const string: String = {
    * @example $regexMatch(['hello', '/bye/']) // false
    */
   $regexMatch(args: [Value, Value], vars: Variables): boolean {
-    const string = expry(args[0], vars) as string;
-    const regex = expry(args[1], vars) as string;
+    const string = expry(args[0], vars);
+    assert<string>(string, [isString], "The $regexMatch operator requires a string as the first argument.");
+    const regex = expry(args[1], vars);
+    assert<string>(regex, [isString], "The $regexMatch operator requires a string as the second argument.");
     return string.match(regex) !== null;
   },
 
@@ -78,7 +84,8 @@ export const string: String = {
    * @example $rtrim('hello  ') // 'hello'
    */
   $rtrim(args: Value, vars: Variables): string {
-    const string = expry(args, vars) as string;
+    const string = expry(args, vars);
+    assert<string>(string, [isString], "The $rtrim operator requires a string as argument.");
     return string.replace(/\s+$/, "");
   },
 
@@ -94,8 +101,10 @@ export const string: String = {
    * @example $split(['hello world', ' ']) // ['hello', 'world']
    */
   $split(args: [Value, Value], vars: Variables): string[] {
-    const string = expry(args[0], vars) as string;
-    const delimiter = expry(args[1], vars) as string;
+    const string = expry(args[0], vars);
+    assert<string>(string, [isString], "The $split operator requires a string as the first argument.");
+    const delimiter = expry(args[1], vars);
+    assert<string>(delimiter, [isString], "The $split operator requires a string as the second argument.");
     return string.split(delimiter);
   },
 
@@ -110,7 +119,8 @@ export const string: String = {
    * @example $strLen('hello') // 5
    */
   $strLen(args: Value, vars: Variables): number {
-    const string = expry(args, vars) as string;
+    const string = expry(args, vars);
+    assert<string>(string, [isString], "The $strLen operator requires a string as argument.");
     return string.length;
   },
 
@@ -125,9 +135,12 @@ export const string: String = {
    * @example $substr(['hello', 0, 2]) // 'he'
    */
   $substr(args: [Value, Value, Value], vars: Variables): string {
-    const string = expry(args[0], vars) as string;
-    const start = expry(args[1], vars) as number;
-    const length = expry(args[2], vars) as number;
+    const string = expry(args[0], vars);
+    assert<string>(string, [isString], "The $substr operator requires a string as the first argument.");
+    const start = expry(args[1], vars);
+    assert<number>(start, [isNumber], "The $substr operator requires a number as the second argument.");
+    const length = expry(args[2], vars);
+    assert<number>(length, [isNumber], "The $substr operator requires a number as the third argument.");
     return string.substring(start, start + length);
   },
 
@@ -142,7 +155,8 @@ export const string: String = {
    * @example $toLower('Marti Serra') // 'marti serra'
    */
   $toLower(args: Value, vars: Variables): string {
-    const string = expry(args, vars) as string;
+    const string = expry(args, vars);
+    assert<string>(string, [isString], "The $toLower operator requires a string as argument.");
     return string.toLowerCase();
   },
 
@@ -157,7 +171,8 @@ export const string: String = {
    * @example $trim('  hello  ') // 'hello'
    */
   $trim(args: Value, vars: Variables): string {
-    const string = expry(args, vars) as string;
+    const string = expry(args, vars);
+    assert<string>(string, [isString], "The $trim operator requires a string as argument.");
     return string.trim();
   },
 
@@ -172,7 +187,8 @@ export const string: String = {
    * @example $toUpper('Marti Serra') // 'MARTI SERRA'
    */
   $toUpper(args: Value, vars: Variables): string {
-    const string = expry(args, vars) as string;
+    const string = expry(args, vars);
+    assert<string>(string, [isString], "The $toUpper operator requires a string as argument.");
     return string.toUpperCase();
   },
 };
