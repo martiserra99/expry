@@ -36,7 +36,7 @@ describe("$toBoolean", () => {
 describe("$toNumber", () => {
   it("converts a value to a number", () => {
     expect(expry({ $toNumber: "7" })).toBe(7);
-    expect(expry({ $toNumber: "hello" })).toBeNull();
+    expect(expry({ $toNumber: "hello" })).toBeNaN();
   });
 });
 

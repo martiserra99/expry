@@ -90,13 +90,11 @@ export const type: Type = {
    * @returns The converted value.
    *
    * @example $toNumber('5') // 5
-   * @example $toNumber('hello') // null
+   * @example $toNumber('hello') // NaN
    */
-  $toNumber(args: Value, vars: Variables): number | null {
+  $toNumber(args: Value, vars: Variables): number {
     const value = expry(args, vars);
-    const number = Number(value);
-    if (isNaN(number)) return null;
-    return number;
+    return Number(value);
   },
 
   /**
