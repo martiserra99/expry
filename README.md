@@ -9,7 +9,7 @@
 
 ## Documentation
 
-**Visit [https://expry.dev](https://expry.dev) to get started with Formity.**
+**Visit [https://expry.dev](https://expry.dev) to get started with Expry.**
 
 ## Installation
 
