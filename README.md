@@ -1,24 +1,21 @@
-# expry
+<!-- markdownlint-disable MD033 -->
+<!-- markdownlint-disable MD041 -->
 
-Create expressions for getting results.
-
-## Overview
-
-In programming, expressions are vital building blocks, seamlessly combining operations and variables to produce specific outcomes. Shaped by your programming language's syntax, these expressions serve as the cornerstone of coding endeavors.
-
-However, a challenge emerges when you want to store, send, or save these expressions in files or databases. That's where Expry steps in. With Expry, crafting expressions that can be easily stored and shared becomes as simple as defining a JSON.
-
-## Installation
-
-To install this package you have to run the following command.
-
-```shell
-npm install expry
-```
+<div align="center">
+    <a href="https://expry.dev/" title="Expry - Create Logic With JSON, Unlocking New Possibilities">
+        <img src="https://raw.githubusercontent.com/martiserra99/expry/main/image.svg" alt="Expry Logo" />
+    </a>
+</div>
 
 ## Documentation
 
-Check out the documentation [here](https://martiserra.me/mongu).
+**Visit [https://expry.dev](https://expry.dev) to get started with Formity.**
+
+## Installation
+
+```bash
+npm install expry
+```
 
 ## License
 

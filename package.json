@@ -1,6 +1,23 @@
 {
-  "version": "0.1.2",
+  "name": "expry",
+  "description": "Create logic with JSON, unlocking new possibilities",
+  "version": "1.0.0",
   "license": "MIT",
+  "author": "Marti Serra",
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/martiserra99/expry"
+  },
+  "homepage": "https://expry.dev/",
+  "keywords": [
+    "expression",
+    "transform",
+    "project",
+    "modify",
+    "update",
+    "map"
+  ],
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -31,23 +48,6 @@
     "singleQuote": false,
     "trailingComma": "es5"
   },
-  "name": "expry",
-  "description": "Create expressions for getting results",
-  "author": "Marti Serra",
-  "keywords": [
-    "javascript",
-    "typescript",
-    "expression",
-    "transform",
-    "project",
-    "modify",
-    "update"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/martiserra99/expry"
-  },
-  "homepage": "https://github.com/martiserra99/expry",
   "module": "dist/expry.esm.js",
   "size-limit": [
     {
