@@ -2,8 +2,6 @@ import { expry } from "../index";
 
 import { Value, Variables, Operation } from "../types";
 
-import { assert, isString, isObject } from "../assert";
-
 export type Object = {
   $getField: Operation<{ field: Value; input: Value }, Value>;
   $mergeObjects: Operation<Value[], Record<string, Value>>;
@@ -22,14 +20,8 @@ export const object: Object = {
    * @example $getField({ field: 'qty', input: { item: 'apple', qty: 25, price: 4.5 } }) // 25
    */
   $getField(args: { field: Value; input: Value }, vars: Variables): Value {
-    const field = expry(args.field, vars);
-    assert<string>(field, [isString], "The $getField operator requires a string as the field argument.");
-    const input = expry(args.input, vars);
-    assert<Record<string, Value>>(
-      input,
-      [isObject],
-      "The $getField operator requires an object as the input argument."
-    );
+    const field = expry(args.field, vars) as string;
+    const input = expry(args.input, vars) as Record<string, Value>;
     if (field in input) return input[field];
     return null;
   },
@@ -46,8 +38,7 @@ export const object: Object = {
    */
   $mergeObjects(args: Value[], vars: Variables): Record<string, Value> {
     return args.reduce((acc: Record<string, Value>, arg) => {
-      const object = expry(arg, vars);
-      assert<Record<string, Value>>(object, [isObject], "The $mergeObjects operator requires objects as arguments.");
+      const object = expry(arg, vars) as Record<string, Value>;
       return { ...acc, ...object };
     }, {});
   },
@@ -63,14 +54,8 @@ export const object: Object = {
    * @example $setField({ field: 'item', input: { qty: 25, price: 4.5 }, value: 'apple' }) // { item: 'apple', qty: 25, price: 4.5 }
    */
   $setField(args: { field: Value; input: Value; value: Value }, vars: Variables): Record<string, Value> {
-    const field = expry(args.field, vars);
-    assert<string>(field, [isString], "The $setField operator requires a string as the field argument.");
-    const input = expry(args.input, vars);
-    assert<Record<string, Value>>(
-      input,
-      [isObject],
-      "The $setField operator requires an object as the input argument."
-    );
+    const field = expry(args.field, vars) as string;
+    const input = expry(args.input, vars) as Record<string, Value>;
     const value = expry(args.value, vars);
     return { ...input, [field]: value };
   },

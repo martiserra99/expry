@@ -2,8 +2,6 @@ import { expry } from "..";
 
 import { Value, Variables, Operation } from "../types";
 
-import { assert, isBoolean } from "../assert";
-
 export type Conditional = {
   $cond: Operation<{ if: Value; then: Value; else: Value }, Value>;
   $ifNull: Operation<Value[], Value>;
@@ -23,8 +21,7 @@ export const conditional: Conditional = {
    * @example $cond({ if: false, then: 'yes', else: 'no' }) // 'no'
    */
   $cond(args: { if: Value; then: Value; else: Value }, vars: Variables): Value {
-    const condition = expry(args.if, vars);
-    assert<boolean>(condition, [isBoolean], "The $cond operator requires a boolean as the if argument.");
+    const condition = expry(args.if, vars) as boolean;
     return condition ? expry(args.then, vars) : expry(args.else, vars);
   },
 
@@ -61,8 +58,7 @@ export const conditional: Conditional = {
    */
   $switch(args: { branches: { case: Value; then: Value }[]; default: Value }, vars: Variables): Value {
     for (const branch of args.branches) {
-      const condition = expry(branch.case, vars);
-      assert<boolean>(condition, [isBoolean], "The $switch operator requires booleans as case arguments.");
+      const condition = expry(branch.case, vars) as boolean;
       if (condition) return expry(branch.then, vars);
     }
     return expry(args.default, vars);

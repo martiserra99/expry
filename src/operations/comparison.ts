@@ -2,8 +2,6 @@ import { expry } from "..";
 
 import { Value, Variables, Operation } from "../types";
 
-import { assert, isNumber, isString, isArrayOfType } from "../assert";
-
 export type Comparison = {
   $cmp: Operation<[Value, Value], number>;
   $eq: Operation<[Value, Value], boolean>;
@@ -28,13 +26,9 @@ export const comparison: Comparison = {
    * @example $cmp([3, 3]) // 0
    */
   $cmp(args: [Value, Value], vars: Variables): number {
-    const values = [expry(args[0], vars), expry(args[1], vars)];
-    assert<[number, number] | [string, string]>(
-      values,
-      [isArrayOfType([isNumber]), isArrayOfType([isString])],
-      "The $cmp operator requires two numbers or two strings as arguments."
-    );
-    return values[0] < values[1] ? -1 : values[0] > values[1] ? 1 : 0;
+    const a = expry(args[0], vars) as number | string;
+    const b = expry(args[1], vars) as number | string;
+    return a < b ? -1 : a > b ? 1 : 0;
   },
 
   /**
@@ -85,13 +79,9 @@ export const comparison: Comparison = {
    * @example $gte([3, 3]) // true
    */
   $gte(args: [Value, Value], vars: Variables): boolean {
-    const values = [expry(args[0], vars), expry(args[1], vars)];
-    assert<[number, number] | [string, string]>(
-      values,
-      [isArrayOfType([isNumber]), isArrayOfType([isString])],
-      "The $gte operator requires two numbers or two strings as arguments."
-    );
-    return values[0] >= values[1];
+    const a = expry(args[0], vars) as number | string;
+    const b = expry(args[1], vars) as number | string;
+    return a >= b;
   },
 
   /**
@@ -107,13 +97,9 @@ export const comparison: Comparison = {
    * @example $lt([3, 3]) // false
    */
   $lt(args: [Value, Value], vars: Variables): boolean {
-    const values = [expry(args[0], vars), expry(args[1], vars)];
-    assert<[number, number] | [string, string]>(
-      values,
-      [isArrayOfType([isNumber]), isArrayOfType([isString])],
-      "The $lt operator requires two numbers or two strings as arguments."
-    );
-    return values[0] < values[1];
+    const a = expry(args[0], vars) as number | string;
+    const b = expry(args[1], vars) as number | string;
+    return a < b;
   },
 
   /**
@@ -129,13 +115,9 @@ export const comparison: Comparison = {
    * @example $lte([3, 3]) // true
    */
   $lte(args: [Value, Value], vars: Variables): boolean {
-    const values = [expry(args[0], vars), expry(args[1], vars)];
-    assert<[number, number] | [string, string]>(
-      values,
-      [isArrayOfType([isNumber]), isArrayOfType([isString])],
-      "The $lte operator requires two numbers or two strings as arguments."
-    );
-    return values[0] <= values[1];
+    const a = expry(args[0], vars) as number | string;
+    const b = expry(args[1], vars) as number | string;
+    return a <= b;
   },
 
   /**

@@ -2,8 +2,6 @@ import { expry } from "..";
 
 import { Value, Variables, Operation } from "../types";
 
-import { assert, isBoolean } from "../assert";
-
 export type Boolean = {
   $and: Operation<Value[], boolean>;
   $not: Operation<Value, boolean>;
@@ -24,8 +22,7 @@ export const boolean: Boolean = {
    */
   $and(args: Value[], vars: Variables): boolean {
     return args.every(expr => {
-      const boolean = expry(expr, vars);
-      assert<boolean>(boolean, [isBoolean], "The $and operator requires booleans as arguments.");
+      const boolean = expry(expr, vars) as boolean;
       return boolean;
     });
   },
@@ -42,8 +39,7 @@ export const boolean: Boolean = {
    * @example $not(false) // true
    */
   $not(args: Value, vars: Variables): boolean {
-    const boolean = expry(args, vars);
-    assert<boolean>(boolean, [isBoolean], "The $not operator requires a boolean as argument.");
+    const boolean = expry(args, vars) as boolean;
     return !boolean;
   },
 
@@ -61,7 +57,6 @@ export const boolean: Boolean = {
   $or(args: Value[], vars: Variables): boolean {
     return args.some(expr => {
       const boolean = expry(expr, vars) as boolean;
-      assert<boolean>(boolean, [isBoolean], "The $or operator requires booleans as arguments.");
       return boolean;
     });
   },

@@ -2,8 +2,6 @@ import { expry } from "..";
 
 import { Value, Variables, Operation } from "../types";
 
-import { assert, isNumber } from "../assert";
-
 export type Arithmetic = {
   $abs: Operation<Value, number>;
   $add: Operation<Value[], number>;
@@ -36,8 +34,7 @@ export const arithmetic: Arithmetic = {
    * @example $abs(5) // 5
    */
   $abs(args: Value, vars: Variables): number {
-    const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $abs operator requires a number as argument.");
+    const number = expry(args, vars) as number;
     return Math.abs(number);
   },
 
@@ -54,8 +51,7 @@ export const arithmetic: Arithmetic = {
    */
   $add(args: Value[], vars: Variables): number {
     return args.reduce((acc: number, expr: Value) => {
-      const number = expry(expr, vars);
-      assert<number>(number, [isNumber], "The $add operator requires numbers as arguments.");
+      const number = expry(expr, vars) as number;
       return acc + number;
     }, 0);
   },
@@ -72,8 +68,7 @@ export const arithmetic: Arithmetic = {
    * @example $ceil(5.1) // 6
    */
   $ceil(args: Value, vars: Variables): number {
-    const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $ceil operator requires a number as argument.");
+    const number = expry(args, vars) as number;
     return Math.ceil(number);
   },
 
@@ -89,10 +84,8 @@ export const arithmetic: Arithmetic = {
    * @example $divide([10, 3]) // 3.3333333333333335
    */
   $divide(args: [Value, Value], vars: Variables): number {
-    const number1 = expry(args[0], vars);
-    assert<number>(number1, [isNumber], "The $divide operator requires numbers as arguments.");
-    const number2 = expry(args[1], vars);
-    assert<number>(number2, [isNumber], "The $divide operator requires numbers as arguments.");
+    const number1 = expry(args[0], vars) as number;
+    const number2 = expry(args[1], vars) as number;
     return number1 / number2;
   },
 
@@ -108,8 +101,7 @@ export const arithmetic: Arithmetic = {
    * @example $exp(2) // 7.3890560989306495
    */
   $exp(args: Value, vars: Variables): number {
-    const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $exp operator requires a number as argument.");
+    const number = expry(args, vars) as number;
     return Math.exp(number);
   },
 
@@ -125,8 +117,7 @@ export const arithmetic: Arithmetic = {
    * @example $floor(5.1) // 5
    */
   $floor(args: Value, vars: Variables): number {
-    const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $floor operator requires a number as argument.");
+    const number = expry(args, vars) as number;
     return Math.floor(number);
   },
 
@@ -142,8 +133,7 @@ export const arithmetic: Arithmetic = {
    * @example $ln(2.718281828459045) // 1
    */
   $ln(args: Value, vars: Variables): number {
-    const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $ln operator requires a number as argument.");
+    const number = expry(args, vars) as number;
     return Math.log(number);
   },
 
@@ -159,10 +149,8 @@ export const arithmetic: Arithmetic = {
    * @example $log([100, 10]) // 2
    */
   $log(args: [Value, Value], vars: Variables): number {
-    const number1 = expry(args[0], vars);
-    assert<number>(number1, [isNumber], "The $log operator requires numbers as arguments.");
-    const number2 = expry(args[1], vars);
-    assert<number>(number2, [isNumber], "The $log operator requires numbers as arguments.");
+    const number1 = expry(args[0], vars) as number;
+    const number2 = expry(args[1], vars) as number;
     return Math.log(number1) / Math.log(number2);
   },
 
@@ -178,8 +166,7 @@ export const arithmetic: Arithmetic = {
    * @example $log10(10) // 1
    */
   $log10(args: Value, vars: Variables): number {
-    const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $log10 operator requires a number as argument.");
+    const number = expry(args, vars) as number;
     return Math.log10(number);
   },
 
@@ -195,10 +182,8 @@ export const arithmetic: Arithmetic = {
    * @example $mod([10, 2]) // 0
    */
   $mod(args: [Value, Value], vars: Variables): number {
-    const number1 = expry(args[0], vars);
-    assert<number>(number1, [isNumber], "The $mod operator requires numbers as arguments.");
-    const number2 = expry(args[1], vars);
-    assert<number>(number2, [isNumber], "The $mod operator requires numbers as arguments.");
+    const number1 = expry(args[0], vars) as number;
+    const number2 = expry(args[1], vars) as number;
     return number1 % number2;
   },
 
@@ -214,8 +199,7 @@ export const arithmetic: Arithmetic = {
    */
   $multiply(args: Value[], vars: Variables): number {
     return args.reduce((acc: number, expr: Value) => {
-      const number = expry(expr, vars);
-      assert<number>(number, [isNumber], "The $multiply operator requires numbers as arguments.");
+      const number = expry(expr, vars) as number;
       return acc * number;
     }, 1);
   },
@@ -232,10 +216,8 @@ export const arithmetic: Arithmetic = {
    * @example $pow([3, 2]) // 9
    */
   $pow(args: [Value, Value], vars: Variables): number {
-    const number1 = expry(args[0], vars);
-    assert<number>(number1, [isNumber], "The $pow operator requires numbers as arguments.");
-    const number2 = expry(args[1], vars);
-    assert<number>(number2, [isNumber], "The $pow operator requires numbers as arguments.");
+    const number1 = expry(args[0], vars) as number;
+    const number2 = expry(args[1], vars) as number;
     return Math.pow(number1, number2);
   },
 
@@ -251,10 +233,8 @@ export const arithmetic: Arithmetic = {
    * @example $round([5.5, 1]) // 5.5
    */
   $round(args: [Value, Value], vars: Variables): number {
-    const number = expry(args[0], vars);
-    assert<number>(number, [isNumber], "The $round operator requires numbers as arguments.");
-    const places = expry(args[1], vars);
-    assert<number>(places, [isNumber], "The $round operator requires numbers as arguments.");
+    const number = expry(args[0], vars) as number;
+    const places = expry(args[1], vars) as number;
     const factor = Math.pow(10, places);
     return Math.round(number * factor) / factor;
   },
@@ -271,8 +251,7 @@ export const arithmetic: Arithmetic = {
    * @example $sqrt(9) // 3
    */
   $sqrt(args: Value, vars: Variables): number {
-    const number = expry(args, vars);
-    assert<number>(number, [isNumber], "The $sqrt operator requires a number as argument.");
+    const number = expry(args, vars) as number;
     return Math.sqrt(number);
   },
 
@@ -288,10 +267,8 @@ export const arithmetic: Arithmetic = {
    * @example $subtract([3, 5]) // -2
    */
   $subtract(args: [Value, Value], vars: Variables): number {
-    const number1 = expry(args[0], vars);
-    assert<number>(number1, [isNumber], "The $subtract operator requires numbers as arguments.");
-    const number2 = expry(args[1], vars);
-    assert<number>(number2, [isNumber], "The $subtract operator requires numbers as arguments.");
+    const number1 = expry(args[0], vars) as number;
+    const number2 = expry(args[1], vars) as number;
     return number1 - number2;
   },
 
@@ -307,10 +284,8 @@ export const arithmetic: Arithmetic = {
    * @example $trunc(5.5, 1) // 5.5
    */
   $trunc(args: [Value, Value], vars: Variables): number {
-    const number = expry(args[0], vars);
-    assert<number>(number, [isNumber], "The $trunc operator requires numbers as arguments.");
-    const places = expry(args[1], vars);
-    assert<number>(places, [isNumber], "The $trunc operator requires numbers as arguments.");
+    const number = expry(args[0], vars) as number;
+    const places = expry(args[1], vars) as number;
     const factor = Math.pow(10, places);
     return Math.trunc(number * factor) / factor;
   },
