@@ -145,7 +145,7 @@ export const array: Array = {
   $lastN(args: { input: Value; n: Value }, vars: Variables): Value[] {
     const array = expry(args.input, vars) as Value[];
     const n = expry(args.n, vars) as number;
-    return array.slice(-n);
+    return n > 0 ? array.slice(-n) : [];
   },
 
   /**
