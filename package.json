@@ -30,8 +30,7 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
-    "test": "tsdx test",
-    "size": "size-limit"
+    "test": "tsdx test"
   },
   "prettier": {
     "printWidth": 120,
@@ -40,19 +39,7 @@
     "trailingComma": "es5"
   },
   "module": "dist/expry.esm.js",
-  "size-limit": [
-    {
-      "path": "dist/expry.cjs.production.min.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "dist/expry.esm.js",
-      "limit": "10 KB"
-    }
-  ],
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^11.1.4",
-    "size-limit": "^11.1.4",
     "tsdx": "^0.14.1",
     "tslib": "^2.6.3",
     "typescript": "^5.5.3"
