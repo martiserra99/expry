@@ -31,16 +31,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test",
-    "lint": "tsdx lint",
-    "prepare": "tsdx build",
-    "size": "size-limit",
-    "analyze": "size-limit --why"
-  },
-  "peerDependencies": {},
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
+    "size": "size-limit"
   },
   "prettier": {
     "printWidth": 120,
@@ -61,7 +52,6 @@
   ],
   "devDependencies": {
     "@size-limit/preset-small-lib": "^11.1.4",
-    "husky": "^9.0.11",
     "size-limit": "^11.1.4",
     "tsdx": "^0.14.1",
     "tslib": "^2.6.3",
