@@ -1,4 +1,6 @@
-import { expry } from "../../src";
+import { describe, it, expect } from "vitest";
+
+import { expry } from "../";
 
 describe("$getField", () => {
   it("gets the value of a field in an object", () => {

@@ -1,4 +1,6 @@
-import { expry } from "../../src";
+import { describe, it, expect } from "vitest";
+
+import { expry } from "../";
 
 describe("$arrayElemAt", () => {
   it("returns the element at the specified array index", () => {
@@ -10,8 +12,16 @@ describe("$arrayElemAt", () => {
 
 describe("$concatArrays", () => {
   it("concatenates arrays to return the concatenated array", () => {
-    expect(expry({ $concatArrays: [["hello", " "], ["world"]] })).toEqual(["hello", " ", "world"]);
-    expect(expry({ $concatArrays: [["hello", " "], [["world"]]] })).toEqual(["hello", " ", ["world"]]);
+    expect(expry({ $concatArrays: [["hello", " "], ["world"]] })).toEqual([
+      "hello",
+      " ",
+      "world",
+    ]);
+    expect(expry({ $concatArrays: [["hello", " "], [["world"]]] })).toEqual([
+      "hello",
+      " ",
+      ["world"],
+    ]);
   });
 });
 
@@ -87,7 +97,9 @@ describe("$maxN", () => {
   it("returns the N highest values in an array", () => {
     expect(expry({ $maxN: { n: 2, input: [3, 7, 2, 4] } })).toEqual([7, 4]);
     expect(expry({ $maxN: { n: 3, input: [3, 7, 2, 4] } })).toEqual([7, 4, 3]);
-    expect(expry({ $maxN: { n: 5, input: [3, 7, 2, 4] } })).toEqual([7, 4, 3, 2]);
+    expect(expry({ $maxN: { n: 5, input: [3, 7, 2, 4] } })).toEqual([
+      7, 4, 3, 2,
+    ]);
   });
 });
 
@@ -95,7 +107,9 @@ describe("$minN", () => {
   it("returns the N lowest values in an array", () => {
     expect(expry({ $minN: { n: 2, input: [3, 7, 2, 4] } })).toEqual([2, 3]);
     expect(expry({ $minN: { n: 3, input: [3, 7, 2, 4] } })).toEqual([2, 3, 4]);
-    expect(expry({ $minN: { n: 5, input: [3, 7, 2, 4] } })).toEqual([2, 3, 4, 7]);
+    expect(expry({ $minN: { n: 5, input: [3, 7, 2, 4] } })).toEqual([
+      2, 3, 4, 7,
+    ]);
   });
 });
 

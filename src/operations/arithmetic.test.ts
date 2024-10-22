@@ -1,4 +1,6 @@
-import { expry } from "../../src";
+import { describe, it, expect } from "vitest";
+
+import { expry } from "../";
 
 describe("$abs", () => {
   it("returns the absolute value of a number", () => {

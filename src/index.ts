@@ -24,7 +24,7 @@ function isArr(expr: Value): expr is Value[] {
 }
 
 function evalArr(expr: Value[], vars: Variables): Value {
-  return expr.map(expression => expry(expression, vars));
+  return expr.map((expression) => expry(expression, vars));
 }
 
 function isObj(expr: Value): expr is Record<string, Value> {

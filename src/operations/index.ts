@@ -8,7 +8,15 @@ import { string, String } from "./string";
 import { type, Type } from "./type";
 import { variable, Variable } from "./variable";
 
-type Operations = Arithmetic & Array & Boolean & Comparison & Conditional & Object & String & Type & Variable;
+type Operations = Arithmetic &
+  Array &
+  Boolean &
+  Comparison &
+  Conditional &
+  Object &
+  String &
+  Type &
+  Variable;
 
 export const operations: Operations = {
   ...arithmetic,

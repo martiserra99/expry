@@ -21,7 +21,7 @@ export const boolean: Boolean = {
    * @example $and([true, false, true]) // false
    */
   $and(args: Value[], vars: Variables): boolean {
-    return args.every(expr => {
+    return args.every((expr) => {
       const boolean = expry(expr, vars) as boolean;
       return boolean;
     });
@@ -55,7 +55,7 @@ export const boolean: Boolean = {
    * @example $or([false, false, false]) // false
    */
   $or(args: Value[], vars: Variables): boolean {
-    return args.some(expr => {
+    return args.some((expr) => {
       const boolean = expry(expr, vars) as boolean;
       return boolean;
     });

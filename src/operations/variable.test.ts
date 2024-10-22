@@ -1,4 +1,6 @@
-import { expry } from "../../src/index";
+import { describe, it, expect } from "vitest";
+
+import { expry } from "../";
 
 describe("$let", () => {
   it("binds variables for use in the specified expression, and returns the result of the expression", () => {

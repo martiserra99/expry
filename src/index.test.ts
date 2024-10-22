@@ -1,4 +1,6 @@
-import { expry } from "../src";
+import { it, expect } from "vitest";
+
+import { expry } from "./";
 
 it("evaluates expression", () => {
   const expr = {

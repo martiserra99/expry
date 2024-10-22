@@ -1,4 +1,6 @@
-import { expry } from "../../src";
+import { describe, it, expect } from "vitest";
+
+import { expry } from "../";
 
 describe("$concat", () => {
   it("concatenates strings and returns the concatenated string", () => {
@@ -27,7 +29,11 @@ describe("$rtrim", () => {
 
 describe("$split", () => {
   it("divides a string into an array of substrings based on a delimiter", () => {
-    expect(expry({ $split: ["June-15-2013", "-"] })).toEqual(["June", "15", "2013"]);
+    expect(expry({ $split: ["June-15-2013", "-"] })).toEqual([
+      "June",
+      "15",
+      "2013",
+    ]);
     expect(expry({ $split: ["Hello World", " "] })).toEqual(["Hello", "World"]);
   });
 });

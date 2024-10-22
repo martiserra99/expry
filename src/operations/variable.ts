@@ -17,7 +17,10 @@ export const variable: Variable = {
    *
    * @example $let({ vars: { age: 24 }, in: { isAdult: { $gte: ['$$age', 18] } } }) // { isAdult: true }
    */
-  $let(args: { vars: Record<string, Value>; in: Value }, vars: Variables): Value {
+  $let(
+    args: { vars: Record<string, Value>; in: Value },
+    vars: Variables
+  ): Value {
     const variables = Object.fromEntries(
       Object.entries(args.vars).map(([key, value]) => {
         return [`$${key}`, expry(value, vars)];

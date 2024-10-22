@@ -5,7 +5,10 @@ import { Value, Variables, Operation } from "../types";
 export type Conditional = {
   $cond: Operation<{ if: Value; then: Value; else: Value }, Value>;
   $ifNull: Operation<Value[], Value>;
-  $switch: Operation<{ branches: { case: Value; then: Value }[]; default: Value }, Value>;
+  $switch: Operation<
+    { branches: { case: Value; then: Value }[]; default: Value },
+    Value
+  >;
 };
 
 export const conditional: Conditional = {
@@ -56,7 +59,10 @@ export const conditional: Conditional = {
    * @example $switch({ branches: [{ case: false, then: 1 }, { case: true, then: 2 }], default: 3 } }) // 2
    * @example $switch({ branches: [{ case: false, then: 1 }, { case: false, then: 2 }], default: 3 } }) // 3
    */
-  $switch(args: { branches: { case: Value; then: Value }[]; default: Value }, vars: Variables): Value {
+  $switch(
+    args: { branches: { case: Value; then: Value }[]; default: Value },
+    vars: Variables
+  ): Value {
     for (const branch of args.branches) {
       const condition = expry(branch.case, vars) as boolean;
       if (condition) return expry(branch.then, vars);

@@ -28,7 +28,7 @@ export const string: String = {
    */
   $concat(args: Value[], vars: Variables): string {
     return args
-      .map(arg => {
+      .map((arg) => {
         const string = expry(arg, vars) as string;
         return string;
       })

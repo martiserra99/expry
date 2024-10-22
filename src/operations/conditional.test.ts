@@ -1,4 +1,6 @@
-import { expry } from "../../src";
+import { describe, it, expect } from "vitest";
+
+import { expry } from "../";
 
 describe("$cond", () => {
   it("evaluates a boolean expression to return one of the two specified return expressions", () => {

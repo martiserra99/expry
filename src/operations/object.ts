@@ -5,7 +5,10 @@ import { Value, Variables, Operation } from "../types";
 export type Object = {
   $getField: Operation<{ field: Value; input: Value }, Value>;
   $mergeObjects: Operation<Value[], Record<string, Value>>;
-  $setField: Operation<{ field: Value; input: Value; value: Value }, Record<string, Value>>;
+  $setField: Operation<
+    { field: Value; input: Value; value: Value },
+    Record<string, Value>
+  >;
 };
 
 export const object: Object = {
@@ -53,7 +56,10 @@ export const object: Object = {
    *
    * @example $setField({ field: 'item', input: { qty: 25, price: 4.5 }, value: 'apple' }) // { item: 'apple', qty: 25, price: 4.5 }
    */
-  $setField(args: { field: Value; input: Value; value: Value }, vars: Variables): Record<string, Value> {
+  $setField(
+    args: { field: Value; input: Value; value: Value },
+    vars: Variables
+  ): Record<string, Value> {
     const field = expry(args.field, vars) as string;
     const input = expry(args.input, vars) as Record<string, Value>;
     const value = expry(args.value, vars);

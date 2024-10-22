@@ -8,7 +8,7 @@
     "skipLibCheck": true,
     "declaration": true,
     "declarationMap": true,
-    "noEmit": true,
+    "noEmit": false,
     "esModuleInterop": true,
     "lib": ["esnext"],
     "strict": true,

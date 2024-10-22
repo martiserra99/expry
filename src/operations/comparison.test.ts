@@ -1,4 +1,6 @@
-import { expry } from "../../src";
+import { describe, it, expect } from "vitest";
+
+import { expry } from "../";
 
 describe("$cmp", () => {
   it("compares two values and returns -1, 1 or 0", () => {

@@ -12,4 +12,7 @@ export type Variables = Record<string, Value>;
  *
  * @returns The result of the operation.
  */
-export type Operation<T extends Value, U extends Value> = (args: T, vars: Variables) => U;
+export type Operation<T extends Value, U extends Value> = (
+  args: T,
+  vars: Variables
+) => U;

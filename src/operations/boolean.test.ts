@@ -1,4 +1,6 @@
-import { expry } from "../../src";
+import { describe, it, expect } from "vitest";
+
+import { expry } from "../";
 
 describe("$and", () => {
   it("evaluates one or more expressions and returns true if any of the expressions are true", () => {

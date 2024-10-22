@@ -69,10 +69,13 @@ export const array: Array = {
    *
    * @example $filter({ input: [1, 2, 3, 4], as: 'num', cond: { $gt: ['$$num', 2] } }) // [3, 4]
    */
-  $filter(args: { input: Value; cond: Value; as: Value }, vars: Variables): Value[] {
+  $filter(
+    args: { input: Value; cond: Value; as: Value },
+    vars: Variables
+  ): Value[] {
     const array = expry(args.input, vars) as Value[];
     const as = expry(args.as, vars) as string;
-    return array.filter(value => {
+    return array.filter((value) => {
       return expry(args.cond, { ...vars, [`$${as}`]: value });
     });
   },
@@ -162,7 +165,7 @@ export const array: Array = {
   $map(args: { input: Value; as: Value; in: Value }, vars: Variables): Value[] {
     const array = expry(args.input, vars) as Value[];
     const as = expry(args.as, vars) as string;
-    return array.map(value => {
+    return array.map((value) => {
       return expry(args.in, { ...vars, [`$${as}`]: value });
     });
   },
@@ -179,10 +182,15 @@ export const array: Array = {
    * @example $maxN({ n: 3, input: [3, 7, 2, 4] } }) // [7, 4, 3]
    * @example $maxN({ n: 5, input: [3, 7, 2, 4] } }) // [7, 4, 3, 2]
    */
-  $maxN(args: { input: Value; n: Value }, vars: Variables): number[] | string[] {
+  $maxN(
+    args: { input: Value; n: Value },
+    vars: Variables
+  ): number[] | string[] {
     const array = expry(args.input, vars) as number[] | string[];
     const n = expry(args.n, vars) as number;
-    return array.sort((a: string | number, b: string | number) => (b > a ? 1 : -1)).slice(0, n);
+    return array
+      .sort((a: string | number, b: string | number) => (b > a ? 1 : -1))
+      .slice(0, n);
   },
 
   /**
@@ -197,10 +205,15 @@ export const array: Array = {
    * @example $minN({ n: 3, input: [3, 7, 2, 4] } }) // [2, 3, 4]
    * @example $minN({ n: 5, input: [3, 7, 2, 4] } }) // [2, 3, 4, 7]
    */
-  $minN(args: { input: Value; n: Value }, vars: Variables): number[] | string[] {
+  $minN(
+    args: { input: Value; n: Value },
+    vars: Variables
+  ): number[] | string[] {
     const array = expry(args.input, vars) as number[] | string[];
     const n = expry(args.n, vars) as number;
-    return array.sort((a: string | number, b: string | number) => (a > b ? 1 : -1)).slice(0, n);
+    return array
+      .sort((a: string | number, b: string | number) => (a > b ? 1 : -1))
+      .slice(0, n);
   },
 
   /**
@@ -214,7 +227,10 @@ export const array: Array = {
    * @example $reduce({ input: ['a', 'b', 'c'], initialValue: '', in: { $concat: ['$$value', '$$this'] } }) // 'abc'
    * @example $reduce({ input: [1, 2, 3], initialValue: 0, in: { $add: ['$$value', '$$this'] } } }) // 6
    */
-  $reduce(args: { input: Value; initialValue: Value; in: Value }, vars: Variables): Value {
+  $reduce(
+    args: { input: Value; initialValue: Value; in: Value },
+    vars: Variables
+  ): Value {
     const array = expry(args.input, vars) as Value[];
     const initialValue = expry(args.initialValue, vars);
     return array.reduce((acc, value) => {
