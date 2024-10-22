@@ -1,6 +1,6 @@
 {
   "name": "expry",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "main": "build/index.cjs.js",
   "module": "build/index.esm.js",
   "source": "src/index.ts",
@@ -14,12 +14,22 @@
     "build": "rollup -c",
     "start": "npm run build && cd ./example && npm install && npm run start"
   },
-  "keywords": [],
+  "keywords": [
+    "expression",
+    "transform",
+    "project",
+    "modify",
+    "update",
+    "map"
+  ],
   "author": "Marti Serra",
   "license": "MIT",
-  "description": "",
-  "repository": {},
-  "homepage": "",
+  "description": "Create Logic With JSON, Unlocking New Possibilities",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/martiserra99/expry"
+  },
+  "homepage": "https://expry.dev/",
   "devDependencies": {
     "@eslint/js": "^9.13.0",
     "eslint": "^9.13.0",
