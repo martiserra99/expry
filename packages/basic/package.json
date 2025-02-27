@@ -29,6 +29,9 @@
     "build": "rollup --config rollup.config.mjs",
     "dev": "rollup --config rollup.config.mjs --watch"
   },
+  "dependencies": {
+    "@expry/system": "workspace:*"
+  },
   "peerDependencies": {
     "@expry/system": ">=0.1.0"
   }
