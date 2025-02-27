@@ -1,0 +1,13 @@
+{
+  "name": "system-app",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@expry/system": "^0.1.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.3"
+  }
+}

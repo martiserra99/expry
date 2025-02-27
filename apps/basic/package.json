@@ -1,0 +1,14 @@
+{
+  "name": "basic-app",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@expry/basic": "^0.1.0",
+    "@expry/system": "^0.1.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.3"
+  }
+}

@@ -1,7 +1,4 @@
 /node_modules
-/build
-
-/example/node_modules
-/example/build
-
 .DS_Store
+.turbo
+.env

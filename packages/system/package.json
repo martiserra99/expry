@@ -1,0 +1,32 @@
+{
+  "name": "@expry/system",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": false,
+  "description": "A library to transform JSON expressions to JavaScript code.",
+  "keywords": [
+    "expression",
+    "transform",
+    "project",
+    "json",
+    "map"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/martiserra99/expry"
+  },
+  "homepage": "https://expry.dev/",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "source": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "eslint",
+    "test": "vitest --run --passWithNoTests",
+    "build": "rollup --config rollup.config.mjs",
+    "dev": "rollup --config rollup.config.mjs --watch"
+  }
+}
