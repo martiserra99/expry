@@ -30,7 +30,7 @@
     "dev": "rollup --config rollup.config.mjs --watch"
   },
   "dependencies": {
-    "@expry/system": "workspace:*"
+    "@expry/system": "*"
   },
   "peerDependencies": {
     "@expry/system": ">=0.1.0"
