@@ -46,7 +46,7 @@ export const comparisonOperations: Operations<ComparisonPrototypes> = {
   },
 
   /**
-   * Compares two values and returns true if they are equal. Otherwise, it returns false.
+   * Compares two values and returns true if they are equal.
    *
    * @example $eq([3, 3]) // true
    * @example $eq(['hello', 'bye']) // false
@@ -58,7 +58,7 @@ export const comparisonOperations: Operations<ComparisonPrototypes> = {
   },
 
   /**
-   * Compares two values and returns true if the first is greater than the second. Otherwise, it returns false.
+   * Compares two values and returns true if the first is greater than the second.
    *
    * @example $gt([5, 3]) // true
    * @example $gt([3, 5]) // false
@@ -71,7 +71,7 @@ export const comparisonOperations: Operations<ComparisonPrototypes> = {
   },
 
   /**
-   * Compares two values and returns true if the first is greater than or equal to the second. Otherwise, it returns false.
+   * Compares two values and returns true if the first is greater than or equal to the second.
    *
    * @example $gte([5, 3]) // true
    * @example $gte([3, 5]) // false
@@ -84,7 +84,7 @@ export const comparisonOperations: Operations<ComparisonPrototypes> = {
   },
 
   /**
-   * Compares two values and returns true if the first is less than the second. Otherwise, it returns false.
+   * Compares two values and returns true if the first is less than the second.
    *
    * @example $lt([3, 5]) // true
    * @example $lt([5, 3]) // false
@@ -97,7 +97,7 @@ export const comparisonOperations: Operations<ComparisonPrototypes> = {
   },
 
   /**
-   * Compares two values and returns true if the first is less than or equal to the second. Otherwise, it returns false.
+   * Compares two values and returns true if the first is less than or equal to the second.
    *
    * @example $lte([3, 5]) // true
    * @example $lte([5, 3]) // false
@@ -110,7 +110,7 @@ export const comparisonOperations: Operations<ComparisonPrototypes> = {
   },
 
   /**
-   * Compares two values and returns true if they are not equal. Otherwise, it returns false.
+   * Compares two values and returns true if they are not equal.
    *
    * @example $ne([3, 3]) // false
    * @example $ne(['hello', 'bye']) // true
