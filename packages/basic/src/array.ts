@@ -14,7 +14,7 @@ export type ArrayPrototypes = {
     return: unknown[];
   };
   filter: {
-    params: { input: unknown; cond: unknown; as: unknown };
+    params: { input: unknown; as: unknown; cond: unknown };
     return: unknown[];
   };
   first: {
@@ -51,7 +51,7 @@ export type ArrayPrototypes = {
   };
   max: {
     params: unknown;
-    return: number | string | null;
+    return: number | string | undefined;
   };
   maxN: {
     params: { input: unknown; n: unknown };
@@ -59,7 +59,7 @@ export type ArrayPrototypes = {
   };
   min: {
     params: unknown;
-    return: number | string | null;
+    return: number | string | undefined;
   };
   minN: {
     params: { input: unknown; n: unknown };
@@ -106,6 +106,22 @@ export type ArrayPrototypes = {
     };
     return: unknown[];
   };
+  every: {
+    params: { input: unknown; as: unknown; cond: unknown };
+    return: boolean;
+  };
+  find: {
+    params: { input: unknown; as: unknown; cond: unknown };
+    return: unknown;
+  };
+  findIndex: {
+    params: { input: unknown; as: unknown; cond: unknown };
+    return: number;
+  };
+  some: {
+    params: { input: unknown; as: unknown; cond: unknown };
+    return: boolean;
+  };
 };
 
 export const arrayOperations: Operations<ArrayPrototypes> = {
@@ -114,12 +130,11 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
    *
    * @example $arrayElemAt([1, 2, 3], 0) // 1
    * @example $arrayElemAt([1, 2, 3], 1) // 2
-   * @example $arrayElemAt([1, 2, 3], 3) // null
+   * @example $arrayElemAt([1, 2, 3], 3) // undefined
    */
   arrayElemAt(args, vars, expry) {
     const array = expry(args[0], vars) as unknown[];
     const index = expry(args[1], vars) as number;
-    if (index < 0 || index >= array.length) return null;
     return array[index];
   },
 
@@ -170,11 +185,10 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
    *
    * @example $first([1, 2, 3]) // 1
    * @example $first(['a', 'b', 'c']) // 'a'
-   * @example $first([]) // null
+   * @example $first([]) // undefined
    */
   first(args, vars, expry) {
     const array = expry(args, vars) as unknown[];
-    if (array.length === 0) return null;
     return array[0];
   },
 
@@ -221,11 +235,10 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
    *
    * @example $last([1, 2, 3]) // 3
    * @example $last(['a', 'b', 'c']) // 'c'
-   * @example $last([]) // null
+   * @example $last([]) // undefined
    */
   last(args, vars, expry) {
     const array = expry(args, vars) as unknown[];
-    if (array.length === 0) return null;
     return array[array.length - 1];
   },
 
@@ -273,11 +286,10 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
    *
    * @example $max([3, 7, 2, 4]) // 7
    * @example $max(['a', 'c', 'b']) // 'c'
-   * @example $max([]) // null
+   * @example $max([]) // undefined
    */
   max(args, vars, expry) {
     const array = expry(args, vars) as number[] | string[];
-    if (array.length === 0) return null;
     return array.reduce((acc, value) => (value > acc ? value : acc), array[0]);
   },
 
@@ -299,11 +311,10 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
    *
    * @example $min([3, 7, 2, 4]) // 2
    * @example $min(['a', 'c', 'b']) // 'a'
-   * @example $min([]) // null
+   * @example $min([]) // undefined
    */
   min(args, vars, expry) {
     const array = expry(args, vars) as number[] | string[];
-    if (array.length === 0) return null;
     return array.reduce((acc, value) => (value < acc ? value : acc), array[0]);
   },
 
@@ -439,5 +450,61 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
     const items = expry(args.items, vars) as unknown[];
     array.splice(start, deleteCount, ...items);
     return array;
+  },
+
+  /**
+   * Returns true if all elements in an array satisfy the specified condition.
+   *
+   * @example $every({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 0] } }) // true
+   * @example $every({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 1] } }) // false
+   */
+  every(args, vars, expry) {
+    const array = expry(args.input, vars) as unknown[];
+    const as = expry(args.as, vars) as string;
+    return array.every((value) => {
+      return expry(args.cond, { ...vars, [`$${as}`]: value });
+    });
+  },
+
+  /**
+   * Returns the first element in an array that satisfies the specified condition.
+   *
+   * @example $find({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 1] } }) // 2
+   * @example $find({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 3] } }) // undefined
+   */
+  find(args, vars, expry) {
+    const array = expry(args.input, vars) as unknown[];
+    const as = expry(args.as, vars) as string;
+    return array.find((value) => {
+      return expry(args.cond, { ...vars, [`$${as}`]: value });
+    });
+  },
+
+  /**
+   * Returns the index of the first element in an array that satisfies the specified condition.
+   *
+   * @example $findIndex({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 1] } }) // 1
+   * @example $findIndex({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 3] } }) // -1
+   */
+  findIndex(args, vars, expry) {
+    const array = expry(args.input, vars) as unknown[];
+    const as = expry(args.as, vars) as string;
+    return array.findIndex((value) => {
+      return expry(args.cond, { ...vars, [`$${as}`]: value });
+    });
+  },
+
+  /**
+   * Returns true if at least one element in an array satisfies the specified condition.
+   *
+   * @example $some({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 2] } }) // true
+   * @example $some({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 3] } }) // false
+   */
+  some(args, vars, expry) {
+    const array = expry(args.input, vars) as unknown[];
+    const as = expry(args.as, vars) as string;
+    return array.some((value) => {
+      return expry(args.cond, { ...vars, [`$${as}`]: value });
+    });
   },
 };

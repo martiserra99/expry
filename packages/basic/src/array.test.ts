@@ -10,7 +10,7 @@ describe("arrayElemAt", () => {
   it("returns the element at the specified index in an array", () => {
     expect(expry({ $arrayElemAt: [[1, 2, 3], 0] })).toBe(1);
     expect(expry({ $arrayElemAt: [[1, 2, 3], 1] })).toBe(2);
-    expect(expry({ $arrayElemAt: [[1, 2, 3], 3] })).toBe(null);
+    expect(expry({ $arrayElemAt: [[1, 2, 3], 3] })).toBe(undefined);
   });
 });
 
@@ -85,7 +85,7 @@ describe("first", () => {
   it("returns the first element of an array", () => {
     expect(expry({ $first: [1, 2, 3] })).toBe(1);
     expect(expry({ $first: ["a", "b", "c"] })).toBe("a");
-    expect(expry({ $first: [] })).toBe(null);
+    expect(expry({ $first: [] })).toBe(undefined);
   });
 });
 
@@ -116,7 +116,7 @@ describe("last", () => {
   it("returns the last element of an array", () => {
     expect(expry({ $last: [1, 2, 3] })).toBe(3);
     expect(expry({ $last: ["a", "b", "c"] })).toBe("c");
-    expect(expry({ $last: [] })).toBe(null);
+    expect(expry({ $last: [] })).toBe(undefined);
   });
 });
 
@@ -163,7 +163,7 @@ describe("max", () => {
   it("returns the largest value in an array", () => {
     expect(expry({ $max: [3, 7, 2, 4] })).toBe(7);
     expect(expry({ $max: ["a", "c", "b"] })).toBe("c");
-    expect(expry({ $max: [] })).toBe(null);
+    expect(expry({ $max: [] })).toBe(undefined);
   });
 });
 
@@ -191,7 +191,7 @@ describe("min", () => {
   it("returns the smallest value in an array", () => {
     expect(expry({ $min: [3, 7, 2, 4] })).toBe(2);
     expect(expry({ $min: ["a", "c", "b"] })).toBe("a");
-    expect(expry({ $min: [] })).toBe(null);
+    expect(expry({ $min: [] })).toBe(undefined);
   });
 });
 
@@ -342,5 +342,73 @@ describe("splice", () => {
         },
       })
     ).toEqual(["a", "x", "y", "z"]);
+  });
+});
+
+describe("every", () => {
+  it("returns true if all elements in an array satisfy the specified condition", () => {
+    expect(
+      expry({
+        $every: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 0] } },
+      })
+    ).toBe(true);
+    expect(
+      expry({
+        $every: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 1] } },
+      })
+    ).toBe(false);
+  });
+});
+
+describe("find", () => {
+  it("returns the first element in an array that satisfies the specified condition", () => {
+    expect(
+      expry({
+        $find: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 1] } },
+      })
+    ).toBe(2);
+    expect(
+      expry({
+        $find: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 3] } },
+      })
+    ).toBe(undefined);
+  });
+});
+
+describe("findIndex", () => {
+  it("returns the index of the first element in an array that satisfies the specified condition", () => {
+    expect(
+      expry({
+        $findIndex: {
+          input: [1, 2, 3],
+          as: "num",
+          cond: { $gt: ["$$num", 1] },
+        },
+      })
+    ).toBe(1);
+    expect(
+      expry({
+        $findIndex: {
+          input: [1, 2, 3],
+          as: "num",
+          cond: { $gt: ["$$num", 3] },
+        },
+      })
+    ).toBe(-1);
+  });
+});
+
+describe("some", () => {
+  it("returns true if at least one element in an array satisfies the specified condition", () => {
+    expect(
+      expry({
+        $some: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 2] } },
+      })
+    ).toBe(true);
+    expect(
+      expry({
+        $some: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 3] } },
+      })
+    ).toBe(false);
   });
 });
