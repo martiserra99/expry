@@ -17,7 +17,7 @@ export type BooleanPrototypes = {
 
 export const booleanOperations: Operations<BooleanPrototypes> = {
   /**
-   * Evaluates one or more expressions and returns true if all of the expressions are true. Otherwise, it returns false.
+   * Returns true if all expressions are true.
    *
    * @example $and([true, true, true]) // true
    * @example $and([true, false, true]) // false
@@ -30,7 +30,7 @@ export const booleanOperations: Operations<BooleanPrototypes> = {
   },
 
   /**
-   * Evaluates a boolean and returns the opposite boolean value.
+   * Returns the opposite boolean value.
    *
    * @example $not(true) // false
    * @example $not(false) // true
@@ -41,7 +41,7 @@ export const booleanOperations: Operations<BooleanPrototypes> = {
   },
 
   /**
-   * Evaluates one or more expressions and returns true if any of the expressions are true. Otherwise, it returns false.
+   * Returns true if any of the expressions are true.
    *
    * @example $or([true, false, true]) // true
    * @example $or([false, false, false]) // false
