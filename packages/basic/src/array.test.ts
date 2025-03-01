@@ -7,30 +7,68 @@ import { basicOperations, BasicPrototypes } from "./index";
 const expry = expryInstance<[BasicPrototypes]>(basicOperations);
 
 describe("arrayElemAt", () => {
-  it("returns the element at the specified array index", () => {
+  it("returns the element at the specified index in an array", () => {
     expect(expry({ $arrayElemAt: [[1, 2, 3], 0] })).toBe(1);
     expect(expry({ $arrayElemAt: [[1, 2, 3], 1] })).toBe(2);
     expect(expry({ $arrayElemAt: [[1, 2, 3], 3] })).toBe(null);
   });
 });
 
+describe("arrayToObject", () => {
+  it("converts an array of two-element arrays into an object", () => {
+    expect(
+      expry({
+        $arrayToObject: [
+          ["a", 1],
+          ["b", 2],
+        ],
+      })
+    ).toEqual({ a: 1, b: 2 });
+    expect(
+      expry({
+        $arrayToObject: [
+          ["name", "John"],
+          ["age", 30],
+        ],
+      })
+    ).toEqual({ name: "John", age: 30 });
+    expect(
+      expry({
+        $arrayToObject: [
+          ["a", 1],
+          ["b", 2],
+          ["a", 3],
+        ],
+      })
+    ).toEqual({ a: 3, b: 2 });
+  });
+});
+
 describe("concatArrays", () => {
-  it("concatenates arrays to return the concatenated array", () => {
-    expect(expry({ $concatArrays: [["hello", " "], ["world"]] })).toEqual([
-      "hello",
-      " ",
-      "world",
-    ]);
-    expect(expry({ $concatArrays: [["hello", " "], [["world"]]] })).toEqual([
-      "hello",
-      " ",
-      ["world"],
-    ]);
+  it("returns the concatenation of arrays", () => {
+    expect(
+      expry({
+        $concatArrays: [
+          [1, 2],
+          [3, 4],
+        ],
+      })
+    ).toEqual([1, 2, 3, 4]);
+    expect(
+      expry({
+        $concatArrays: [["hello", " "], ["world"]],
+      })
+    ).toEqual(["hello", " ", "world"]);
+    expect(
+      expry({
+        $concatArrays: [["hello", " "], [["world"]]],
+      })
+    ).toEqual(["hello", " ", ["world"]]);
   });
 });
 
 describe("filter", () => {
-  it("selects a subset of an array to return based on the specified condition", () => {
+  it("returns a subset of an array based on the specified condition", () => {
     expect(
       expry({
         $filter: {
@@ -43,19 +81,27 @@ describe("filter", () => {
   });
 });
 
+describe("first", () => {
+  it("returns the first element of an array", () => {
+    expect(expry({ $first: [1, 2, 3] })).toBe(1);
+    expect(expry({ $first: ["a", "b", "c"] })).toBe("a");
+    expect(expry({ $first: [] })).toBe(null);
+  });
+});
+
 describe("firstN", () => {
   it("returns the first N elements of an array", () => {
     expect(expry({ $firstN: { n: 2, input: [1, 2, 3] } })).toEqual([1, 2]);
     expect(expry({ $firstN: { n: 3, input: [1, 2] } })).toEqual([1, 2]);
-    expect(expry({ $firstN: { n: 2, input: [1] } })).toEqual([1]);
+    expect(expry({ $firstN: { n: -1, input: [1, 2] } })).toEqual([]);
   });
 });
 
 describe("in", () => {
-  it("returns a boolean indicating whether a specified value is in an array", () => {
+  it("returns a boolean indicating whether a value is in an array", () => {
     expect(expry({ $in: [2, [1, 2, 3]] })).toBe(true);
-    expect(expry({ $in: ["abc", ["xyc", "abc"]] })).toBe(true);
-    expect(expry({ $in: ["xy", ["xyc", "abc"]] })).toBe(false);
+    expect(expry({ $in: [4, [1, 2, 3]] })).toBe(false);
+    expect(expry({ $in: ["world", ["hello", "world"]] })).toBe(true);
   });
 });
 
@@ -66,11 +112,27 @@ describe("indexOfArray", () => {
   });
 });
 
+describe("last", () => {
+  it("returns the last element of an array", () => {
+    expect(expry({ $last: [1, 2, 3] })).toBe(3);
+    expect(expry({ $last: ["a", "b", "c"] })).toBe("c");
+    expect(expry({ $last: [] })).toBe(null);
+  });
+});
+
 describe("lastN", () => {
   it("returns the last N elements of an array", () => {
     expect(expry({ $lastN: { n: 2, input: [1, 2, 3] } })).toEqual([2, 3]);
     expect(expry({ $lastN: { n: 3, input: [1, 2] } })).toEqual([1, 2]);
-    expect(expry({ $lastN: { n: 2, input: [1] } })).toEqual([1]);
+    expect(expry({ $lastN: { n: -1, input: [1, 2] } })).toEqual([]);
+  });
+});
+
+describe("length", () => {
+  it("returns the number of elements in an array", () => {
+    expect(expry({ $length: [1, 2, 3] })).toBe(3);
+    expect(expry({ $length: ["a", "b", "c", "d"] })).toBe(4);
+    expect(expry({ $length: [] })).toBe(0);
   });
 });
 
@@ -85,35 +147,108 @@ describe("map", () => {
         },
       })
     ).toEqual([2, 3, 4]);
+    expect(
+      expry({
+        $map: {
+          input: ["a", "b"],
+          as: "str",
+          in: { $toUpper: "$$str" },
+        },
+      })
+    ).toEqual(["A", "B"]);
   });
-  expect(
-    expry({
-      $map: {
-        input: ["a", "b"],
-        as: "str",
-        in: { $toUpper: "$$str" },
-      },
-    })
-  ).toEqual(["A", "B"]);
+});
+
+describe("max", () => {
+  it("returns the largest value in an array", () => {
+    expect(expry({ $max: [3, 7, 2, 4] })).toBe(7);
+    expect(expry({ $max: ["a", "c", "b"] })).toBe("c");
+    expect(expry({ $max: [] })).toBe(null);
+  });
 });
 
 describe("maxN", () => {
-  it("returns the N highest values in an array", () => {
-    expect(expry({ $maxN: { n: 2, input: [3, 7, 2, 4] } })).toEqual([7, 4]);
-    expect(expry({ $maxN: { n: 3, input: [3, 7, 2, 4] } })).toEqual([7, 4, 3]);
-    expect(expry({ $maxN: { n: 5, input: [3, 7, 2, 4] } })).toEqual([
-      7, 4, 3, 2,
-    ]);
+  it("returns the N largest values in an array", () => {
+    expect(
+      expry({
+        $maxN: { n: 2, input: [3, 7, 2, 4] },
+      })
+    ).toEqual([7, 4]);
+    expect(
+      expry({
+        $maxN: { n: 3, input: [3, 7, 2, 4] },
+      })
+    ).toEqual([7, 4, 3]);
+    expect(
+      expry({
+        $maxN: { n: 5, input: [3, 7, 2, 4] },
+      })
+    ).toEqual([7, 4, 3, 2]);
+  });
+});
+
+describe("min", () => {
+  it("returns the smallest value in an array", () => {
+    expect(expry({ $min: [3, 7, 2, 4] })).toBe(2);
+    expect(expry({ $min: ["a", "c", "b"] })).toBe("a");
+    expect(expry({ $min: [] })).toBe(null);
   });
 });
 
 describe("minN", () => {
-  it("returns the N lowest values in an array", () => {
-    expect(expry({ $minN: { n: 2, input: [3, 7, 2, 4] } })).toEqual([2, 3]);
-    expect(expry({ $minN: { n: 3, input: [3, 7, 2, 4] } })).toEqual([2, 3, 4]);
-    expect(expry({ $minN: { n: 5, input: [3, 7, 2, 4] } })).toEqual([
-      2, 3, 4, 7,
+  it("returns the N smallest values in an array", () => {
+    expect(
+      expry({
+        $minN: { n: 2, input: [3, 7, 2, 4] },
+      })
+    ).toEqual([2, 3]);
+    expect(
+      expry({
+        $minN: { n: 3, input: [3, 7, 2, 4] },
+      })
+    ).toEqual([2, 3, 4]);
+    expect(
+      expry({
+        $minN: { n: 5, input: [3, 7, 2, 4] },
+      })
+    ).toEqual([2, 3, 4, 7]);
+  });
+});
+
+describe("objectToArray", () => {
+  it("converts an object to an array of key-value pairs", () => {
+    expect(
+      expry({
+        $objectToArray: { a: 1, b: 2 },
+      })
+    ).toEqual([
+      ["a", 1],
+      ["b", 2],
     ]);
+    expect(
+      expry({
+        $objectToArray: { name: "John", age: 30 },
+      })
+    ).toEqual([
+      ["name", "John"],
+      ["age", 30],
+    ]);
+  });
+});
+
+describe("pop", () => {
+  it("removes the last element from an array and returns the array", () => {
+    expect(expry({ $pop: [1, 2, 3] })).toEqual([1, 2]);
+    expect(expry({ $pop: ["a", "b", "c"] })).toEqual(["a", "b"]);
+    expect(expry({ $pop: [] })).toEqual([]);
+  });
+});
+
+describe("push", () => {
+  it("adds an element to the end of an array and returns the array", () => {
+    expect(expry({ $push: [[1, 2], 3] })).toEqual([1, 2, 3]);
+    expect(expry({ $push: [["a", "b"], "c"] })).toEqual(["a", "b", "c"]);
+    expect(expry({ $push: [[], "a"] })).toEqual(["a"]);
   });
 });
 
@@ -141,31 +276,31 @@ describe("reduce", () => {
 });
 
 describe("reverseArray", () => {
-  it("returns an array with the elements in reverse order", () => {
+  it("reverses the elements of an array", () => {
     expect(expry({ $reverseArray: [4, 2, 3] })).toEqual([3, 2, 4]);
     expect(expry({ $reverseArray: ["a", "c", "b"] })).toEqual(["b", "c", "a"]);
   });
 });
 
-describe("size", () => {
-  it("returns the number of elements in an array", () => {
-    expect(expry({ $size: [1, 2, 3] })).toBe(3);
-    expect(expry({ $size: ["a", "b", "c", "d"] })).toBe(4);
-    expect(expry({ $size: [] })).toBe(0);
+describe("shift", () => {
+  it("removes the first element from an array and returns the array", () => {
+    expect(expry({ $shift: [1, 2, 3] })).toEqual([2, 3]);
+    expect(expry({ $shift: ["a", "b", "c"] })).toEqual(["b", "c"]);
+    expect(expry({ $shift: [] })).toEqual([]);
   });
 });
 
 describe("slice", () => {
   it("returns a subset of an array", () => {
-    expect(expry({ $slice: [[1, 2, 3], 1, 1] })).toEqual([2]);
-    expect(expry({ $slice: [[1, 2, 3], 1, 2] })).toEqual([2, 3]);
+    expect(expry({ $slice: [[1, 2, 3], 1, 2] })).toEqual([2]);
     expect(expry({ $slice: [[1, 2, 3], 1, 3] })).toEqual([2, 3]);
-    expect(expry({ $slice: [[1, 2, 3], 3, 2] })).toEqual([]);
+    expect(expry({ $slice: [[1, 2, 3], 1, 0] })).toEqual([]);
+    expect(expry({ $slice: [[1, 2, 3], 0, -1] })).toEqual([1, 2]);
   });
 });
 
 describe("sortArray", () => {
-  it("returns an array with its elements sorted", () => {
+  it("sorts the elements of an array", () => {
     expect(
       expry({
         $sortArray: {
@@ -182,5 +317,30 @@ describe("sortArray", () => {
         },
       })
     ).toEqual([4, 3, 2]);
+  });
+});
+
+describe("splice", () => {
+  it("removes elements from an array and inserts new elements in their place", () => {
+    expect(
+      expry({
+        $splice: {
+          input: [1, 2, 3],
+          start: 1,
+          deleteCount: 1,
+          items: [4, 5],
+        },
+      })
+    ).toEqual([1, 4, 5, 3]);
+    expect(
+      expry({
+        $splice: {
+          input: ["a", "b", "c"],
+          start: 1,
+          deleteCount: 2,
+          items: ["x", "y", "z"],
+        },
+      })
+    ).toEqual(["a", "x", "y", "z"]);
   });
 });

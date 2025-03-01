@@ -5,6 +5,10 @@ export type ArrayPrototypes = {
     params: [unknown, unknown];
     return: unknown;
   };
+  arrayToObject: {
+    params: unknown;
+    return: Record<PropertyKey, unknown>;
+  };
   concatArrays: {
     params: unknown[];
     return: unknown[];
@@ -12,6 +16,10 @@ export type ArrayPrototypes = {
   filter: {
     params: { input: unknown; cond: unknown; as: unknown };
     return: unknown[];
+  };
+  first: {
+    params: unknown;
+    return: unknown;
   };
   firstN: {
     params: { input: unknown; n: unknown };
@@ -25,21 +33,49 @@ export type ArrayPrototypes = {
     params: [unknown, unknown];
     return: number;
   };
+  last: {
+    params: unknown;
+    return: unknown;
+  };
   lastN: {
     params: { input: unknown; n: unknown };
     return: unknown[];
+  };
+  length: {
+    params: unknown;
+    return: number;
   };
   map: {
     params: { input: unknown; as: unknown; in: unknown };
     return: unknown[];
   };
+  max: {
+    params: unknown;
+    return: number | string | null;
+  };
   maxN: {
     params: { input: unknown; n: unknown };
     return: number[] | string[];
   };
+  min: {
+    params: unknown;
+    return: number | string | null;
+  };
   minN: {
     params: { input: unknown; n: unknown };
     return: number[] | string[];
+  };
+  objectToArray: {
+    params: unknown;
+    return: [PropertyKey, unknown][];
+  };
+  pop: {
+    params: unknown;
+    return: unknown[];
+  };
+  push: {
+    params: [unknown, unknown];
+    return: unknown[];
   };
   reduce: {
     params: { input: unknown; initialValue: unknown; in: unknown };
@@ -49,9 +85,9 @@ export type ArrayPrototypes = {
     params: unknown;
     return: unknown[];
   };
-  size: {
+  shift: {
     params: unknown;
-    return: number;
+    return: unknown[];
   };
   slice: {
     params: [unknown, unknown, unknown];
@@ -59,6 +95,15 @@ export type ArrayPrototypes = {
   };
   sortArray: {
     params: { input: unknown; sortBy: unknown };
+    return: unknown[];
+  };
+  splice: {
+    params: {
+      input: unknown;
+      start: unknown;
+      deleteCount: unknown;
+      items: unknown;
+    };
     return: unknown[];
   };
 };
@@ -76,6 +121,21 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
     const index = expry(args[1], vars) as number;
     if (index < 0 || index >= array.length) return null;
     return array[index];
+  },
+
+  /**
+   * Converts an array of two-element arrays into an object.
+   *
+   * @example $arrayToObject([['a', 1], ['b', 2]]) // { a: 1, b: 2 }
+   * @example $arrayToObject([['name', 'John'], ['age', 30]]) // { name: 'John', age: 30 }
+   * @example $arrayToObject([['a', 1], ['b', 2], ['a', 3]]) // { a: 3, b: 2 }
+   */
+  arrayToObject(args, vars, expry) {
+    const array = expry(args, vars) as [PropertyKey, unknown][];
+    return array.reduce<Record<PropertyKey, unknown>>((obj, [key, value]) => {
+      obj[key] = value;
+      return obj;
+    }, {});
   },
 
   /**
@@ -106,16 +166,29 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
   },
 
   /**
-   * Returns a specified number of elements from the beginning of an array.
+   * Returns the first element of an array.
+   *
+   * @example $first([1, 2, 3]) // 1
+   * @example $first(['a', 'b', 'c']) // 'a'
+   * @example $first([]) // null
+   */
+  first(args, vars, expry) {
+    const array = expry(args, vars) as unknown[];
+    if (array.length === 0) return null;
+    return array[0];
+  },
+
+  /**
+   * Returns the first N elements of an array.
    *
    * @example $firstN({ n: 2, input: [1, 2, 3] }) // [1, 2]
    * @example $firstN({ n: 3, input: [1, 2] } }) // [1, 2]
-   * @example $firstN({ n: 2, input: [1] } }) // [1]
+   * @example $firstN({ n: -1, input: [1, 2] } }) // []
    */
   firstN(args, vars, expry) {
     const array = expry(args.input, vars) as unknown[];
     const n = expry(args.n, vars) as number;
-    return array.slice(0, n);
+    return n > 0 ? array.slice(0, n) : [];
   },
 
   /**
@@ -132,7 +205,7 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
   },
 
   /**
-   * Returns the index of the first occurrence of a value in an array. If the value is not in the array, it returns -1.
+   * Returns the index of the first occurrence of a specified value in an array.
    *
    * @example $indexOfArray([['a', 'abc'], 'a']) // 0
    * @example $indexOfArray([[1, 2], 5]) // -1
@@ -144,11 +217,24 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
   },
 
   /**
-   * Returns a specified number of elements from the end of an array.
+   * Returns the last element of an array.
+   *
+   * @example $last([1, 2, 3]) // 3
+   * @example $last(['a', 'b', 'c']) // 'c'
+   * @example $last([]) // null
+   */
+  last(args, vars, expry) {
+    const array = expry(args, vars) as unknown[];
+    if (array.length === 0) return null;
+    return array[array.length - 1];
+  },
+
+  /**
+   * Returns the last N elements of an array.
    *
    * @example $lastN({ n: 2, input: [1, 2, 3] }) // [2, 3]
    * @example $lastN({ n: 3, input: [1, 2] } }) // [1, 2]
-   * @example $lastN({ n: 2, input: [1] } }) // [1]
+   * @example $lastN({ n: -1, input: [1, 2] } }) // []
    */
   lastN(args, vars, expry) {
     const array = expry(args.input, vars) as unknown[];
@@ -157,7 +243,19 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
   },
 
   /**
-   * Applies a specified expression to each element of an array and returns the result.
+   * Returns the number of elements in an array.
+   *
+   * @example $length([1, 2, 3]) // 3
+   * @example $length(['a', 'b', 'c', 'd']) // 4
+   * @example $length([]) // 0
+   */
+  length(args, vars, expry) {
+    const array = expry(args, vars) as unknown[];
+    return array.length;
+  },
+
+  /**
+   * Applies an expression to each element in an array and returns an array with the applied results.
    *
    * @example $map({ input: [1, 2, 3], as: 'num', in: { $add: ['$$num', 1] } }) // [2, 3, 4]
    * @example $map({ input: ['a', 'b'], as: 'str', in: { $toUpper: '$$str' } }) // ['A', 'B']
@@ -171,7 +269,20 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
   },
 
   /**
-   * Returns the largest values in an array.
+   * Returns the largest value in an array.
+   *
+   * @example $max([3, 7, 2, 4]) // 7
+   * @example $max(['a', 'c', 'b']) // 'c'
+   * @example $max([]) // null
+   */
+  max(args, vars, expry) {
+    const array = expry(args, vars) as number[] | string[];
+    if (array.length === 0) return null;
+    return array.reduce((acc, value) => (value > acc ? value : acc), array[0]);
+  },
+
+  /**
+   * Returns the N largest values in an array.
    *
    * @example $maxN({ n: 2, input: [3, 7, 2, 4] } }) // [7, 4]
    * @example $maxN({ n: 3, input: [3, 7, 2, 4] } }) // [7, 4, 3]
@@ -180,13 +291,24 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
   maxN(args, vars, expry) {
     const array = expry(args.input, vars) as number[] | string[];
     const n = expry(args.n, vars) as number;
-    return array
-      .sort((a: string | number, b: string | number) => (b > a ? 1 : -1))
-      .slice(0, n);
+    return array.sort((a, b) => (b > a ? 1 : -1)).slice(0, n);
   },
 
   /**
-   * Returns the smallest values in an array.
+   * Returns the smallest value in an array.
+   *
+   * @example $min([3, 7, 2, 4]) // 2
+   * @example $min(['a', 'c', 'b']) // 'a'
+   * @example $min([]) // null
+   */
+  min(args, vars, expry) {
+    const array = expry(args, vars) as number[] | string[];
+    if (array.length === 0) return null;
+    return array.reduce((acc, value) => (value < acc ? value : acc), array[0]);
+  },
+
+  /**
+   * Returns the N smallest values in an array.
    *
    * @example $minN({ n: 2, input: [3, 7, 2, 4] } }) // [2, 3]
    * @example $minN({ n: 3, input: [3, 7, 2, 4] } }) // [2, 3, 4]
@@ -195,13 +317,49 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
   minN(args, vars, expry) {
     const array = expry(args.input, vars) as number[] | string[];
     const n = expry(args.n, vars) as number;
-    return array
-      .sort((a: string | number, b: string | number) => (a > b ? 1 : -1))
-      .slice(0, n);
+    return array.sort((a, b) => (a > b ? 1 : -1)).slice(0, n);
   },
 
   /**
-   * Accumulates the elements of an array using an expression and returns the result.
+   * Converts an object to an array of key-value pairs.
+   *
+   * @example $objectToArray({ a: 1, b: 2 }) // [['a', 1], ['b', 2]]
+   * @example $objectToArray({ name: 'John', age: 30 }) // [['name', 'John'], ['age', 30]]
+   */
+  objectToArray(args, vars, expry) {
+    const object = expry(args, vars) as Record<PropertyKey, unknown>;
+    return Object.entries(object);
+  },
+
+  /**
+   * Removes the last element from an array and returns the array.
+   *
+   * @example $pop([1, 2, 3]) // [1, 2]
+   * @example $pop(['a', 'b', 'c']) // ['a', 'b']
+   * @example $pop([]) // []
+   */
+  pop(args, vars, expry) {
+    const array = expry(args, vars) as unknown[];
+    array.pop();
+    return array;
+  },
+
+  /**
+   * Adds an element to the end of an array and returns the array.
+   *
+   * @example $push([1, 2], 3) // [1, 2, 3]
+   * @example $push(['a', 'b'], 'c') // ['a', 'b', 'c']
+   * @example $push([], 'a') // ['a']
+   */
+  push(args, vars, expry) {
+    const array = expry(args[0], vars) as unknown[];
+    const value = expry(args[1], vars);
+    array.push(value);
+    return array;
+  },
+
+  /**
+   * Applies an expression to each element in an array and combines them into a single value.
    *
    * @example $reduce({ input: ['a', 'b', 'c'], initialValue: '', in: { $concat: ['$$value', '$$this'] } }) // 'abc'
    * @example $reduce({ input: [1, 2, 3], initialValue: 0, in: { $add: ['$$value', '$$this'] } } }) // 6
@@ -226,30 +384,31 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
   },
 
   /**
-   * Returns the number of elements in an array.
+   * Removes the first element from an array and returns the array.
    *
-   * @example $size([1, 2, 3]) // 3
-   * @example $size(['a', 'b', 'c', 'd']) // 4
-   * @example $size([]) // 0
+   * @example $shift([1, 2, 3]) // [2, 3]
+   * @example $shift(['a', 'b', 'c']) // ['b', 'c']
+   * @example $shift([]) // []
    */
-  size(args, vars, expry) {
+  shift(args, vars, expry) {
     const array = expry(args, vars) as unknown[];
-    return array.length;
+    array.shift();
+    return array;
   },
 
   /**
    * Returns a subset of an array.
    *
-   * @example $slice([[1, 2, 3], 1, 1]) // [2]
-   * @example $slice([[1, 2, 3], 1, 2]) // [2, 3]
-   * @example $slice([[1, 2, 3], 1, 3]) // [2, 3]
-   * @example $slice([[1, 2, 3], 3, 2]) // []
+   * @example $slice([1, 2, 3], 1, 2) // [2]
+   * @example $slice([1, 2, 3], 1, 3) // [2, 3]
+   * @example $slice([1, 2, 3], 1, 0) // []
+   * @example $slice([1, 2, 3], 0, -1) // [1, 2]
    */
-  slice(args, vars, expry): unknown[] {
+  slice(args, vars, expry) {
     const array = expry(args[0], vars) as unknown[];
-    const position = expry(args[1], vars) as number;
-    const n = expry(args[2], vars) as number;
-    return array.slice(position, position + n);
+    const start = expry(args[1], vars) as number;
+    const end = expry(args[2], vars) as number;
+    return array.slice(start, end);
   },
 
   /**
@@ -265,5 +424,20 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
       const number = expry(args.sortBy, variables) as number;
       return number;
     });
+  },
+
+  /**
+   * Removes elements from an array and inserts new elements in their place.
+   *
+   * @example $splice({ input: [1, 2, 3], start: 1, deleteCount: 1, items: [4, 5] }) // [1, 4, 5, 3]
+   * @example $splice({ input: ['a', 'b', 'c'], start: 1, deleteCount: 2, items: ['x', 'y', 'z'] }) // ['a', 'x', 'y', 'z']
+   */
+  splice(args, vars, expry) {
+    const array = expry(args.input, vars) as unknown[];
+    const start = expry(args.start, vars) as number;
+    const deleteCount = expry(args.deleteCount, vars) as number;
+    const items = expry(args.items, vars) as unknown[];
+    array.splice(start, deleteCount, ...items);
+    return array;
   },
 };
