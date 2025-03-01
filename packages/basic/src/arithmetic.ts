@@ -17,23 +17,7 @@ export type ArithmeticPrototypes = {
     params: [unknown, unknown];
     return: number;
   };
-  exp: {
-    params: unknown;
-    return: number;
-  };
   floor: {
-    params: unknown;
-    return: number;
-  };
-  ln: {
-    params: unknown;
-    return: number;
-  };
-  log: {
-    params: [unknown, unknown];
-    return: number;
-  };
-  log10: {
     params: unknown;
     return: number;
   };
@@ -51,10 +35,6 @@ export type ArithmeticPrototypes = {
   };
   round: {
     params: [unknown, unknown];
-    return: number;
-  };
-  sqrt: {
-    params: unknown;
     return: number;
   };
   subtract: {
@@ -83,7 +63,7 @@ export const arithmeticOperations: Operations<ArithmeticPrototypes> = {
    * Adds numbers together.
    *
    * @example $add([1, 2, 3]) // 6
-   * @example $add([1, 2, 3, 4]) // 10
+   * @example $add([-1, 2, -3, 4]) // 2
    */
   add(args, vars, expry) {
     return args.reduce((acc: number, expr) => {
@@ -97,6 +77,7 @@ export const arithmeticOperations: Operations<ArithmeticPrototypes> = {
    *
    * @example $ceil(5.5) // 6
    * @example $ceil(5.1) // 6
+   * @example $ceil(-2.8) // -2
    */
   ceil(args, vars, expry) {
     const number = expry(args, vars) as number;
@@ -107,7 +88,7 @@ export const arithmeticOperations: Operations<ArithmeticPrototypes> = {
    * Divides one number by another.
    *
    * @example $divide([10, 2]) // 5
-   * @example $divide([10, 3]) // 3.3333333333333335
+   * @example $divide([5, 2]) // 2.5
    */
   divide(args, vars, expry) {
     const number1 = expry(args[0], vars) as number;
@@ -116,21 +97,11 @@ export const arithmeticOperations: Operations<ArithmeticPrototypes> = {
   },
 
   /**
-   * Raises Euler's number to the specified exponent.
-   *
-   * @example $exp(1) // 2.718281828459045
-   * @example $exp(2) // 7.3890560989306495
-   */
-  exp(args, vars, expry) {
-    const number = expry(args, vars) as number;
-    return Math.exp(number);
-  },
-
-  /**
    * Returns the largest integer less than or equal to the specified number.
    *
    * @example $floor(5.5) // 5
    * @example $floor(5.1) // 5
+   * @example $floor(-2.8) // -3
    */
   floor(args, vars, expry) {
     const number = expry(args, vars) as number;
@@ -138,41 +109,7 @@ export const arithmeticOperations: Operations<ArithmeticPrototypes> = {
   },
 
   /**
-   * Returns the natural logarithm of a number.
-   *
-   * @example $ln(1) // 0
-   * @example $ln(2.718281828459045) // 1
-   */
-  ln(args, vars, expry) {
-    const number = expry(args, vars) as number;
-    return Math.log(number);
-  },
-
-  /**
-   * Returns the logarithm of a number in a specified base.
-   *
-   * @example $log([10, 10]) // 1
-   * @example $log([100, 10]) // 2
-   */
-  log(args, vars, expry) {
-    const number1 = expry(args[0], vars) as number;
-    const number2 = expry(args[1], vars) as number;
-    return Math.log(number1) / Math.log(number2);
-  },
-
-  /**
-   * Returns the base 10 logarithm of a number.
-   *
-   * @example $log10(1) // 0
-   * @example $log10(10) // 1
-   */
-  log10(args, vars, expry) {
-    const number = expry(args, vars) as number;
-    return Math.log10(number);
-  },
-
-  /**
-   * Returns the remainder of dividing one number by another.
+   * Divides one number by another and returns the remainder.
    *
    * @example $mod([10, 3]) // 1
    * @example $mod([10, 2]) // 0
@@ -187,6 +124,7 @@ export const arithmeticOperations: Operations<ArithmeticPrototypes> = {
    * Multiplies numbers together.
    *
    * @example $multiply([1, 2, 3]) // 6
+   * @example $multiply([-1, 2, -3, 4]) // 24
    */
   multiply(args, vars, expry) {
     return args.reduce((acc: number, expr) => {
@@ -200,6 +138,7 @@ export const arithmeticOperations: Operations<ArithmeticPrototypes> = {
    *
    * @example $pow([2, 3]) // 8
    * @example $pow([3, 2]) // 9
+   * @example $pow([9, 0.5]) // 3
    */
   pow(args, vars, expry) {
     const number1 = expry(args[0], vars) as number;
@@ -208,27 +147,17 @@ export const arithmeticOperations: Operations<ArithmeticPrototypes> = {
   },
 
   /**
-   * Rounds a number to the nearest integer.
+   * Rounds a number to a specified decimal place.
    *
-   * @example $round([5.5, 0]) // 6
-   * @example $round([5.5, 1]) // 5.5
+   * @example $round([5.4, 0]) // 5
+   * @example $round([5.55, 1]) // 5.6
+   * @example $round([5.55, 3]) // 5.55
    */
   round(args, vars, expry) {
     const number = expry(args[0], vars) as number;
     const places = expry(args[1], vars) as number;
     const factor = Math.pow(10, places);
     return Math.round(number * factor) / factor;
-  },
-
-  /**
-   * Returns the square root of a number.
-   *
-   * @example $sqrt(4) // 2
-   * @example $sqrt(9) // 3
-   */
-  sqrt(args, vars, expry) {
-    const number = expry(args, vars) as number;
-    return Math.sqrt(number);
   },
 
   /**
@@ -246,8 +175,9 @@ export const arithmeticOperations: Operations<ArithmeticPrototypes> = {
   /**
    * Truncates a number to the specified number of decimal places.
    *
-   * @example $trunc(5.5) // 5
-   * @example $trunc(5.5, 1) // 5.5
+   * @example $trunc(5.55, 0) // 5
+   * @example $trunc(5.55, 1) // 5.5
+   * @example $trunc(5.55, 3) // 5.55
    */
   trunc(args, vars, expry) {
     const number = expry(args[0], vars) as number;
