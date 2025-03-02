@@ -7,7 +7,7 @@ import { basicOperations, BasicPrototypes } from "./index";
 const expry = expryInstance<[BasicPrototypes]>(basicOperations);
 
 describe("let", () => {
-  it("binds variables for use in the specified expression, and returns the result of the expression", () => {
+  it("creates variables that are used during the evaluation of an expression, and returns the expression's outcome", () => {
     expect(
       expry({
         $let: {

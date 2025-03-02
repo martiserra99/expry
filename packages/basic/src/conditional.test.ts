@@ -18,6 +18,7 @@ describe("ifNull", () => {
     expect(expry({ $ifNull: [null, "hello", "bye"] })).toBe("hello");
     expect(expry({ $ifNull: [null, null, "bye"] })).toBe("bye");
     expect(expry({ $ifNull: [null, null, null] })).toBe(null);
+    expect(expry({ $ifNull: [] })).toBe(null);
   });
 });
 

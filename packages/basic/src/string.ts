@@ -96,12 +96,13 @@ export const stringOperations: Operations<StringPrototypes> = {
    * Returns a substring of a string.
    *
    * @example $substring(['hello', 0, 2]) // 'he'
+   * @example $substring(['hello', 1, 3]) // 'el'
    */
   substring(args, vars, expry) {
     const string = expry(args[0], vars) as string;
     const start = expry(args[1], vars) as number;
-    const length = expry(args[2], vars) as number;
-    return string.substring(start, start + length);
+    const end = expry(args[2], vars) as number;
+    return string.substring(start, end);
   },
 
   /**

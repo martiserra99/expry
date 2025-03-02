@@ -8,8 +8,8 @@ const expry = expryInstance<[BasicPrototypes]>(basicOperations);
 
 describe("abs", () => {
   it("returns the absolute value of a number", () => {
-    expect(expry({ $abs: 5 })).toBe(5);
     expect(expry({ $abs: -5 })).toBe(5);
+    expect(expry({ $abs: 5 })).toBe(5);
   });
 });
 

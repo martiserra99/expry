@@ -358,9 +358,9 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
   /**
    * Adds an element to the end of an array and returns the array.
    *
-   * @example $push([1, 2], 3) // [1, 2, 3]
-   * @example $push(['a', 'b'], 'c') // ['a', 'b', 'c']
-   * @example $push([], 'a') // ['a']
+   * @example $push([[1, 2], 3]) // [1, 2, 3]
+   * @example $push([['a', 'b'], 'c']) // ['a', 'b', 'c']
+   * @example $push([[], 'a']) // ['a']
    */
   push(args, vars, expry) {
     const array = expry(args[0], vars) as unknown[];

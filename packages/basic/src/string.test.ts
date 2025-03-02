@@ -48,6 +48,7 @@ describe("strLen", () => {
 describe("substring", () => {
   it("returns a substring of a string", () => {
     expect(expry({ $substring: ["hello", 0, 2] })).toBe("he");
+    expect(expry({ $substring: ["hello", 1, 3] })).toBe("el");
   });
 });
 

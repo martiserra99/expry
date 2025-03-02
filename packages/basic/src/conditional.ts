@@ -33,13 +33,14 @@ export const conditionalOperations: Operations<ConditionalPrototypes> = {
    * @example $ifNull([null, 'hello', 'bye']) // 'hello'
    * @example $ifNull([null, null, 'bye']) // 'bye'
    * @example $ifNull([null, null, null]) // null
+   * @example $ifNull([]) // null
    */
   ifNull(args, vars, expry) {
     for (const arg of args) {
       const value = expry(arg, vars);
       if (value !== null) return value;
     }
-    return expry(args[args.length - 1], vars);
+    return null;
   },
 
   /**

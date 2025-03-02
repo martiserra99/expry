@@ -9,7 +9,7 @@ export type VariablePrototypes = {
 
 export const variableOperations: Operations<VariablePrototypes> = {
   /**
-   * Binds variables for use in the specified expression, and returns the result of the expression.
+   * Creates variables that are used during the evaluation of an expression, and returns the expression's outcome.
    *
    * @example $let({ vars: { age: 24 }, in: { isAdult: { $gte: ['$$age', 18] } } }) // { isAdult: true }
    */
