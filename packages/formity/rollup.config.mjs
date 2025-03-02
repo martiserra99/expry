@@ -19,5 +19,5 @@ export default {
     },
   ],
   plugins: [resolve(), typescript({ sourceMap: true })],
-  external: [],
+  external: ["@expry/system", "@formity/system"],
 };

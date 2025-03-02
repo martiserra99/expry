@@ -8,7 +8,7 @@ type Prototypes = {
 };
 
 const operations: Operations<Prototypes> = {
-  add: (args, vars): unknown => {
+  add: (args, vars, expry): unknown => {
     const a = expry(args.a, vars) as number;
     const b = expry(args.b, vars) as number;
     return a + b;
