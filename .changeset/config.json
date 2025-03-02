@@ -7,5 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["system-app", "basic-app"]
+  "ignore": ["system-app", "basic-app", "formity-app"]
 }

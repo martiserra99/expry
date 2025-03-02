@@ -1,12 +1,7 @@
-# @expry/basic
+# @expry/formity
 
 ## 0.1.0
 
 ### Minor Changes
 
-- Introduced the core functionality of the package
-
-### Patch Changes
-
-- Updated dependencies
-  - @expry/system@0.1.0
+- Created formity operators

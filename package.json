@@ -22,6 +22,7 @@
     "test": "turbo run test",
     "start:system": "npm run start --workspace=system-app",
     "start:basic": "npm run start --workspace=basic-app",
+    "start:formity": "npm run start --workspace=formity-app",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",

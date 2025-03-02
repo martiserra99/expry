@@ -1,5 +1,11 @@
 # @expry/basic
 
+## 0.2.0
+
+### Minor Changes
+
+- Added and removed basic operators
+
 ## 0.1.0
 
 ### Minor Changes

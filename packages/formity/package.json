@@ -29,7 +29,10 @@
     "build": "rollup --config rollup.config.mjs",
     "dev": "rollup --config rollup.config.mjs --watch"
   },
+  "dependencies": {
+    "@expry/system": "*"
+  },
   "peerDependencies": {
-    "@formity/react": "^1.0.0"
+    "@expry/system": ">=0.1.0"
   }
 }

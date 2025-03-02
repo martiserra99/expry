@@ -21,6 +21,6 @@ const expry = expryInstance<[BasicPrototypes, Prototypes]>(
   operations
 );
 
-const value = expry({ $add: [1, 2] });
+const value = expry({ $length: "hello" });
 
 console.log(value);
