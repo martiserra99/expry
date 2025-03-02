@@ -1,54 +1,72 @@
 import { Operations } from "@expry/system";
 
 export type ObjectPrototypes = {
-  getField: {
-    params: { field: unknown; input: unknown };
+  getValue: {
+    params: { input: unknown; key: unknown };
     return: unknown;
   };
   mergeObjects: {
     params: unknown[];
-    return: unknown;
+    return: Record<PropertyKey, unknown>;
   };
-  setField: {
-    params: { field: unknown; input: unknown; value: unknown };
-    return: unknown;
+  objectToArray: {
+    params: unknown;
+    return: [PropertyKey, unknown][];
+  };
+  setValue: {
+    params: { input: unknown; key: unknown; value: unknown };
+    return: Record<PropertyKey, unknown>;
   };
 };
 
 export const objectOperations: Operations<ObjectPrototypes> = {
   /**
-   * Gets the value of a field in an object. If the field does not exist, it returns null.
+   * Gets the value of a property in an object.
    *
-   * @example $getField({ field: 'qty', input: { item: 'apple', qty: 25, price: 4.5 } }) // 25
+   * @example $getValue({ input: { item: 'apple', qty: 25, price: 4.5 }, key: 'qty' }) // 25
+   * @example $getValue({ input: { item: 'apple', price: 4.5 }, key: 'qty' }) // undefined
    */
-  getField(args, vars, expry) {
-    const field = expry(args.field, vars) as string;
-    const input = expry(args.input, vars) as Record<string, unknown>;
-    if (field in input) return input[field];
-    return null;
+  getValue(args, vars, expry) {
+    const input = expry(args.input, vars) as Record<PropertyKey, unknown>;
+    const key = expry(args.key, vars) as PropertyKey;
+    return input[key];
   },
 
   /**
    * Merges objects into a single object.
    *
-   * @example $mergeObjects([{ item: 'apple', qty: 5, price: 2.5 }, { qty: 10, price: 1.2, sale: true }]) // { item: 'apple', qty: 10, price: 1.2, sale: true }
+   * @example $mergeObjects([{ item: 'apple' }, { qty: 25, price: 4.5 }]) // { item: 'apple', qty: 25, price: 4.5 }
+   * @example $mergeObjects([{ item: 'apple', qty: 10 }, { qty: 25 }, { price: 4.5 }]) // { item: 'apple', qty: 25, price: 4.5 }
    */
   mergeObjects(args, vars, expry) {
-    return args.reduce((acc: Record<string, unknown>, arg) => {
-      const object = expry(arg, vars) as Record<string, unknown>;
+    return args.reduce((acc: Record<PropertyKey, unknown>, arg) => {
+      const object = expry(arg, vars) as Record<PropertyKey, unknown>;
       return { ...acc, ...object };
     }, {});
   },
 
   /**
-   * Sets a field in an object to a specified value.
+   * Converts an object to an array of key-value pairs.
    *
-   * @example $setField({ field: 'item', input: { qty: 25, price: 4.5 }, value: 'apple' }) // { item: 'apple', qty: 25, price: 4.5 }
+   * @example $objectToArray({ item: 'apple', qty: 25, price: 4.5 }) // [['item', 'apple'], ['qty', 25], ['price', 4.5]]
+   * @example $objectToArray({ item: 'apple', price: 4.5 }) // [['item', 'apple'], ['price', 4.5]]
    */
-  setField(args, vars, expry) {
-    const field = expry(args.field, vars) as string;
-    const input = expry(args.input, vars) as Record<string, unknown>;
+  objectToArray(args, vars, expry) {
+    const input = expry(args, vars) as Record<PropertyKey, unknown>;
+    return Object.entries(input);
+  },
+
+  /**
+   * Sets the value of a property in an object.
+   *
+   * @example $setValue({ input: { item: 'apple', qty: 25, price: 4.5 }, key: 'qty', value: 30 }) // { item: 'apple', qty: 30, price: 4.5 }
+   * @example $setValue({ input: { item: 'apple', price: 4.5 }, key: 'qty', value: 30 }) // { item: 'apple', qty: 30, price: 4.5 }
+   */
+  setValue(args, vars, expry) {
+    const input = expry(args.input, vars) as Record<PropertyKey, unknown>;
+    const key = expry(args.key, vars) as PropertyKey;
     const value = expry(args.value, vars);
-    return { ...input, [field]: value };
+    input[key] = value;
+    return input;
   },
 };

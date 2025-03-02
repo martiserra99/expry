@@ -6,16 +6,24 @@ import { basicOperations, BasicPrototypes } from "./index";
 
 const expry = expryInstance<[BasicPrototypes]>(basicOperations);
 
-describe("getField", () => {
-  it("gets the value of a field in an object", () => {
+describe("getValue", () => {
+  it("gets the value of a property in an object", () => {
     expect(
       expry({
-        $getField: {
-          field: "qty",
+        $getValue: {
           input: { item: "apple", qty: 25, price: 4.5 },
+          key: "qty",
         },
       })
-    ).toEqual(25);
+    ).toBe(25);
+    expect(
+      expry({
+        $getValue: {
+          input: { item: "apple", price: 4.5 },
+          key: "qty",
+        },
+      })
+    ).toBe(undefined);
   });
 });
 
@@ -23,34 +31,62 @@ describe("mergeObjects", () => {
   it("merges objects into a single object", () => {
     expect(
       expry({
+        $mergeObjects: [{ item: "apple" }, { qty: 25, price: 4.5 }],
+      })
+    ).toEqual({ item: "apple", qty: 25, price: 4.5 });
+    expect(
+      expry({
         $mergeObjects: [
-          { item: "apple", qty: 5, price: 2.5 },
-          { qty: 10, price: 1.2, sale: true },
+          { item: "apple", qty: 10 },
+          { qty: 25 },
+          { price: 4.5 },
         ],
       })
-    ).toEqual({
-      item: "apple",
-      qty: 10,
-      price: 1.2,
-      sale: true,
-    });
+    ).toEqual({ item: "apple", qty: 25, price: 4.5 });
   });
 });
 
-describe("setField", () => {
-  it("sets a field in an object to a specified value", () => {
+describe("objectToArray", () => {
+  it("converts an object to an array of key-value pairs", () => {
     expect(
       expry({
-        $setField: {
-          field: "item",
-          input: { qty: 25, price: 4.5 },
-          value: "apple",
+        $objectToArray: { item: "apple", qty: 25, price: 4.5 },
+      })
+    ).toEqual([
+      ["item", "apple"],
+      ["qty", 25],
+      ["price", 4.5],
+    ]);
+    expect(
+      expry({
+        $objectToArray: { item: "apple", price: 4.5 },
+      })
+    ).toEqual([
+      ["item", "apple"],
+      ["price", 4.5],
+    ]);
+  });
+});
+
+describe("setValue", () => {
+  it("sets the value of a property in an object", () => {
+    expect(
+      expry({
+        $setValue: {
+          input: { item: "apple", qty: 25, price: 4.5 },
+          key: "qty",
+          value: 30,
         },
       })
-    ).toEqual({
-      item: "apple",
-      qty: 25,
-      price: 4.5,
-    });
+    ).toEqual({ item: "apple", qty: 30, price: 4.5 });
+    expect(
+      expry({
+        $setValue: {
+          input: { item: "apple", price: 4.5 },
+          key: "qty",
+          value: 30,
+        },
+      })
+    ).toEqual({ item: "apple", qty: 30, price: 4.5 });
   });
 });
