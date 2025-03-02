@@ -1,6 +1,6 @@
 {
   "name": "@expry/formity",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "private": false,
   "description": "Formity operations to be used with Expry.",
