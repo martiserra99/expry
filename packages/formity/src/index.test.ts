@@ -3,6 +3,9 @@ import { describe, it, expect } from "vitest";
 import { expryInstance } from "@expry/system";
 
 import {
+  ModelCondSchema,
+  ModelLoopSchema,
+  ModelSwitchSchema,
   ModelFormSchema,
   ModelYieldSchema,
   ModelReturnSchema,
@@ -15,7 +18,65 @@ import {
 
 import { formityOperations, FormityPrototypes } from "./index";
 
-const expry = expryInstance<[FormityPrototypes]>(formityOperations);
+type BasicPrototypes = {
+  add: {
+    params: [unknown, unknown];
+    return: number;
+  };
+};
+
+type Prototypes = [FormityPrototypes, BasicPrototypes];
+
+const expry = expryInstance<Prototypes>(formityOperations, {
+  add: (args, vars, expry) => {
+    const a = expry(args[0], vars) as number;
+    const b = expry(args[1], vars) as number;
+    return a + b;
+  },
+});
+
+describe("schema$cond", () => {
+  it("returns the condition schema element", () => {
+    const schema = expry({
+      $schema$cond: {
+        if: "$$if",
+        then: [{ $add: [1, 2] }],
+        else: [{ $add: [3, 4] }],
+      },
+    }) as ModelCondSchema;
+    expect(schema.cond.if({ if: true })).toEqual(true);
+    expect(schema.cond.then).toEqual([3]);
+    expect(schema.cond.else).toEqual([7]);
+  });
+});
+
+describe("schema$loop", () => {
+  const schema = expry({
+    $schema$loop: {
+      while: "$$while",
+      do: [{ $add: [1, 2] }],
+    },
+  }) as ModelLoopSchema;
+  expect(schema.loop.while({ while: true })).toEqual(true);
+  expect(schema.loop.do).toEqual([3]);
+});
+
+describe("schema$switch", () => {
+  const schema = expry({
+    $schema$switch: {
+      branches: [
+        { case: "$$case1", then: [{ $add: [1, 2] }] },
+        { case: "$$case2", then: [{ $add: [3, 4] }] },
+      ],
+      default: [{ $add: [5, 6] }],
+    },
+  }) as ModelSwitchSchema;
+  expect(schema.switch.branches[0].case({ case1: true })).toEqual(true);
+  expect(schema.switch.branches[0].then).toEqual([3]);
+  expect(schema.switch.branches[1].case({ case2: true })).toEqual(true);
+  expect(schema.switch.branches[1].then).toEqual([7]);
+  expect(schema.switch.default).toEqual([11]);
+});
 
 describe("schema$form", () => {
   it("returns the form schema element", () => {
@@ -77,10 +138,8 @@ describe("schema$yield", () => {
         back: { c: "$$c", d: "$$d" },
       },
     }) as ModelYieldSchema;
-    const next = schema.yield.next({ a: 1, b: 2 });
-    const back = schema.yield.back({ c: 3, d: 4 });
-    expect(next).toEqual({ a: 1, b: 2 });
-    expect(back).toEqual({ c: 3, d: 4 });
+    expect(schema.yield.next({ a: 1, b: 2 })).toEqual({ a: 1, b: 2 });
+    expect(schema.yield.back({ c: 3, d: 4 })).toEqual({ c: 3, d: 4 });
   });
 });
 
@@ -92,8 +151,7 @@ describe("schema$return", () => {
         b: "$$b",
       },
     }) as ModelReturnSchema;
-    const result = schema.return({ a: 1, b: 2 });
-    expect(result).toEqual({ a: 1, b: 2 });
+    expect(schema.return({ a: 1, b: 2 })).toEqual({ a: 1, b: 2 });
   });
 });
 
@@ -105,7 +163,6 @@ describe("schema$variables", () => {
         b: "$$b",
       },
     }) as ModelVariablesSchema;
-    const result = schema.variables({ a: 1, b: 2 });
-    expect(result).toEqual({ a: 1, b: 2 });
+    expect(schema.variables({ a: 1, b: 2 })).toEqual({ a: 1, b: 2 });
   });
 });
