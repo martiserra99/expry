@@ -1,9 +1,9 @@
 {
-  "name": "@expry/basic",
+  "name": "@expry/formity",
   "version": "0.1.0",
   "license": "MIT",
   "private": false,
-  "description": "Basic operations to be used with Expry.",
+  "description": "Formity operations to be used with Expry.",
   "keywords": [
     "expression",
     "transform",
@@ -29,10 +29,7 @@
     "build": "rollup --config rollup.config.mjs",
     "dev": "rollup --config rollup.config.mjs --watch"
   },
-  "dependencies": {
-    "@expry/system": "*"
-  },
   "peerDependencies": {
-    "@expry/system": ">=0.1.0"
+    "@formity/react": "^1.0.0"
   }
 }

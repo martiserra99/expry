@@ -7,9 +7,9 @@
     </a>
 </div>
 
-## @expry/basic
+## @expry/formity
 
-This package provides basic operations to be included when using the core Expry package.
+This package provides operations related to [Formity](https://formity.app) when using the core Expry package.
 
 ## Website
 
