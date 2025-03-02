@@ -17,7 +17,7 @@ export type ConditionalPrototypes = {
 
 export const conditionalOperations: Operations<ConditionalPrototypes> = {
   /**
-   * Evaluates a boolean expression to return one of the two specified return expressions.
+   * Evaluates a boolean expression and based on the result, returns one of the two specified return expressions.
    *
    * @example $cond({ if: true, then: 'yes', else: 'no' }) // 'yes'
    * @example $cond({ if: false, then: 'yes', else: 'no' }) // 'no'
@@ -28,7 +28,7 @@ export const conditionalOperations: Operations<ConditionalPrototypes> = {
   },
 
   /**
-   * Evaluates expressions for null values and returns the first non-null expression's value. Otherwise, it returns the last expression's value.
+   * Returns the first non-null expression, or null if all expressions are null.
    *
    * @example $ifNull([null, 'hello', 'bye']) // 'hello'
    * @example $ifNull([null, null, 'bye']) // 'bye'
@@ -43,7 +43,7 @@ export const conditionalOperations: Operations<ConditionalPrototypes> = {
   },
 
   /**
-   * Evaluates a series of case expressions. When it finds an expression which evaluates to true, it returns the value of the corresponding expression. If no expression is true, it returns the value of the default expression.
+   * Evaluates a series of case expressions and returns the value of the first expression that evaluates to true, or the default value if there is no expression that evaluates to true.
    *
    * @example $switch({ branches: [{ case: false, then: 1 }, { case: true, then: 2 }], default: 3 } }) // 2
    * @example $switch({ branches: [{ case: false, then: 1 }, { case: false, then: 2 }], default: 3 } }) // 3
