@@ -29,7 +29,7 @@ export type TypePrototypes = {
 
 export const typeOperations: Operations<TypePrototypes> = {
   /**
-   * Returns true if the value is a boolean. Otherwise, it returns false.
+   * Checks if a value is a boolean.
    *
    * @example $isBoolean(false) // true
    * @example $isBoolean(5) // false
@@ -41,7 +41,7 @@ export const typeOperations: Operations<TypePrototypes> = {
   },
 
   /**
-   * Returns true if the value is a number. Otherwise, it returns false.
+   * Checks if a value is a number.
    *
    * @example $isNumber(5) // true
    * @example $isNumber(true) // false
@@ -53,7 +53,7 @@ export const typeOperations: Operations<TypePrototypes> = {
   },
 
   /**
-   * Returns true if the value is a string. Otherwise, it returns false.
+   * Checks if a value is a string.
    *
    * @example $isString('hello') // true
    * @example $isString(5) // false
@@ -78,7 +78,7 @@ export const typeOperations: Operations<TypePrototypes> = {
   },
 
   /**
-   * Converts a value to a number. If the value cannot be converted, it returns null.
+   * Converts a value to a number.
    *
    * @example $toNumber('5') // 5
    * @example $toNumber('hello') // NaN

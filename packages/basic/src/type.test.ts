@@ -41,14 +41,14 @@ describe("toBoolean", () => {
 
 describe("toNumber", () => {
   it("converts a value to a number", () => {
-    expect(expry({ $toNumber: "7" })).toBe(7);
+    expect(expry({ $toNumber: "5" })).toBe(5);
     expect(expry({ $toNumber: "hello" })).toBeNaN();
   });
 });
 
 describe("toString", () => {
   it("converts a value to a string", () => {
-    expect(expry({ $toString: 7 })).toBe("7");
+    expect(expry({ $toString: 5 })).toBe("5");
     expect(expry({ $toString: true })).toBe("true");
   });
 });
