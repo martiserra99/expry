@@ -9,10 +9,6 @@ export type StringPrototypes = {
     params: unknown;
     return: string;
   };
-  regexMatch: {
-    params: [unknown, unknown];
-    return: boolean;
-  };
   rtrim: {
     params: unknown;
     return: string;
@@ -25,7 +21,7 @@ export type StringPrototypes = {
     params: unknown;
     return: number;
   };
-  substr: {
+  substring: {
     params: [unknown, unknown, unknown];
     return: string;
   };
@@ -33,11 +29,11 @@ export type StringPrototypes = {
     params: unknown;
     return: string;
   };
-  trim: {
+  toUpper: {
     params: unknown;
     return: string;
   };
-  toUpper: {
+  trim: {
     params: unknown;
     return: string;
   };
@@ -50,18 +46,14 @@ export const stringOperations: Operations<StringPrototypes> = {
    * @example $concat(['hello', ' ', 'world']) // 'hello world'
    */
   concat(args, vars, expry) {
-    return args
-      .map((arg) => {
-        const string = expry(arg, vars) as string;
-        return string;
-      })
-      .join("");
+    const array = args.map((arg) => expry(arg, vars)) as string[];
+    return array.join("");
   },
 
   /**
    * Removes whitespace from the beginning of a string.
    *
-   * @example $ltrim('  hello') // 'hello'
+   * @example $ltrim('  hello ') // 'hello '
    */
   ltrim(args, vars, expry) {
     const string = expry(args, vars) as string;
@@ -69,21 +61,9 @@ export const stringOperations: Operations<StringPrototypes> = {
   },
 
   /**
-   * Performs a regular expression and returns true if there is a match. Otherwise, it returns false.
-   *
-   * @example $regexMatch(['hello', '/ell/']) // true
-   * @example $regexMatch(['hello', '/bye/']) // false
-   */
-  regexMatch(args, vars, expry) {
-    const string = expry(args[0], vars) as string;
-    const regex = expry(args[1], vars) as string;
-    return string.match(regex) !== null;
-  },
-
-  /**
    * Removes whitespace from the end of a string.
    *
-   * @example $rtrim('hello  ') // 'hello'
+   * @example $rtrim(' hello  ') // ' hello'
    */
   rtrim(args, vars, expry) {
     const string = expry(args, vars) as string;
@@ -115,9 +95,9 @@ export const stringOperations: Operations<StringPrototypes> = {
   /**
    * Returns a substring of a string.
    *
-   * @example $substr(['hello', 0, 2]) // 'he'
+   * @example $substring(['hello', 0, 2]) // 'he'
    */
-  substr(args, vars, expry) {
+  substring(args, vars, expry) {
     const string = expry(args[0], vars) as string;
     const start = expry(args[1], vars) as number;
     const length = expry(args[2], vars) as number;
@@ -125,13 +105,23 @@ export const stringOperations: Operations<StringPrototypes> = {
   },
 
   /**
-   * Returns the string converted to lowercase.
+   * Converts a string to lowercase.
    *
-   * @example $toLower('Marti Serra') // 'marti serra'
+   * @example $toLower('Hello World') // 'hello world'
    */
   toLower(args, vars, expry) {
     const string = expry(args, vars) as string;
     return string.toLowerCase();
+  },
+
+  /**
+   * Converts a string to uppercase.
+   *
+   * @example $toUpper('Hello World') // 'HELLO WORLD'
+   */
+  toUpper(args, vars, expry) {
+    const string = expry(args, vars) as string;
+    return string.toUpperCase();
   },
 
   /**
@@ -142,15 +132,5 @@ export const stringOperations: Operations<StringPrototypes> = {
   trim(args, vars, expry) {
     const string = expry(args, vars) as string;
     return string.trim();
-  },
-
-  /**
-   * Returns the string converted to uppercase.
-   *
-   * @example $toUpper('Marti Serra') // 'MARTI SERRA'
-   */
-  toUpper(args, vars, expry) {
-    const string = expry(args, vars) as string;
-    return string.toUpperCase();
   },
 };
