@@ -93,6 +93,18 @@ it("evaulates expression with array variable", () => {
   });
 });
 
+it("returns undefined when variable doesn't exist", () => {
+  expect(expry("$b", { a: 1 })).toEqual(undefined);
+});
+
+it("returns undefined when property doesn't exist in variable object", () => {
+  expect(expry("$a.b", { a: { a: 1 } })).toEqual(undefined);
+});
+
+it("returns undefined when property doesn't exist in variable array", () => {
+  expect(expry("$a.1", { a: [1] })).toEqual(undefined);
+});
+
 it("ignores $ when using _", () => {
   expect(expry({ _$gte: ["_$age", 18] })).toEqual({ $gte: ["$age", 18] });
 });
