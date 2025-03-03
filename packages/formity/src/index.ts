@@ -11,6 +11,9 @@ import type {
   ModelVariablesSchema,
 } from "@formity/system";
 
+/**
+ * Structure of the Formity operations to be used in the expry function.
+ */
 export type FormityOperations = {
   schema$cond: {
     params: {
@@ -61,6 +64,9 @@ export type FormityOperations = {
   };
 };
 
+/**
+ * Formity operations to be used in the expry function.
+ */
 export const formityOperations: Executions<FormityOperations> = {
   /**
    * Returns the condition schema element.

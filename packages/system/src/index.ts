@@ -1,5 +1,11 @@
+/**
+ * It is the type of the expry function. It receives an expression and a set of variables and returns the result of the expression.
+ */
 export type Expry = (expr: unknown, vars?: Record<string, unknown>) => unknown;
 
+/**
+ * It is an utility type that merges the operations from the given array of operations.
+ */
 export type Merge<T extends Operations[]> = T extends [
   infer First,
   ...infer Other
@@ -11,6 +17,9 @@ export type Merge<T extends Operations[]> = T extends [
     : never
   : unknown;
 
+/**
+ * It defines the operations the structure of the operations that can be used in the expry function.
+ */
 export type Operations = {
   [key: string]: {
     params: unknown;
@@ -18,6 +27,9 @@ export type Operations = {
   };
 };
 
+/**
+ * It defines the functions that will be used to execute the operations in the expry function.
+ */
 export type Executions<T extends Operations> = {
   [K in keyof T]: (
     args: T[K]["params"],
@@ -37,6 +49,12 @@ type Projection<T extends Operations[]> = T extends [
     : never
   : [];
 
+/**
+ * Creates the expry function used to execute JSON expressions.
+ *
+ * @param array Array of operations to be used in the expry function.
+ * @returns The expry function.
+ */
 export function createExpry<T extends Operations[]>(...array: Projection<T>) {
   const operations = array.reduce((acc, obj) => ({ ...acc, ...obj }), {});
 

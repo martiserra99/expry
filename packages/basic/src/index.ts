@@ -10,6 +10,9 @@ import { stringOperations, StringOperations } from "./string";
 import { typeOperations, TypeOperations } from "./type";
 import { variableOperations, VariableOperations } from "./variable";
 
+/**
+ * Structure of the basic operations to be used in the expry function.
+ */
 export type BasicOperations = Merge<
   [
     ArithmeticOperations,
@@ -24,6 +27,9 @@ export type BasicOperations = Merge<
   ]
 >;
 
+/**
+ * Basic operations to be used in the expry function.
+ */
 export const basicOperations: Executions<BasicOperations> = {
   ...arithmeticOperations,
   ...arrayOperations,
