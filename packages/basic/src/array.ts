@@ -268,7 +268,7 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
   },
 
   /**
-   * Applies an expression to each element in an array and returns an array with the applied results.
+   * Applies an expression to each element in an array.
    *
    * @example $map({ input: [1, 2, 3], as: 'num', in: { $add: ['$$num', 1] } }) // [2, 3, 4]
    * @example $map({ input: ['a', 'b'], as: 'str', in: { $toUpper: '$$str' } }) // ['A', 'B']

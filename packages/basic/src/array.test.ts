@@ -137,7 +137,7 @@ describe("length", () => {
 });
 
 describe("map", () => {
-  it("applies an expression to each element in an array and returns an array with the applied results", () => {
+  it("applies an expression to each element in an array", () => {
     expect(
       expry({
         $map: {
