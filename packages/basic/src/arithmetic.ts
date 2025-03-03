@@ -1,6 +1,6 @@
-import { Operations } from "@expry/system";
+import { Executions } from "@expry/system";
 
-export type ArithmeticPrototypes = {
+export type ArithmeticOperations = {
   abs: {
     params: unknown;
     return: number;
@@ -47,7 +47,7 @@ export type ArithmeticPrototypes = {
   };
 };
 
-export const arithmeticOperations: Operations<ArithmeticPrototypes> = {
+export const arithmeticOperations: Executions<ArithmeticOperations> = {
   /**
    * Returns the absolute value of a number.
    *

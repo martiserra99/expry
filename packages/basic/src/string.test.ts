@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 
-import { expryInstance } from "@expry/system";
+import { createExpry } from "@expry/system";
 
-import { basicOperations, BasicPrototypes } from "./index";
+import { basicOperations, BasicOperations } from "./index";
 
-const expry = expryInstance<[BasicPrototypes]>(basicOperations);
+const expry = createExpry<[BasicOperations]>(basicOperations);
 
 describe("concat", () => {
   it("concatenates strings together", () => {

@@ -1,6 +1,6 @@
-import { Operations } from "@expry/system";
+import { Executions } from "@expry/system";
 
-export type ConditionalPrototypes = {
+export type ConditionalOperations = {
   cond: {
     params: { if: unknown; then: unknown; else: unknown };
     return: unknown;
@@ -15,7 +15,7 @@ export type ConditionalPrototypes = {
   };
 };
 
-export const conditionalOperations: Operations<ConditionalPrototypes> = {
+export const conditionalOperations: Executions<ConditionalOperations> = {
   /**
    * Evaluates a boolean expression and based on the result, returns one of the two specified return expressions.
    *

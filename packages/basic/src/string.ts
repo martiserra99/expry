@@ -1,6 +1,6 @@
-import { Operations } from "@expry/system";
+import { Executions } from "@expry/system";
 
-export type StringPrototypes = {
+export type StringOperations = {
   concat: {
     params: unknown[];
     return: string;
@@ -39,7 +39,7 @@ export type StringPrototypes = {
   };
 };
 
-export const stringOperations: Operations<StringPrototypes> = {
+export const stringOperations: Executions<StringOperations> = {
   /**
    * Concatenates strings together.
    *

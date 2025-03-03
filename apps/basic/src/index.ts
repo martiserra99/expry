@@ -1,14 +1,14 @@
-import { expryInstance, Operations } from "@expry/system";
-import { basicOperations, BasicPrototypes } from "@expry/basic";
+import { createExpry, Executions } from "@expry/system";
+import { basicOperations, BasicOperations } from "@expry/basic";
 
-type Prototypes = {
+type Operations = {
   sum: {
     params: { a: unknown; b: unknown };
     return: unknown;
   };
 };
 
-const operations: Operations<Prototypes> = {
+const operations: Executions<Operations> = {
   sum: (args, vars): unknown => {
     const a = expry(args.a, vars) as number;
     const b = expry(args.b, vars) as number;
@@ -16,7 +16,7 @@ const operations: Operations<Prototypes> = {
   },
 };
 
-const expry = expryInstance<[BasicPrototypes, Prototypes]>(
+const expry = createExpry<[BasicOperations, Operations]>(
   basicOperations,
   operations
 );

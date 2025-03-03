@@ -1,6 +1,6 @@
-import { Operations } from "@expry/system";
+import { Executions } from "@expry/system";
 
-export type TypePrototypes = {
+export type TypeOperations = {
   isBoolean: {
     params: unknown;
     return: boolean;
@@ -27,7 +27,7 @@ export type TypePrototypes = {
   };
 };
 
-export const typeOperations: Operations<TypePrototypes> = {
+export const typeOperations: Executions<TypeOperations> = {
   /**
    * Checks if a value is a boolean.
    *

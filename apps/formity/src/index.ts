@@ -1,10 +1,10 @@
-import { expryInstance } from "@expry/system";
-import { basicOperations, BasicPrototypes } from "@expry/basic";
-import { formityOperations, FormityPrototypes } from "@expry/formity";
+import { createExpry } from "@expry/system";
+import { basicOperations, BasicOperations } from "@expry/basic";
+import { formityOperations, FormityOperations } from "@expry/formity";
 
-type Prototypes = [BasicPrototypes, FormityPrototypes];
+type Operations = [BasicOperations, FormityOperations];
 
-const expry = expryInstance<Prototypes>(basicOperations, formityOperations);
+const expry = createExpry<Operations>(basicOperations, formityOperations);
 
 const value = expry([
   {

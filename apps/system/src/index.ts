@@ -1,6 +1,6 @@
-import { expryInstance, Operations } from "@expry/system";
+import { createExpry, Operations } from "@expry/system";
 
-type Prototypes = {
+type Operations = {
   map: {
     params: { input: unknown; as: unknown; in: unknown };
     return: unknown[];
@@ -11,7 +11,7 @@ type Prototypes = {
   };
 };
 
-const operations: Operations<Prototypes> = {
+const operations: Operations<Operations> = {
   map(args, vars, expry) {
     const array = expry(args.input, vars) as unknown[];
     const as = expry(args.as, vars) as string;
@@ -25,7 +25,7 @@ const operations: Operations<Prototypes> = {
   },
 };
 
-const expry = expryInstance<[Prototypes]>(operations);
+const expry = createExpry<[Operations]>(operations);
 
 const expression: unknown = {
   $map: {

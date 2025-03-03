@@ -1,6 +1,6 @@
-import { Operations } from "@expry/system";
+import { Executions } from "@expry/system";
 
-export type ArrayPrototypes = {
+export type ArrayOperations = {
   arrayElemAt: {
     params: [unknown, unknown];
     return: unknown;
@@ -128,7 +128,7 @@ export type ArrayPrototypes = {
   };
 };
 
-export const arrayOperations: Operations<ArrayPrototypes> = {
+export const arrayOperations: Executions<ArrayOperations> = {
   /**
    * Returns the element at the specified index in an array.
    *

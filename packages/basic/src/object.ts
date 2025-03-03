@@ -1,6 +1,6 @@
-import { Operations } from "@expry/system";
+import { Executions } from "@expry/system";
 
-export type ObjectPrototypes = {
+export type ObjectOperations = {
   getValue: {
     params: { input: unknown; key: unknown };
     return: unknown;
@@ -19,7 +19,7 @@ export type ObjectPrototypes = {
   };
 };
 
-export const objectOperations: Operations<ObjectPrototypes> = {
+export const objectOperations: Executions<ObjectOperations> = {
   /**
    * Gets the value of a property in an object.
    *

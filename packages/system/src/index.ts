@@ -1,24 +1,24 @@
 export type Expry = (expr: unknown, vars?: Record<string, unknown>) => unknown;
 
-export type Merge<T extends Prototypes[]> = T extends [
+export type Merge<T extends Operations[]> = T extends [
   infer First,
   ...infer Other
 ]
-  ? First extends Prototypes
-    ? Other extends Prototypes[]
+  ? First extends Operations
+    ? Other extends Operations[]
       ? First & Merge<Other>
       : never
     : never
   : unknown;
 
-export type Prototypes = {
+export type Operations = {
   [key: string]: {
     params: unknown;
     return: unknown;
   };
 };
 
-export type Operations<T extends Prototypes> = {
+export type Executions<T extends Operations> = {
   [K in keyof T]: (
     args: T[K]["params"],
     vars: Record<string, unknown>,
@@ -26,18 +26,18 @@ export type Operations<T extends Prototypes> = {
   ) => T[K]["return"];
 };
 
-type Projection<T extends Prototypes[]> = T extends [
+type Projection<T extends Operations[]> = T extends [
   infer First,
   ...infer Other
 ]
-  ? First extends Prototypes
-    ? Other extends Prototypes[]
-      ? [Operations<First>, ...Projection<Other>]
+  ? First extends Operations
+    ? Other extends Operations[]
+      ? [Executions<First>, ...Projection<Other>]
       : never
     : never
   : [];
 
-export function expryInstance<T extends Prototypes[]>(...array: Projection<T>) {
+export function createExpry<T extends Operations[]>(...array: Projection<T>) {
   const operations = array.reduce((acc, obj) => ({ ...acc, ...obj }), {});
 
   function expry(expr: unknown, vars: Record<string, unknown> = {}) {

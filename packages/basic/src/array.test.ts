@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 
-import { expryInstance } from "@expry/system";
+import { createExpry } from "@expry/system";
 
-import { basicOperations, BasicPrototypes } from "./index";
+import { basicOperations, BasicOperations } from "./index";
 
-const expry = expryInstance<[BasicPrototypes]>(basicOperations);
+const expry = createExpry<[BasicOperations]>(basicOperations);
 
 describe("arrayElemAt", () => {
   it("returns the element at the specified index in an array", () => {

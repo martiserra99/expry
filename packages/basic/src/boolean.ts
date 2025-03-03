@@ -1,6 +1,6 @@
-import { Operations } from "@expry/system";
+import { Executions } from "@expry/system";
 
-export type BooleanPrototypes = {
+export type BooleanOperations = {
   and: {
     params: unknown[];
     return: boolean;
@@ -15,7 +15,7 @@ export type BooleanPrototypes = {
   };
 };
 
-export const booleanOperations: Operations<BooleanPrototypes> = {
+export const booleanOperations: Executions<BooleanOperations> = {
   /**
    * Returns true if all expressions are true.
    *

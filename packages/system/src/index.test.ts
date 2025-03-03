@@ -1,8 +1,8 @@
 import { it, expect } from "vitest";
 
-import { expryInstance, Operations } from "./index";
+import { createExpry, Executions } from "./index";
 
-type Prototypes = {
+type Operations = {
   concat: {
     params: unknown[];
     return: string;
@@ -17,7 +17,7 @@ type Prototypes = {
   };
 };
 
-const operations: Operations<Prototypes> = {
+const operations: Executions<Operations> = {
   concat(args, vars, expry) {
     return args
       .map((arg) => {
@@ -37,7 +37,7 @@ const operations: Operations<Prototypes> = {
   },
 };
 
-const expry = expryInstance<[Prototypes]>(operations);
+const expry = createExpry<[Operations]>(operations);
 
 it("evaluates expression", () => {
   const expr = {

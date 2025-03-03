@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 
-import { expryInstance } from "@expry/system";
+import { createExpry } from "@expry/system";
 
-import { basicOperations, BasicPrototypes } from "./index";
+import { basicOperations, BasicOperations } from "./index";
 
-const expry = expryInstance<[BasicPrototypes]>(basicOperations);
+const expry = createExpry<[BasicOperations]>(basicOperations);
 
 describe("cond", () => {
   it("evaluates a boolean expression and based on the result, returns one of the two specified return expressions", () => {

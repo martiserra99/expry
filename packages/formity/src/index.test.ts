@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import { expryInstance } from "@expry/system";
+import { createExpry } from "@expry/system";
 
 import {
   ModelCondSchema,
@@ -16,18 +16,18 @@ import {
   SetState,
 } from "@formity/system";
 
-import { formityOperations, FormityPrototypes } from "./index";
+import { formityOperations, FormityOperations } from "./index";
 
-type BasicPrototypes = {
+type BasicOperations = {
   add: {
     params: [unknown, unknown];
     return: number;
   };
 };
 
-type Prototypes = [FormityPrototypes, BasicPrototypes];
+type Operations = [FormityOperations, BasicOperations];
 
-const expry = expryInstance<Prototypes>(formityOperations, {
+const expry = createExpry<Operations>(formityOperations, {
   add: (args, vars, expry) => {
     const a = expry(args[0], vars) as number;
     const b = expry(args[1], vars) as number;

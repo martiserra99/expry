@@ -1,4 +1,4 @@
-import type { Operations } from "@expry/system";
+import type { Executions } from "@expry/system";
 import type { OnNext, OnBack, GetState, SetState } from "@formity/system";
 import type {
   ModelListSchema,
@@ -11,7 +11,7 @@ import type {
   ModelVariablesSchema,
 } from "@formity/system";
 
-export type FormityPrototypes = {
+export type FormityOperations = {
   schema$cond: {
     params: {
       if: unknown;
@@ -61,7 +61,7 @@ export type FormityPrototypes = {
   };
 };
 
-export const formityOperations: Operations<FormityPrototypes> = {
+export const formityOperations: Executions<FormityOperations> = {
   /**
    * Returns the condition schema element.
    */

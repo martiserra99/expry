@@ -1,30 +1,30 @@
-import { Merge, Operations } from "@expry/system";
+import { Merge, Executions } from "@expry/system";
 
-import { arithmeticOperations, ArithmeticPrototypes } from "./arithmetic";
-import { arrayOperations, ArrayPrototypes } from "./array";
-import { booleanOperations, BooleanPrototypes } from "./boolean";
-import { comparisonOperations, ComparisonPrototypes } from "./comparison";
-import { conditionalOperations, ConditionalPrototypes } from "./conditional";
-import { objectOperations, ObjectPrototypes } from "./object";
-import { stringOperations, StringPrototypes } from "./string";
-import { typeOperations, TypePrototypes } from "./type";
-import { variableOperations, VariablePrototypes } from "./variable";
+import { arithmeticOperations, ArithmeticOperations } from "./arithmetic";
+import { arrayOperations, ArrayOperations } from "./array";
+import { booleanOperations, BooleanOperations } from "./boolean";
+import { comparisonOperations, ComparisonOperations } from "./comparison";
+import { conditionalOperations, ConditionalOperations } from "./conditional";
+import { objectOperations, ObjectOperations } from "./object";
+import { stringOperations, StringOperations } from "./string";
+import { typeOperations, TypeOperations } from "./type";
+import { variableOperations, VariableOperations } from "./variable";
 
-export type BasicPrototypes = Merge<
+export type BasicOperations = Merge<
   [
-    ArithmeticPrototypes,
-    ArrayPrototypes,
-    BooleanPrototypes,
-    ComparisonPrototypes,
-    ConditionalPrototypes,
-    ObjectPrototypes,
-    StringPrototypes,
-    TypePrototypes,
-    VariablePrototypes
+    ArithmeticOperations,
+    ArrayOperations,
+    BooleanOperations,
+    ComparisonOperations,
+    ConditionalOperations,
+    ObjectOperations,
+    StringOperations,
+    TypeOperations,
+    VariableOperations
   ]
 >;
 
-export const basicOperations: Operations<BasicPrototypes> = {
+export const basicOperations: Executions<BasicOperations> = {
   ...arithmeticOperations,
   ...arrayOperations,
   ...booleanOperations,

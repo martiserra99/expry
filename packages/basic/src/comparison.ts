@@ -1,6 +1,6 @@
-import { Operations } from "@expry/system";
+import { Executions } from "@expry/system";
 
-export type ComparisonPrototypes = {
+export type ComparisonOperations = {
   cmp: {
     params: [unknown, unknown];
     return: number;
@@ -31,7 +31,7 @@ export type ComparisonPrototypes = {
   };
 };
 
-export const comparisonOperations: Operations<ComparisonPrototypes> = {
+export const comparisonOperations: Executions<ComparisonOperations> = {
   /**
    * Compares two values and returns -1 if the first is less than the second, 1 if the first is greater than the second, and 0 if the two values are equal.
    *

@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 
-import { expryInstance } from "@expry/system";
+import { createExpry } from "@expry/system";
 
-import { basicOperations, BasicPrototypes } from "./index";
+import { basicOperations, BasicOperations } from "./index";
 
-const expry = expryInstance<[BasicPrototypes]>(basicOperations);
+const expry = createExpry<[BasicOperations]>(basicOperations);
 
 describe("let", () => {
   it("creates variables that are used during the evaluation of an expression, and returns the expression's outcome", () => {
