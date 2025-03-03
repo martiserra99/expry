@@ -9,11 +9,13 @@
 
 ## The Expry mono repo
 
-The Expry repository is the home of two packages:
+The Expry repository is the home of three packages:
 
 - `@expry/system`: [packages/system](./packages/system)
 
 - `@expry/basic`: [packages/basic](./packages/basic)
+
+- `@expry/formity`: [packages/formity](./packages/formity)
 
 ## Website
 

@@ -9,7 +9,7 @@
 
 ## @expry/formity
 
-This package provides operations related to [Formity](https://formity.app) when using the core Expry package.
+This package provides [Formity](https://formity.app) operations to be included when using the core Expry package.
 
 ## Website
 
@@ -21,4 +21,4 @@ Expry is a package designed to create logic with JSON. It is really helpful when
 
 ## License
 
-These packages are licensed under the [MIT license](./LICENSE).
+This package is licensed under the [MIT license](../../LICENSE).
