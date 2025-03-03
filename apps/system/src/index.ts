@@ -1,4 +1,4 @@
-import { createExpry, Operations } from "@expry/system";
+import { createExpry, Executions } from "@expry/system";
 
 type Operations = {
   map: {
@@ -11,7 +11,7 @@ type Operations = {
   };
 };
 
-const operations: Operations<Operations> = {
+const operations: Executions<Operations> = {
   map(args, vars, expry) {
     const array = expry(args.input, vars) as unknown[];
     const as = expry(args.as, vars) as string;

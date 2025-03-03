@@ -55,7 +55,9 @@ type Projection<T extends Operations[]> = T extends [
  * @param array Array of operations to be used in the expry function.
  * @returns The expry function.
  */
-export function createExpry<T extends Operations[]>(...array: Projection<T>) {
+export function createExpry<T extends Operations[]>(
+  ...array: Projection<T>
+): Expry {
   const operations = array.reduce((acc, obj) => ({ ...acc, ...obj }), {});
 
   function expry(expr: unknown, vars: Record<string, unknown> = {}) {
