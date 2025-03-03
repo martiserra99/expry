@@ -7,8 +7,8 @@
     "start": "tsx src/index.ts"
   },
   "dependencies": {
-    "@expry/basic": "^0.2.0",
-    "@expry/system": "^0.1.0"
+    "@expry/basic": "^1.0.0",
+    "@expry/system": "^1.0.0"
   },
   "devDependencies": {
     "tsx": "^4.19.3"
