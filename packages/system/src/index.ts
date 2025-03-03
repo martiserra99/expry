@@ -126,7 +126,7 @@ export function createExpry<T extends Operations[]>(...array: Projection<T>) {
     return parts.reduce((acc: unknown, key: string): unknown => {
       if (isObject(acc) && key in acc) return acc[key];
       if (isArray(acc) && key in acc) return acc[Number(key)];
-      return null;
+      return undefined;
     }, vars);
   }
 
