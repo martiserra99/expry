@@ -13,9 +13,21 @@ export type ArrayPrototypes = {
     params: unknown[];
     return: unknown[];
   };
+  every: {
+    params: { input: unknown; as: unknown; cond: unknown };
+    return: boolean;
+  };
   filter: {
     params: { input: unknown; as: unknown; cond: unknown };
     return: unknown[];
+  };
+  find: {
+    params: { input: unknown; as: unknown; cond: unknown };
+    return: unknown;
+  };
+  findIndex: {
+    params: { input: unknown; as: unknown; cond: unknown };
+    return: number;
   };
   first: {
     params: unknown;
@@ -93,6 +105,10 @@ export type ArrayPrototypes = {
     params: [unknown, unknown, unknown];
     return: unknown[];
   };
+  some: {
+    params: { input: unknown; as: unknown; cond: unknown };
+    return: boolean;
+  };
   sortArray: {
     params: { input: unknown; sortBy: unknown };
     return: unknown[];
@@ -106,21 +122,9 @@ export type ArrayPrototypes = {
     };
     return: unknown[];
   };
-  every: {
-    params: { input: unknown; as: unknown; cond: unknown };
-    return: boolean;
-  };
-  find: {
-    params: { input: unknown; as: unknown; cond: unknown };
-    return: unknown;
-  };
-  findIndex: {
-    params: { input: unknown; as: unknown; cond: unknown };
-    return: number;
-  };
-  some: {
-    params: { input: unknown; as: unknown; cond: unknown };
-    return: boolean;
+  unshift: {
+    params: [unknown, unknown];
+    return: unknown[];
   };
 };
 
@@ -168,6 +172,20 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
   },
 
   /**
+   * Returns true if all elements in an array satisfy the specified condition.
+   *
+   * @example $every({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 0] } }) // true
+   * @example $every({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 1] } }) // false
+   */
+  every(args, vars, expry) {
+    const array = expry(args.input, vars) as unknown[];
+    const as = expry(args.as, vars) as string;
+    return array.every((value) => {
+      return expry(args.cond, { ...vars, [`$${as}`]: value });
+    });
+  },
+
+  /**
    * Returns a subset of an array based on the specified condition.
    *
    * @example $filter({ input: [1, 2, 3, 4], as: 'num', cond: { $gt: ['$$num', 2] } }) // [3, 4]
@@ -176,6 +194,34 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
     const array = expry(args.input, vars) as unknown[];
     const as = expry(args.as, vars) as string;
     return array.filter((value) => {
+      return expry(args.cond, { ...vars, [`$${as}`]: value });
+    });
+  },
+
+  /**
+   * Returns the first element in an array that satisfies the specified condition.
+   *
+   * @example $find({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 1] } }) // 2
+   * @example $find({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 3] } }) // undefined
+   */
+  find(args, vars, expry) {
+    const array = expry(args.input, vars) as unknown[];
+    const as = expry(args.as, vars) as string;
+    return array.find((value) => {
+      return expry(args.cond, { ...vars, [`$${as}`]: value });
+    });
+  },
+
+  /**
+   * Returns the index of the first element in an array that satisfies the specified condition.
+   *
+   * @example $findIndex({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 1] } }) // 1
+   * @example $findIndex({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 3] } }) // -1
+   */
+  findIndex(args, vars, expry) {
+    const array = expry(args.input, vars) as unknown[];
+    const as = expry(args.as, vars) as string;
+    return array.findIndex((value) => {
       return expry(args.cond, { ...vars, [`$${as}`]: value });
     });
   },
@@ -423,6 +469,20 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
   },
 
   /**
+   * Returns true if at least one element in an array satisfies the specified condition.
+   *
+   * @example $some({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 2] } }) // true
+   * @example $some({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 3] } }) // false
+   */
+  some(args, vars, expry) {
+    const array = expry(args.input, vars) as unknown[];
+    const as = expry(args.as, vars) as string;
+    return array.some((value) => {
+      return expry(args.cond, { ...vars, [`$${as}`]: value });
+    });
+  },
+
+  /**
    * Sorts the elements of an array.
    *
    * @example $sortArray({ input: [3, 4, 2], sortBy: { $cmp: ['$$first', '$$second'] } }) // [2, 3, 4]
@@ -453,58 +513,16 @@ export const arrayOperations: Operations<ArrayPrototypes> = {
   },
 
   /**
-   * Returns true if all elements in an array satisfy the specified condition.
+   * Adds an element to the beginning of an array and returns the array.
    *
-   * @example $every({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 0] } }) // true
-   * @example $every({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 1] } }) // false
+   * @example $unshift([[1, 2], 3]) // [3, 1, 2]
+   * @example $unshift([['a', 'b'], 'c']) // ['c', 'a', 'b']
+   * @example $unshift([[], 'a']) // ['a']
    */
-  every(args, vars, expry) {
-    const array = expry(args.input, vars) as unknown[];
-    const as = expry(args.as, vars) as string;
-    return array.every((value) => {
-      return expry(args.cond, { ...vars, [`$${as}`]: value });
-    });
-  },
-
-  /**
-   * Returns the first element in an array that satisfies the specified condition.
-   *
-   * @example $find({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 1] } }) // 2
-   * @example $find({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 3] } }) // undefined
-   */
-  find(args, vars, expry) {
-    const array = expry(args.input, vars) as unknown[];
-    const as = expry(args.as, vars) as string;
-    return array.find((value) => {
-      return expry(args.cond, { ...vars, [`$${as}`]: value });
-    });
-  },
-
-  /**
-   * Returns the index of the first element in an array that satisfies the specified condition.
-   *
-   * @example $findIndex({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 1] } }) // 1
-   * @example $findIndex({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 3] } }) // -1
-   */
-  findIndex(args, vars, expry) {
-    const array = expry(args.input, vars) as unknown[];
-    const as = expry(args.as, vars) as string;
-    return array.findIndex((value) => {
-      return expry(args.cond, { ...vars, [`$${as}`]: value });
-    });
-  },
-
-  /**
-   * Returns true if at least one element in an array satisfies the specified condition.
-   *
-   * @example $some({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 2] } }) // true
-   * @example $some({ input: [1, 2, 3], as: 'num', cond: { $gt: ['$$num', 3] } }) // false
-   */
-  some(args, vars, expry) {
-    const array = expry(args.input, vars) as unknown[];
-    const as = expry(args.as, vars) as string;
-    return array.some((value) => {
-      return expry(args.cond, { ...vars, [`$${as}`]: value });
-    });
+  unshift(args, vars, expry) {
+    const array = expry(args[0], vars) as unknown[];
+    const value = expry(args[1], vars);
+    array.unshift(value);
+    return array;
   },
 };

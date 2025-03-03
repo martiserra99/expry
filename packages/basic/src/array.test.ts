@@ -67,6 +67,21 @@ describe("concatArrays", () => {
   });
 });
 
+describe("every", () => {
+  it("returns true if all elements in an array satisfy the specified condition", () => {
+    expect(
+      expry({
+        $every: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 0] } },
+      })
+    ).toBe(true);
+    expect(
+      expry({
+        $every: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 1] } },
+      })
+    ).toBe(false);
+  });
+});
+
 describe("filter", () => {
   it("returns a subset of an array based on the specified condition", () => {
     expect(
@@ -78,6 +93,44 @@ describe("filter", () => {
         },
       })
     ).toEqual([3, 4]);
+  });
+});
+
+describe("find", () => {
+  it("returns the first element in an array that satisfies the specified condition", () => {
+    expect(
+      expry({
+        $find: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 1] } },
+      })
+    ).toBe(2);
+    expect(
+      expry({
+        $find: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 3] } },
+      })
+    ).toBe(undefined);
+  });
+});
+
+describe("findIndex", () => {
+  it("returns the index of the first element in an array that satisfies the specified condition", () => {
+    expect(
+      expry({
+        $findIndex: {
+          input: [1, 2, 3],
+          as: "num",
+          cond: { $gt: ["$$num", 1] },
+        },
+      })
+    ).toBe(1);
+    expect(
+      expry({
+        $findIndex: {
+          input: [1, 2, 3],
+          as: "num",
+          cond: { $gt: ["$$num", 3] },
+        },
+      })
+    ).toBe(-1);
   });
 });
 
@@ -299,6 +352,21 @@ describe("slice", () => {
   });
 });
 
+describe("some", () => {
+  it("returns true if at least one element in an array satisfies the specified condition", () => {
+    expect(
+      expry({
+        $some: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 2] } },
+      })
+    ).toBe(true);
+    expect(
+      expry({
+        $some: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 3] } },
+      })
+    ).toBe(false);
+  });
+});
+
 describe("sortArray", () => {
   it("sorts the elements of an array", () => {
     expect(
@@ -345,70 +413,10 @@ describe("splice", () => {
   });
 });
 
-describe("every", () => {
-  it("returns true if all elements in an array satisfy the specified condition", () => {
-    expect(
-      expry({
-        $every: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 0] } },
-      })
-    ).toBe(true);
-    expect(
-      expry({
-        $every: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 1] } },
-      })
-    ).toBe(false);
-  });
-});
-
-describe("find", () => {
-  it("returns the first element in an array that satisfies the specified condition", () => {
-    expect(
-      expry({
-        $find: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 1] } },
-      })
-    ).toBe(2);
-    expect(
-      expry({
-        $find: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 3] } },
-      })
-    ).toBe(undefined);
-  });
-});
-
-describe("findIndex", () => {
-  it("returns the index of the first element in an array that satisfies the specified condition", () => {
-    expect(
-      expry({
-        $findIndex: {
-          input: [1, 2, 3],
-          as: "num",
-          cond: { $gt: ["$$num", 1] },
-        },
-      })
-    ).toBe(1);
-    expect(
-      expry({
-        $findIndex: {
-          input: [1, 2, 3],
-          as: "num",
-          cond: { $gt: ["$$num", 3] },
-        },
-      })
-    ).toBe(-1);
-  });
-});
-
-describe("some", () => {
-  it("returns true if at least one element in an array satisfies the specified condition", () => {
-    expect(
-      expry({
-        $some: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 2] } },
-      })
-    ).toBe(true);
-    expect(
-      expry({
-        $some: { input: [1, 2, 3], as: "num", cond: { $gt: ["$$num", 3] } },
-      })
-    ).toBe(false);
+describe("unshift", () => {
+  it("adds an element to the beginning of an array and returns the array", () => {
+    expect(expry({ $unshift: [[1, 2], 3] })).toEqual([3, 1, 2]);
+    expect(expry({ $unshift: [["a", "b"], "c"] })).toEqual(["c", "a", "b"]);
+    expect(expry({ $unshift: [[], "a"] })).toEqual(["a"]);
   });
 });
