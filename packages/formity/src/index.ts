@@ -1,36 +1,42 @@
 import type { Executions } from "@expry/system";
-import type { OnNext, OnBack, GetState, SetState } from "@formity/system";
 import type {
-  ModelListSchema,
-  ModelCondSchema,
-  ModelLoopSchema,
-  ModelSwitchSchema,
-  ModelFormSchema,
-  ModelYieldSchema,
-  ModelReturnSchema,
-  ModelVariablesSchema,
+  OnNext,
+  OnBack,
+  OnJump,
+  GetState,
+  SetState,
 } from "@formity/system";
+
+import type { ListFlow } from "./types/flow";
+import type { ConditionFlow } from "./types/flow";
+import type { LoopFlow } from "./types/flow";
+import type { SwitchFlow } from "./types/flow";
+import type { JumpFlow } from "./types/flow";
+import type { FormFlow } from "./types/flow";
+import type { VariablesFlow } from "./types/flow";
+import type { YieldFlow } from "./types/flow";
+import type { ReturnFlow } from "./types/flow";
 
 /**
  * Structure of the Formity operations to be used in the expry function.
  */
 export type FormityOperations = {
-  schema$cond: {
+  formity$condition: {
     params: {
       if: unknown;
       then: unknown[];
       else: unknown[];
     };
-    return: ModelCondSchema;
+    return: ConditionFlow;
   };
-  schema$loop: {
+  formity$loop: {
     params: {
       while: unknown;
       do: unknown[];
     };
-    return: ModelLoopSchema;
+    return: LoopFlow;
   };
-  schema$switch: {
+  formity$switch: {
     params: {
       branches: {
         case: unknown;
@@ -38,29 +44,36 @@ export type FormityOperations = {
       }[];
       default: unknown[];
     };
-    return: ModelSwitchSchema;
+    return: SwitchFlow;
   };
-  schema$form: {
+  formity$jump: {
     params: {
-      values: unknown;
+      id: unknown;
+      at: unknown;
+    };
+    return: JumpFlow;
+  };
+  formity$form: {
+    params: {
+      fields: unknown;
       render: unknown;
     };
-    return: ModelFormSchema;
+    return: FormFlow;
   };
-  schema$yield: {
+  formity$variables: {
+    params: unknown;
+    return: VariablesFlow;
+  };
+  formity$yield: {
     params: {
       next: unknown;
       back: unknown;
     };
-    return: ModelYieldSchema;
+    return: YieldFlow;
   };
-  schema$return: {
+  formity$return: {
     params: unknown;
-    return: ModelReturnSchema;
-  };
-  schema$variables: {
-    params: unknown;
-    return: ModelVariablesSchema;
+    return: ReturnFlow;
   };
 };
 
@@ -69,95 +82,108 @@ export type FormityOperations = {
  */
 export const formityOperations: Executions<FormityOperations> = {
   /**
-   * Returns the condition schema element.
+   * Returns the condition formity element.
    */
-  schema$cond: (args, vars, expry): ModelCondSchema => {
-    const condition = (inputs: object) => {
-      return expry(args.if, { ...vars, ...with$(inputs) }) as boolean;
+  formity$condition: (args, vars, expry): ConditionFlow => {
+    const condition = (values: Record<string, unknown>) => {
+      return expry(args.if, { ...vars, ...with$(values) }) as boolean;
     };
-    const thenPath = args.then.map((i) => expry(i, vars)) as ModelListSchema;
-    const elsePath = args.else.map((i) => expry(i, vars)) as ModelListSchema;
-    return { cond: { if: condition, then: thenPath, else: elsePath } };
+    const thenPath = args.then.map((i) => expry(i, vars)) as ListFlow;
+    const elsePath = args.else.map((i) => expry(i, vars)) as ListFlow;
+    return { condition: { if: condition, then: thenPath, else: elsePath } };
   },
 
   /**
-   * Returns the loop schema element.
+   * Returns the loop formity element.
    */
-  schema$loop: (args, vars, expry): ModelLoopSchema => {
-    const condition = (inputs: object) => {
-      return expry(args.while, { ...vars, ...with$(inputs) }) as boolean;
+  formity$loop: (args, vars, expry): LoopFlow => {
+    const condition = (values: Record<string, unknown>) => {
+      return expry(args.while, { ...vars, ...with$(values) }) as boolean;
     };
-    const items = args.do.map((i) => expry(i, vars)) as ModelListSchema;
-    return { loop: { while: condition, do: items } };
+    const elements = args.do.map((i) => expry(i, vars)) as ListFlow;
+    return { loop: { while: condition, do: elements } };
   },
 
   /**
-   * Returns the switch schema element.
+   * Returns the switch formity element.
    */
-  schema$switch: (args, vars, expry): ModelSwitchSchema => {
+  formity$switch: (args, vars, expry): SwitchFlow => {
     const branches = args.branches.map((branch) => ({
-      case: (inputs: object) => {
-        return expry(branch.case, { ...vars, ...with$(inputs) }) as boolean;
+      case: (values: Record<string, unknown>) => {
+        return expry(branch.case, { ...vars, ...with$(values) }) as boolean;
       },
-      then: branch.then.map((i) => expry(i, vars)) as ModelListSchema,
+      then: branch.then.map((i) => expry(i, vars)) as ListFlow,
     }));
-    const fallback = args.default.map((i) => expry(i, vars)) as ModelListSchema;
+    const fallback = args.default.map((i) => expry(i, vars)) as ListFlow;
     return { switch: { branches, default: fallback } };
   },
 
   /**
-   * Returns the form schema element.
+   * Returns thejump formity element.
    */
-  schema$form: (args, vars, expry): ModelFormSchema => {
-    const values = (inputs: object) => {
-      return expry(args.values, {
-        ...vars,
-        ...with$(inputs),
-      }) as Record<string, [unknown, PropertyKey[]]>;
-    };
-    const render = (object: {
-      inputs: object;
-      values: object;
-      params: object;
-      onNext: OnNext;
-      onBack: OnBack;
-      getState: GetState;
-      setState: SetState;
-    }) => expry(args.render, { ...vars, ...with$(object) });
-    return { form: { values, render } };
+  formity$jump: (args, vars, expry): JumpFlow => {
+    const id = expry(args.id, vars);
+    const at = expry(args.at, vars) as FormFlow;
+    return { jump: { id, at } };
   },
 
   /**
-   * Returns the yield schema element.
+   * Returns the form formity element.
    */
-  schema$yield: (args, vars, expry): ModelYieldSchema => {
-    const next = (inputs: object) => {
-      return expry(args.next, { ...vars, ...with$(inputs) }) as unknown[];
+  formity$form: (args, vars, expry): FormFlow => {
+    const fields = (values: Record<string, unknown>) => {
+      return expry(args.fields, {
+        ...vars,
+        ...with$(values),
+      }) as Record<string, [unknown, PropertyKey[]]>;
     };
-    const back = (inputs: object) => {
-      return expry(args.back, { ...vars, ...with$(inputs) }) as unknown[];
+    const render = (object: {
+      fields: Record<string, unknown>;
+      values: Record<string, unknown>;
+      params: Record<string, unknown>;
+      onNext: OnNext<Record<string, unknown>>;
+      onBack: OnBack<Record<string, unknown>>;
+      onJump: OnJump<Record<string, unknown>>;
+      getState: GetState<Record<string, unknown>>;
+      setState: SetState;
+    }) => expry(args.render, { ...vars, ...with$(object) });
+    return { form: { fields, render } };
+  },
+
+  /**
+   * Returns the variables formity element.
+   */
+  formity$variables: (args, vars, expry): VariablesFlow => {
+    const variables = (values: Record<string, unknown>) => {
+      return expry(args, { ...vars, ...with$(values) }) as Record<
+        string,
+        unknown
+      >;
+    };
+    return { variables: variables };
+  },
+
+  /**
+   * Returns the yield formity element.
+   */
+  formity$yield: (args, vars, expry): YieldFlow => {
+    const next = (values: Record<string, unknown>) => {
+      return expry(args.next, { ...vars, ...with$(values) }) as unknown[];
+    };
+    const back = (values: Record<string, unknown>) => {
+      return expry(args.back, { ...vars, ...with$(values) }) as unknown[];
     };
     return { yield: { next, back } };
   },
 
   /**
-   * Returns the return schema element.
+   * Returns the return formity element.
    */
-  schema$return: (args, vars, expry): ModelReturnSchema => {
-    const values = (inputs: object) => {
-      return expry(args, { ...vars, ...with$(inputs) });
+  formity$return: (args, vars, expry): ReturnFlow => {
+    const values = (values: Record<string, unknown>) => {
+      return expry(args, { ...vars, ...with$(values) });
     };
     return { return: values };
-  },
-
-  /**
-   * Returns the variables schema element.
-   */
-  schema$variables: (args, vars, expry): ModelVariablesSchema => {
-    const values = (inputs: object) => {
-      return expry(args, { ...vars, ...with$(inputs) }) as object;
-    };
-    return { variables: values };
   },
 };
 
@@ -165,6 +191,6 @@ function with$(values: object) {
   return Object.fromEntries(
     Object.entries(values).map(([key, value]) => {
       return [`$${key}`, value];
-    })
+    }),
   );
 }

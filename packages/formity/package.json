@@ -34,6 +34,6 @@
   },
   "peerDependencies": {
     "@expry/system": ">=1.0.0",
-    "@formity/system": ">=1.0.0"
+    "@formity/system": ">=2.0.0"
   }
 }
