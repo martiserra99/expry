@@ -2,13 +2,7 @@ import { describe, it, expect } from "vitest";
 
 import { createExpry } from "@expry/system";
 
-import type {
-  OnNext,
-  OnBack,
-  OnJump,
-  GetState,
-  SetState,
-} from "@formity/system";
+import type { Next, Back, Jump, GetState, SetState } from "@formity/system";
 
 import type { ConditionFlow } from "./types/flow";
 import type { LoopFlow } from "./types/flow";
@@ -96,9 +90,9 @@ describe("formity$jump", () => {
               fields: "$$fields",
               values: "$$values",
               params: "$$params",
-              onNext: "$$onNext",
-              onBack: "$$onBack",
-              onJump: "$$onJump",
+              next: "$$next",
+              back: "$$back",
+              jump: "$$jump",
               getState: "$$getState",
               setState: "$$setState",
             },
@@ -124,18 +118,18 @@ describe("formity$form", () => {
           fields: "$$fields",
           values: "$$values",
           params: "$$params",
-          onNext: "$$onNext",
-          onBack: "$$onBack",
-          onJump: "$$onJump",
+          next: "$$next",
+          back: "$$back",
+          jump: "$$jump",
           getState: "$$getState",
           setState: "$$setState",
         },
       },
     }) as FormFlow;
     const fields = formity.form.fields({ a: 1, b: 2 });
-    const onNext: OnNext<Record<string, unknown>> = () => {};
-    const onBack: OnBack<Record<string, unknown>> = () => {};
-    const onJump: OnJump<Record<string, unknown>> = () => {};
+    const next: Next<Record<string, unknown>> = () => {};
+    const back: Back<Record<string, unknown>> = () => {};
+    const jump: Jump<Record<string, unknown>> = () => {};
     const getState: GetState<Record<string, unknown>> = () => ({
       points: [],
       memory: { type: "list", list: [] },
@@ -145,9 +139,9 @@ describe("formity$form", () => {
       fields: { a: 1, b: 2 },
       values: { c: 3, d: 4 },
       params: { e: 5, f: 6 },
-      onNext: onNext,
-      onBack: onBack,
-      onJump: onJump,
+      next: next,
+      back: back,
+      jump: jump,
       getState: getState,
       setState: setState,
     });
@@ -159,9 +153,9 @@ describe("formity$form", () => {
       fields: { a: 1, b: 2 },
       values: { c: 3, d: 4 },
       params: { e: 5, f: 6 },
-      onNext: onNext,
-      onBack: onBack,
-      onJump: onJump,
+      next: next,
+      back: back,
+      jump: jump,
       getState: getState,
       setState: setState,
     });

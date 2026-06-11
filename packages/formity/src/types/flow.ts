@@ -1,4 +1,4 @@
-import type { OnNext, OnBack, OnJump, GetState, SetState } from "./controls";
+import type { Next, Back, Jump, GetState, SetState } from "./controls";
 
 export type Flow = ListFlow;
 
@@ -14,7 +14,8 @@ export type NestFlow =
   | ConditionFlow
   | LoopFlow
   | SwitchFlow
-  | JumpFlow;
+  | JumpFlow
+  | ModuleFlow;
 
 export type ListFlow = ItemFlow[];
 
@@ -50,6 +51,10 @@ export type JumpFlow = {
   };
 };
 
+export type ModuleFlow = {
+  module: ListFlow;
+};
+
 export type FormFlow = {
   form: {
     fields: (
@@ -59,9 +64,9 @@ export type FormFlow = {
       fields: Record<string, unknown>;
       values: Record<string, unknown>;
       params: Record<string, unknown>;
-      onNext: OnNext<Record<string, unknown>>;
-      onBack: OnBack<Record<string, unknown>>;
-      onJump: OnJump<Record<string, unknown>>;
+      next: Next<Record<string, unknown>>;
+      back: Back<Record<string, unknown>>;
+      jump: Jump<Record<string, unknown>>;
       getState: GetState<Record<string, unknown>>;
       setState: SetState;
     }) => unknown;

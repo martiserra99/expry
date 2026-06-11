@@ -1,17 +1,12 @@
 import type { Executions } from "@expry/system";
-import type {
-  OnNext,
-  OnBack,
-  OnJump,
-  GetState,
-  SetState,
-} from "@formity/system";
+import type { Next, Back, Jump, GetState, SetState } from "@formity/system";
 
 import type { ListFlow } from "./types/flow";
 import type { ConditionFlow } from "./types/flow";
 import type { LoopFlow } from "./types/flow";
 import type { SwitchFlow } from "./types/flow";
 import type { JumpFlow } from "./types/flow";
+import type { ModuleFlow } from "./types/flow";
 import type { FormFlow } from "./types/flow";
 import type { VariablesFlow } from "./types/flow";
 import type { YieldFlow } from "./types/flow";
@@ -52,6 +47,10 @@ export type FormityOperations = {
       at: unknown;
     };
     return: JumpFlow;
+  };
+  formity$module: {
+    params: unknown;
+    return: ModuleFlow;
   };
   formity$form: {
     params: {
@@ -119,12 +118,20 @@ export const formityOperations: Executions<FormityOperations> = {
   },
 
   /**
-   * Returns thejump formity element.
+   * Returns the jump formity element.
    */
   formity$jump: (args, vars, expry): JumpFlow => {
     const id = expry(args.id, vars);
     const at = expry(args.at, vars) as FormFlow;
     return { jump: { id, at } };
+  },
+
+  /**
+   * Returns the module formity element.
+   */
+  formity$module: (args, vars, expry): ModuleFlow => {
+    const module = expry(args, vars) as ListFlow;
+    return { module: module };
   },
 
   /**
@@ -141,9 +148,9 @@ export const formityOperations: Executions<FormityOperations> = {
       fields: Record<string, unknown>;
       values: Record<string, unknown>;
       params: Record<string, unknown>;
-      onNext: OnNext<Record<string, unknown>>;
-      onBack: OnBack<Record<string, unknown>>;
-      onJump: OnJump<Record<string, unknown>>;
+      next: Next<Record<string, unknown>>;
+      back: Back<Record<string, unknown>>;
+      jump: Jump<Record<string, unknown>>;
       getState: GetState<Record<string, unknown>>;
       setState: SetState;
     }) => expry(args.render, { ...vars, ...with$(object) });

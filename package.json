@@ -50,5 +50,8 @@
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.29.1"
   },
-  "packageManager": "npm@10.8.2"
+  "packageManager": "npm@10.8.2",
+  "dependencies": {
+    "@formity/system": "^3.0.0"
+  }
 }
